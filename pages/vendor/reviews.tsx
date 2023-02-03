@@ -1,3 +1,5 @@
+import { ReactElement } from "react";
+import { GetStaticProps } from "next";
 import { RemoveRedEye } from "@mui/icons-material";
 import {
   Avatar,
@@ -9,19 +11,19 @@ import {
   TableContainer,
 } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
-import TableHeader from "components/data-table/TableHeader";
-import TablePagination from "components/data-table/TablePagination";
-import { FlexBox } from "components/flex-box";
-import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import Scrollbar from "components/Scrollbar";
+import { FlexBox } from "components/flex-box";
+import TableHeader from "components/data-table/TableHeader";
 import { H3, Paragraph, Small } from "components/Typography";
+import TablePagination from "components/data-table/TablePagination";
+import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import useMuiTable from "hooks/useMuiTable";
 import {
   StyledIconButton,
   StyledTableCell,
   StyledTableRow,
 } from "pages-sections/admin";
-import React, { ReactElement } from "react";
+import api from "utils/__api__/vendor";
 
 const tableHeading = [
   { id: "name", label: "Name", align: "left" },
@@ -36,8 +38,10 @@ Reviews.getLayout = function getLayout(page: ReactElement) {
   return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
 };
 // =============================================================================
+type ReviewsProps = { reviews: any[] };
+// =============================================================================
 
-export default function Reviews() {
+export default function Reviews({ reviews }: ReviewsProps) {
   const {
     order,
     orderBy,
@@ -46,7 +50,7 @@ export default function Reviews() {
     filteredList,
     handleChangePage,
     handleRequestSort,
-  } = useMuiTable({ listData });
+  } = useMuiTable({ listData: reviews });
 
   return (
     <Box py={4}>
@@ -61,7 +65,7 @@ export default function Reviews() {
                 hideSelectBtn
                 orderBy={orderBy}
                 heading={tableHeading}
-                rowCount={listData.length}
+                rowCount={reviews.length}
                 numSelected={selected.length}
                 onRequestSort={handleRequestSort}
               />
@@ -111,7 +115,7 @@ export default function Reviews() {
         <Stack alignItems="center" my={4}>
           <TablePagination
             onChange={handleChangePage}
-            count={Math.ceil(listData.length / rowsPerPage)}
+            count={Math.ceil(reviews.length / rowsPerPage)}
           />
         </Stack>
       </Card>
@@ -119,62 +123,7 @@ export default function Reviews() {
   );
 }
 
-// list data
-const listData = [
-  {
-    rating: 5,
-    name: "Samsung Galaxy-M1",
-    customer: "Gage Pequette",
-    image: "/assets/images/products/samsung.png",
-    comment: "“But I must explain to you how all this of denouncing pleasure.”",
-  },
-  {
-    rating: 4,
-    name: "Tomatto",
-    customer: "Zachary Taylor",
-    image: "/assets/images/products/tomato.png",
-    comment: "“But I must explain to you how all this of denouncing pleasure.”",
-  },
-  {
-    rating: 5,
-    name: "Boston Round Cream Pack",
-    customer: "Ollie Casper",
-    image: "/assets/images/products/beauty-cream.png",
-    comment: "“But I must explain to you how all this of denouncing pleasure.”",
-  },
-  {
-    rating: 5,
-    name: "Woman Party Dress",
-    customer: "Tony Richardson",
-    image: "/assets/images/products/red-dress.png",
-    comment: "“But I must explain to you how all this of denouncing pleasure.”",
-  },
-  {
-    rating: 4,
-    name: "White Tops",
-    customer: "Zach Marshall",
-    image: "/assets/images/products/white-tops.png",
-    comment: "“But I must explain to you how all this of denouncing pleasure.”",
-  },
-  {
-    rating: 3,
-    name: "Casual Shirt for Man",
-    customer: "Ken Matthews",
-    image: "/assets/images/products/formal-shirt.png",
-    comment: "“But I must explain to you how all this of denouncing pleasure.”",
-  },
-  {
-    rating: 5,
-    name: "Blue Premium T-shirt",
-    customer: "Nathan Clark",
-    image: "/assets/images/products/blu-tshirt.png",
-    comment: "“But I must explain to you how all this of denouncing pleasure.”",
-  },
-  {
-    rating: 5,
-    name: "Man Trowzer Pant",
-    customer: "Bruce Reynolds",
-    image: "/assets/images/products/pnat.png",
-    comment: "“But I must explain to you how all this of denouncing pleasure.”",
-  },
-];
+export const getStaticProps: GetStaticProps = async () => {
+  const reviews = await api.getAllProductReviews();
+  return { props: { reviews } };
+};

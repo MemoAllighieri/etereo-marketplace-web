@@ -1,17 +1,18 @@
+import { FC } from "react";
 import { Box, Button, Card, styled } from "@mui/material";
 import { FlexBox } from "components/flex-box";
 import Verify from "components/icons/Verify";
 import { H1, H3, H5 } from "components/Typography";
-import React, { FC } from "react";
+import { currency } from "lib";
 
 // styled components
-const Wrapper = styled(Card)(() => ({
+const Wrapper = styled(Card)({
   display: "flex",
   padding: "3rem 2rem",
   alignItems: "center",
   flexDirection: "column",
   justifyContent: "center",
-}));
+});
 
 const PackageHeading = styled(H1)(({ theme }) => ({
   ":after": {
@@ -24,9 +25,7 @@ const PackageHeading = styled(H1)(({ theme }) => ({
 }));
 
 // ===================================================
-type SellerPackageCardProps = {
-  listItem: any;
-};
+type SellerPackageCardProps = { listItem: any };
 // ===================================================
 
 const SellerPackageCard: FC<SellerPackageCardProps> = ({ listItem }) => {
@@ -40,7 +39,7 @@ const SellerPackageCard: FC<SellerPackageCardProps> = ({ listItem }) => {
         {packageName} Package
       </H3>
 
-      <PackageHeading fontSize={60}>{price}</PackageHeading>
+      <PackageHeading fontSize={60}>{currency(price, 0)}</PackageHeading>
 
       <Box mt={1} mb={2}>
         {features.map((item, index) => (

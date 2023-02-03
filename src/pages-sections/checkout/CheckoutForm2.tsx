@@ -1,6 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { DeleteOutline, ModeEditOutline } from "@mui/icons-material";
-import { Avatar, Box, Button, Card, Checkbox, Grid, MenuItem, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  Checkbox,
+  Grid,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
@@ -48,15 +57,18 @@ const CheckoutForm2: FC = () => {
   const [dateList, setDateList] = useState<DateProps[]>([]);
   const [addressData, setAddressData] = useState<any[]>([]);
   const [openEditForm, setOpenEditForm] = useState<boolean>(false);
-  const [selected, setSelected] = useState<{ [k: string]: any } | boolean>(false);
+  const [selected, setSelected] = useState<{ [k: string]: any } | boolean>(
+    false
+  );
 
   const handleFormSubmit = async (values: any) => {
     router.push("/payment");
   };
 
-  const handleFieldValueChange = (value: string, fieldName: string, setFieldValue: any) => () => {
-    setFieldValue(fieldName, value);
-  };
+  const handleFieldValueChange =
+    (value: string, fieldName: string, setFieldValue: any) => () => {
+      setFieldValue(fieldName, value);
+    };
 
   const toggleHasVoucher = () => setHasVoucher((has) => !has);
 
@@ -69,7 +81,10 @@ const CheckoutForm2: FC = () => {
 
     for (let i = 1; i < 10; i++) {
       today.setDate(dateCount + i);
-      list.push({ label: format(today, "dd MMMM"), value: today.toISOString() });
+      list.push({
+        label: format(today, "dd MMMM"),
+        value: today.toISOString(),
+      });
     }
 
     setDateList(list);
@@ -110,7 +125,14 @@ const CheckoutForm2: FC = () => {
       initialValues={initialValues}
       validationSchema={checkoutSchema}
     >
-      {({ values, errors, touched, handleChange, handleSubmit, setFieldValue }) => (
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleSubmit,
+        setFieldValue,
+      }) => (
         <form onSubmit={handleSubmit}>
           <Card1 sx={{ mb: 3 }}>
             <Heading number={1} title="Delivery Date and Time" />
@@ -127,7 +149,7 @@ const CheckoutForm2: FC = () => {
                     onChange={handleChange}
                     value={values.date}
                     error={!!touched.date && !!errors.date}
-                    helperText={touched.date && errors.date}
+                    helperText={(touched.date && errors.date) as string}
                   >
                     {dateList.map((item) => (
                       <MenuItem value={item.value} key={item.label}>
@@ -146,7 +168,7 @@ const CheckoutForm2: FC = () => {
                     onChange={handleChange}
                     value={values.time}
                     error={!!touched.time && !!errors.time}
-                    helperText={touched.time && errors.time}
+                    helperText={(touched.time && errors.time) as string}
                   >
                     {timeList.map((item) => (
                       <MenuItem value={item.value} key={item.value}>
@@ -178,9 +200,16 @@ const CheckoutForm2: FC = () => {
                       border: "1px solid",
                       position: "relative",
                       backgroundColor: "grey.100",
-                      borderColor: item.street1 === values.address ? "primary.main" : "transparent",
+                      borderColor:
+                        item.street1 === values.address
+                          ? "primary.main"
+                          : "transparent",
                     }}
-                    onClick={handleFieldValueChange(item.street1, "address", setFieldValue)}
+                    onClick={handleFieldValueChange(
+                      item.street1,
+                      "address",
+                      setFieldValue
+                    )}
                   >
                     <FlexBox
                       justifyContent="flex-end"
@@ -214,7 +243,9 @@ const CheckoutForm2: FC = () => {
 
                     <H6 mb={0.5}>{item.name}</H6>
                     <Paragraph color="grey.700">{item.street1}</Paragraph>
-                    {item.street2 && <Paragraph color="grey.700">{item.address2}</Paragraph>}
+                    {item.street2 && (
+                      <Paragraph color="grey.700">{item.address2}</Paragraph>
+                    )}
                     <Paragraph color="grey.700">{item.phone}</Paragraph>
                   </Card>
                 </Grid>
@@ -237,7 +268,10 @@ const CheckoutForm2: FC = () => {
                     label="Enter Your Name"
                     value={values.cardHolderName}
                     error={!!touched.cardHolderName && !!errors.cardHolderName}
-                    helperText={touched.cardHolderName && errors.cardHolderName}
+                    helperText={
+                      (touched.cardHolderName &&
+                        errors.cardHolderName) as string
+                    }
                   />
                 </Grid>
                 <Grid item sm={6} xs={12}>
@@ -249,7 +283,9 @@ const CheckoutForm2: FC = () => {
                     label="Enter Your Card Number"
                     value={values.cardNumber}
                     error={!!touched.cardNumber && !!errors.cardNumber}
-                    helperText={touched.cardNumber && errors.cardNumber}
+                    helperText={
+                      (touched.cardNumber && errors.cardNumber) as string
+                    }
                   />
                 </Grid>
                 <Grid item sm={12} xs={12}>
@@ -263,7 +299,9 @@ const CheckoutForm2: FC = () => {
                       label="Expire Card Month"
                       value={values.cardMonth}
                       error={!!touched.cardMonth && !!errors.cardMonth}
-                      helperText={touched.cardMonth && errors.cardMonth}
+                      helperText={
+                        (touched.cardMonth && errors.cardMonth) as string
+                      }
                     >
                       {months.map((item) => (
                         <MenuItem value={item} key={item}>
@@ -280,7 +318,9 @@ const CheckoutForm2: FC = () => {
                       label="Expire Card Year"
                       value={values.cardYear}
                       error={!!touched.cardYear && !!errors.cardYear}
-                      helperText={touched.cardYear && errors.cardYear}
+                      helperText={
+                        (touched.cardYear && errors.cardYear) as string
+                      }
                       sx={{ mx: 3 }}
                     >
                       {years.map((item) => (
@@ -297,12 +337,16 @@ const CheckoutForm2: FC = () => {
                       onChange={handleChange}
                       value={values.cardCVC}
                       error={!!touched.cardCVC && !!errors.cardCVC}
-                      helperText={touched.cardCVC && errors.cardCVC}
+                      helperText={(touched.cardCVC && errors.cardCVC) as string}
                     />
                   </Box>
                 </Grid>
               </Grid>
-              <FormControlLabel sx={{ mt: 1 }} control={<Checkbox />} label="Save this card" />
+              <FormControlLabel
+                sx={{ mt: 1 }}
+                control={<Checkbox />}
+                label="Save this card"
+              />
             </Box>
 
             <Box>
@@ -319,19 +363,28 @@ const CheckoutForm2: FC = () => {
                         border: "1px solid",
                         backgroundColor: "grey.100",
                         borderColor:
-                          item.last4Digits === values.card ? "primary.main" : "transparent",
+                          item.last4Digits === values.card
+                            ? "primary.main"
+                            : "transparent",
                       }}
-                      onClick={handleFieldValueChange(item.last4Digits, "card", setFieldValue)}
+                      onClick={handleFieldValueChange(
+                        item.last4Digits,
+                        "card",
+                        setFieldValue
+                      )}
                     >
                       <Box height={24} width={36} position="relative" mb={1}>
                         <LazyImage
                           layout="fill"
+                          alt={item.name}
                           objectFit="contain"
                           src={`/assets/images/payment-methods/${item.cardType}.svg`}
                         />
                       </Box>
 
-                      <Paragraph color="grey.700">**** **** **** {item.last4Digits}</Paragraph>
+                      <Paragraph color="grey.700">
+                        **** **** **** {item.last4Digits}
+                      </Paragraph>
                       <Paragraph color="grey.700">{item.name}</Paragraph>
                     </Card>
                   </Grid>
@@ -339,7 +392,10 @@ const CheckoutForm2: FC = () => {
               </Grid>
             </Box>
 
-            <Button sx={{ color: "primary.main", mt: 3, lineHeight: 1 }} onClick={toggleHasVoucher}>
+            <Button
+              sx={{ color: "primary.main", mt: 3, lineHeight: 1 }}
+              onClick={toggleHasVoucher}
+            >
               I have a voucher
             </Button>
 
@@ -358,7 +414,13 @@ const CheckoutForm2: FC = () => {
               </FlexBox>
             )}
 
-            <Button fullWidth type="submit" color="primary" variant="contained" sx={{ mt: 3 }}>
+            <Button
+              fullWidth
+              type="submit"
+              color="primary"
+              variant="contained"
+              sx={{ mt: 3 }}
+            >
               Place Order
             </Button>
           </Card1>
@@ -373,13 +435,13 @@ const addressList2 = [
     name: "Home",
     phone: "+17804084466",
     street2: "435 Bristol, MA 2351",
-    street1: "375 Subidbazar, MA 2351",
+    street1: "375 Subidbazaar, MA 2351",
   },
   {
     name: "Office",
     phone: "+18334271710",
     street2: "968 Brockton, MA 2351",
-    street1: "645 Bondorbazar, MA 2351",
+    street1: "645 Bondorbazaar, MA 2351",
   },
   {
     name: "Office 2",

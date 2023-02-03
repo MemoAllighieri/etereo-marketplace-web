@@ -1,40 +1,20 @@
+import { FC } from "react";
+import Link from "next/link";
 import { Box, Grid } from "@mui/material";
-import BazarCard from "components/BazarCard";
-import Image from "components/BazarImage";
+import StyledMegaMenu from "./StyledMegaMenu";
 import { FlexBox } from "components/flex-box";
 import LazyImage from "components/LazyImage";
-import NavLink from "components/nav-link/NavLink";
+import { NavLink } from "components/nav-link";
+import BazaarCard from "components/BazaarCard";
 import { H3, Small } from "components/Typography";
-import Link from "next/link";
-import React, { FC } from "react";
-import StyledMegaMenu from "./StyledMegaMenu";
 
-// component props with nested interface
-interface Image {
-  imgUrl: string;
-  href: string;
-}
-
-interface SubCategory {
-  title: string;
-  href: string;
-}
-
-interface Category {
-  title: string;
-  href?: string;
-  subCategories: SubCategory[];
-}
-
-interface MegaMenu {
-  categories: Category[];
-  rightImage?: Image;
-}
-
-interface MegaMenuProps {
-  data: MegaMenu;
-  minWidth?: string;
-}
+// ====================================================================================
+type Image = { imgUrl: string; href: string };
+type SubCategory = { title: string; href: string };
+type Category = { title: string; href?: string; subCategories: SubCategory[] };
+type MegaMenu = { categories: Category[]; rightImage?: Image };
+type MegaMenuProps = { data: MegaMenu; minWidth?: string };
+// ====================================================================================
 
 const MegaMenu3: FC<MegaMenuProps> = ({
   data: { categories, rightImage },
@@ -42,7 +22,7 @@ const MegaMenu3: FC<MegaMenuProps> = ({
 }) => {
   return categories ? (
     <StyledMegaMenu>
-      <BazarCard sx={{ ml: "1rem", minWidth }} elevation={2}>
+      <BazaarCard sx={{ ml: "1rem", minWidth }} elevation={2}>
         <FlexBox px={2.5} py={1.75}>
           <Box flex="1 1 0">
             <Grid container spacing={4}>
@@ -70,9 +50,10 @@ const MegaMenu3: FC<MegaMenuProps> = ({
               <a>
                 <Box position="relative" width="153px" height="100%">
                   <LazyImage
-                    src={rightImage.imgUrl}
+                    alt="banner"
                     layout="fill"
                     objectFit="contain"
+                    src={rightImage.imgUrl}
                   />
                 </Box>
               </a>
@@ -124,7 +105,7 @@ const MegaMenu3: FC<MegaMenuProps> = ({
             </Grid>
           </a>
         </Link>
-      </BazarCard>
+      </BazaarCard>
     </StyledMegaMenu>
   ) : null;
 };

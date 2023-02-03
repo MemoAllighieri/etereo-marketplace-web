@@ -1,26 +1,27 @@
+import NextImage from "next/image";
+import { FC, useState } from "react";
 import { Clear } from "@mui/icons-material";
 import { Box, Button, Grid, styled } from "@mui/material";
 import DropZone from "components/DropZone";
 import { FlexBox } from "components/flex-box";
-import NextImage from "next/image";
-import React, { FC, useState } from "react";
 
-const UploadBox = styled(Box)(() => ({
+// styled components
+const UploadBox = styled(Box)({
   width: 170,
   height: "auto",
   overflow: "hidden",
   borderRadius: "8px",
   position: "relative",
-}));
+});
 
-const StyledClear = styled(Clear)(() => ({
+const StyledClear = styled(Clear)({
   top: 5,
   right: 5,
   fontSize: 14,
   color: "red",
   cursor: "pointer",
   position: "absolute",
-}));
+});
 
 interface FileType extends File {
   preview: string;
@@ -46,12 +47,7 @@ const BannerSlider: FC = () => {
           <DropZone
             title="Drag and Drop slide image here"
             imageSize="upload landscape photo"
-            onChange={(files) => {
-              const uploadFiles = files.map((file) =>
-                Object.assign(file, { preview: URL.createObjectURL(file) })
-              );
-              setNewFiles(uploadFiles);
-            }}
+            onChange={(files) => console.log(files)}
           />
 
           <FlexBox gap={1} mt={2}>

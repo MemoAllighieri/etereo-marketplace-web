@@ -1,12 +1,12 @@
+import { FC } from "react";
 import { Box } from "@mui/material";
 import { H3 } from "components/Typography";
-import React from "react";
 
 // ======================================================
 type ProductDescriptionProps = {};
 // ======================================================
 
-const ProductDescription: React.FC<ProductDescriptionProps> = () => {
+const ProductDescription: FC<ProductDescriptionProps> = () => {
   return (
     <Box>
       <H3 mb={2}>Specification:</H3>

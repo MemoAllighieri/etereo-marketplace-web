@@ -1,3 +1,4 @@
+import { ReactElement } from "react";
 import { Add } from "@mui/icons-material";
 import { Box, Button, Grid } from "@mui/material";
 import { FlexBetween } from "components/flex-box";
@@ -7,12 +8,11 @@ import SilverPackageIcon from "components/icons/SilverPackageIcon";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import { H3 } from "components/Typography";
 import { SellerPackageCard } from "pages-sections/admin";
-import React, { ReactElement } from "react";
 
 const packageList = [
   {
     id: 1,
-    price: "$25",
+    price: 25,
     packageName: "Premium",
     Icon: PremiumPackageIcon,
     features: [
@@ -23,7 +23,7 @@ const packageList = [
   },
   {
     id: 2,
-    price: "$15",
+    price: 15,
     packageName: "Gold",
     Icon: GoldPackageIcon,
     features: [
@@ -34,7 +34,7 @@ const packageList = [
   },
   {
     id: 3,
-    price: "$10",
+    price: 10,
     packageName: "Silver",
     Icon: SilverPackageIcon,
     features: [

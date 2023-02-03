@@ -1,6 +1,7 @@
 import Accounts from "./Accounts";
 import AccountSetting from "./AccountSetting";
 import AdminEcommerce from "./AdminEcommerce";
+import Apps from "./Apps";
 import Calender from "./Calender";
 import Chat from "./Chat";
 import Customers from "./Customers";
@@ -28,8 +29,8 @@ import UserProfile from "./UserProfile";
 import UserTie from "./UserTie";
 import Vest from "./Vest";
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default {
+  Apps,
   AdminEcommerce,
   Dashboard,
   Ecommerce,

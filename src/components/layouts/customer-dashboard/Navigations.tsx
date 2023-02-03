@@ -1,11 +1,11 @@
+import { FC, Fragment } from "react";
+import { useRouter } from "next/router";
+import { Card, styled, Typography } from "@mui/material";
 import { CreditCard, FavoriteBorder, Person, Place } from "@mui/icons-material";
 import ShoppingBagOutlined from "@mui/icons-material/ShoppingBagOutlined";
-import { Card, styled, Typography } from "@mui/material";
 import { FlexBox } from "components/flex-box";
 import CustomerService from "components/icons/CustomerService";
 import NavLink, { NavLinkProps } from "components/nav-link/NavLink";
-import { useRouter } from "next/router";
-import { FC, Fragment } from "react";
 
 // custom styled components
 const MainContainer = styled(Card)(({ theme }) => ({
@@ -20,7 +20,9 @@ const MainContainer = styled(Card)(({ theme }) => ({
 type StyledNavLinkProps = { isCurrentPath: boolean };
 
 const StyledNavLink = styled<FC<StyledNavLinkProps & NavLinkProps>>(
-  ({ children, isCurrentPath, ...rest }) => <NavLink {...rest}>{children}</NavLink>
+  ({ children, isCurrentPath, ...rest }) => (
+    <NavLink {...rest}>{children}</NavLink>
+  )
 )<StyledNavLinkProps>(({ theme, isCurrentPath }) => ({
   display: "flex",
   alignItems: "center",
@@ -57,7 +59,11 @@ const Navigations = () => {
               isCurrentPath={pathname.includes(item.href)}
             >
               <FlexBox alignItems="center" gap={1}>
-                <item.icon color="inherit" fontSize="small" className="nav-icon" />
+                <item.icon
+                  color="inherit"
+                  fontSize="small"
+                  className="nav-icon"
+                />
                 <span>{item.title}</span>
               </FlexBox>
 
@@ -75,8 +81,18 @@ const linkList = [
     title: "DASHBOARD",
     list: [
       { href: "/orders", title: "Orders", icon: ShoppingBagOutlined, count: 5 },
-      { href: "/wish-list", title: "Wishlist", icon: FavoriteBorder, count: 19 },
-      { href: "/support-tickets", title: "Support Tickets", icon: CustomerService, count: 1 },
+      {
+        href: "/wish-list",
+        title: "Wishlist",
+        icon: FavoriteBorder,
+        count: 19,
+      },
+      {
+        href: "/support-tickets",
+        title: "Support Tickets",
+        icon: CustomerService,
+        count: 1,
+      },
     ],
   },
   {
@@ -84,7 +100,12 @@ const linkList = [
     list: [
       { href: "/profile", title: "Profile Info", icon: Person, count: 3 },
       { href: "/address", title: "Addresses", icon: Place, count: 16 },
-      { href: "/payment-methods", title: "Payment Methods", icon: CreditCard, count: 4 },
+      {
+        href: "/payment-methods",
+        title: "Payment Methods",
+        icon: CreditCard,
+        count: 4,
+      },
     ],
   },
 ];

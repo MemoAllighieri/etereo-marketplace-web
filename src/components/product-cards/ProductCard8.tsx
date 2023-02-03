@@ -1,31 +1,34 @@
+import { FC } from "react";
+import Link from "next/link";
 import { SxProps } from "@mui/material";
-import BazarCard from "components/BazarCard";
-import { FlexBox } from "components/flex-box";
 import HoverBox from "components/HoverBox";
 import LazyImage from "components/LazyImage";
+import { FlexBox } from "components/flex-box";
+import BazaarCard from "components/BazaarCard";
 import { H6, Span } from "components/Typography";
-import Link from "next/link";
-import React from "react";
+import { calculateDiscount, currency } from "lib";
 
 // =======================================================
-type ProductCard8Props = {
-  id: string;
+type ProductCardProps = {
   sx: SxProps;
+  slug: string;
   price: number;
   title: string;
   imgUrl: string;
+  id: string | number;
 };
 // =======================================================
 
-const ProductCard8: React.FC<ProductCard8Props> = (props) => {
-  const { id, imgUrl, price, title, sx = {} } = props;
+const ProductCard8: FC<ProductCardProps> = (props) => {
+  const { imgUrl, price, title, slug, sx = {} } = props;
 
   return (
-    <BazarCard sx={{ p: 2, ...sx }}>
-      <Link href={`/product/${id}`}>
+    <BazaarCard sx={{ p: 2, ...sx }}>
+      <Link href={`/product/${slug}`}>
         <a>
           <HoverBox mb={1.5} borderRadius="8px">
             <LazyImage
+              alt={title}
               width={500}
               height={500}
               borderRadius="8px"
@@ -42,16 +45,16 @@ const ProductCard8: React.FC<ProductCard8Props> = (props) => {
 
           <FlexBox alignItems="center">
             <H6 color="primary.main" mr={0.5}>
-              ${price}
+              {currency(price)}
             </H6>
 
             <Span color="grey.600">
-              <del>$1600</del>
+              <del>{calculateDiscount(price, 35)}</del>
             </Span>
           </FlexBox>
         </a>
       </Link>
-    </BazarCard>
+    </BazaarCard>
   );
 };
 

@@ -1,5 +1,5 @@
 import { Box, List, ListItem, styled } from "@mui/material";
-import BazarCard from "components/BazarCard";
+import BazaarCard from "components/BazaarCard";
 
 const Wrapper = styled(Box)(({ theme }) => ({
   cursor: "pointer",
@@ -10,7 +10,7 @@ const Wrapper = styled(Box)(({ theme }) => ({
   },
 }));
 
-const MenusContainer = styled(Box)(() => ({
+const MenusContainer = styled(Box)({
   left: 0,
   zIndex: 2,
   top: "68%",
@@ -20,14 +20,14 @@ const MenusContainer = styled(Box)(() => ({
   minHeight: "500px",
   maxHeight: "500px",
   position: "absolute",
-}));
+});
 
-const StyledCard = styled(BazarCard)(() => ({
+const StyledCard = styled(BazaarCard)({
   marginTop: 12,
   height: "100%",
   display: "flex",
   borderRadius: 0,
-}));
+});
 
 const CategoryList = styled(List)(({ theme }) => ({
   padding: 0,
@@ -36,15 +36,17 @@ const CategoryList = styled(List)(({ theme }) => ({
   borderRight: `1px solid ${theme.palette.grey[200]}`,
 }));
 
-const CategoryListItem = styled(ListItem)<{ active: number }>(({ theme, active }) => ({
-  padding: "1rem 1.5rem",
-  transition: "all 0.3s",
-  justifyContent: "space-between",
-  ...(active && {
-    color: theme.palette.primary.main,
-    backgroundColor: theme.palette.primary[100],
-  }),
-}));
+const CategoryListItem = styled(ListItem)<{ active: number }>(
+  ({ theme, active }) => ({
+    padding: "1rem 1.5rem",
+    transition: "all 0.3s",
+    justifyContent: "space-between",
+    ...(active && {
+      color: theme.palette.primary.main,
+      backgroundColor: theme.palette.primary[100],
+    }),
+  })
+);
 
 const SubCategoryList = styled(List)(({ theme }) => ({
   padding: 0,

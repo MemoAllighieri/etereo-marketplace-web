@@ -1,17 +1,20 @@
+import Router from "next/router";
+import { ReactElement } from "react";
+import { GetStaticProps } from "next";
 import { Box, Card, Stack, Table, TableContainer } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import SearchArea from "components/dashboard/SearchArea";
 import TableHeader from "components/data-table/TableHeader";
 import TablePagination from "components/data-table/TablePagination";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
-import Scrollbar from "components/Scrollbar";
 import { H3 } from "components/Typography";
 import useMuiTable from "hooks/useMuiTable";
-import { GetStaticProps } from "next";
+import Scrollbar from "components/Scrollbar";
 import { ProductRow } from "pages-sections/admin";
-import React, { ReactElement } from "react";
-import api from "utils/api/dashboard";
+import api from "utils/__api__/dashboard";
+import Product from "models/Product.model";
 
+// TABLE HEADING DATA LIST
 const tableHeading = [
   { id: "name", label: "Name", align: "left" },
   { id: "category", label: "Category", align: "left" },
@@ -27,11 +30,23 @@ ProductList.getLayout = function getLayout(page: ReactElement) {
 };
 // =============================================================================
 
-type ProductListProps = { products: any[] };
+type ProductListProps = { products: Product[] };
 // =============================================================================
 
 export default function ProductList(props: ProductListProps) {
   const { products } = props;
+
+  // RESHAPE THE PRODUCT LIST BASED TABLE HEAD CELL ID
+  const filteredProducts = products.map((item) => ({
+    id: item.id,
+    slug: item.slug,
+    name: item.title,
+    brand: item.brand,
+    price: item.price,
+    image: item.thumbnail,
+    published: item.published,
+    category: item.categories[0],
+  }));
 
   const {
     order,
@@ -41,7 +56,7 @@ export default function ProductList(props: ProductListProps) {
     filteredList,
     handleChangePage,
     handleRequestSort,
-  } = useMuiTable({ listData: products });
+  } = useMuiTable({ listData: filteredProducts });
 
   return (
     <Box py={4}>
@@ -50,12 +65,12 @@ export default function ProductList(props: ProductListProps) {
       <SearchArea
         handleSearch={() => {}}
         buttonText="Add Product"
-        handleBtnClick={() => {}}
         searchPlaceholder="Search Product..."
+        handleBtnClick={() => Router.push("/admin/products/create")}
       />
 
       <Card>
-        <Scrollbar>
+        <Scrollbar autoHide={false}>
           <TableContainer sx={{ minWidth: 900 }}>
             <Table>
               <TableHeader
@@ -90,6 +105,5 @@ export default function ProductList(props: ProductListProps) {
 
 export const getStaticProps: GetStaticProps = async () => {
   const products = await api.products();
-
   return { props: { products } };
 };

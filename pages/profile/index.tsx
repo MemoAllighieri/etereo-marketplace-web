@@ -1,30 +1,61 @@
-import Person from "@mui/icons-material/Person";
-import { Avatar, Box, Button, Card, Grid, Typography } from "@mui/material";
+import Link from "next/link";
+import { GetStaticProps, NextPage } from "next";
+import { format } from "date-fns";
+import { Person } from "@mui/icons-material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  Grid,
+  Theme,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
+import TableRow from "components/TableRow";
+import { H3, H5, Small } from "components/Typography";
 import { FlexBetween, FlexBox } from "components/flex-box";
 import UserDashboardHeader from "components/header/UserDashboardHeader";
 import CustomerDashboardLayout from "components/layouts/customer-dashboard";
 import CustomerDashboardNavigation from "components/layouts/customer-dashboard/Navigations";
-import TableRow from "components/TableRow";
-import { H3, H5, Small } from "components/Typography";
-import { format } from "date-fns";
-import Link from "next/link";
+import { currency } from "lib";
+import api from "utils/__api__/users";
+import User from "models/User.model";
 
-const Profile = () => {
+// ============================================================
+type ProfileProps = { user: User };
+// ============================================================
+
+const Profile: NextPage<ProfileProps> = ({ user }) => {
+  const downMd = useMediaQuery((theme: Theme) => theme.breakpoints.down("md"));
+
+  // SECTION TITLE HEADER LINK
+  const HEADER_LINK = (
+    <Link href={`/profile/${user.id}`} passHref>
+      <Button color="primary" sx={{ px: 4, bgcolor: "primary.light" }}>
+        Edit Profile
+      </Button>
+    </Link>
+  );
+
+  const infoList = [
+    { title: "16", subtitle: "All Orders" },
+    { title: "02", subtitle: "Awaiting Payments" },
+    { title: "00", subtitle: "Awaiting Shipment" },
+    { title: "01", subtitle: "Awaiting Delivery" },
+  ];
+
   return (
     <CustomerDashboardLayout>
+      {/* TITLE HEADER AREA */}
       <UserDashboardHeader
         icon={Person}
         title="My Profile"
+        button={HEADER_LINK}
         navigation={<CustomerDashboardNavigation />}
-        button={
-          <Link href="/profile/edit" passHref>
-            <Button color="primary" sx={{ px: 4, bgcolor: "primary.light" }}>
-              Edit Profile
-            </Button>
-          </Link>
-        }
       />
 
+      {/* USER PROFILE INFO */}
       <Box mb={4}>
         <Grid container spacing={3}>
           <Grid item md={6} xs={12}>
@@ -36,16 +67,16 @@ const Profile = () => {
                 alignItems: "center",
               }}
             >
-              <Avatar src="/assets/images/faces/ralph.png" sx={{ height: 64, width: 64 }} />
+              <Avatar src={user.avatar} sx={{ height: 64, width: 64 }} />
 
               <Box ml={1.5} flex="1 1 0">
                 <FlexBetween flexWrap="wrap">
                   <div>
-                    <H5 my="0px">Ralph Edwards</H5>
+                    <H5 my="0px">{`${user.name.firstName} ${user.name.lastName}`}</H5>
                     <FlexBox alignItems="center">
                       <Typography color="grey.600">Balance:</Typography>
                       <Typography ml={0.5} color="primary.main">
-                        $500
+                        {currency(500)}
                       </Typography>
                     </FlexBox>
                   </div>
@@ -86,51 +117,44 @@ const Profile = () => {
         </Grid>
       </Box>
 
-      <TableRow sx={{ p: "0.75rem 1.5rem" }}>
-        <FlexBox flexDirection="column" p={1}>
-          <Small color="grey.600" mb={0.5} textAlign="left">
-            First Name
-          </Small>
-          <span>Ralph</span>
-        </FlexBox>
-
-        <FlexBox flexDirection="column" p={1}>
-          <Small color="grey.600" mb={0.5} textAlign="left">
-            Last Name
-          </Small>
-          <span>Edwards</span>
-        </FlexBox>
-
-        <FlexBox flexDirection="column" p={1}>
-          <Small color="grey.600" mb={0.5} textAlign="left">
-            Email
-          </Small>
-          <span>ralfedwards@email.com</span>
-        </FlexBox>
-
-        <FlexBox flexDirection="column" p={1}>
-          <Small color="grey.600" mb={0.5} textAlign="left">
-            Phone
-          </Small>
-          <span>+1983649392983</span>
-        </FlexBox>
-
-        <FlexBox flexDirection="column" p={1}>
-          <Small color="grey.600" mb={0.5}>
-            Birth date
-          </Small>
-          <span className="pre">{format(new Date(1996 / 11 / 16), "dd MMM, yyyy")}</span>
-        </FlexBox>
+      <TableRow
+        sx={{
+          cursor: "auto",
+          p: "0.75rem 1.5rem",
+          ...(downMd && {
+            alignItems: "start",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+          }),
+        }}
+      >
+        <TableRowItem title="First Name" value={user.name.firstName} />
+        <TableRowItem title="Last Name" value={user.name.lastName} />
+        <TableRowItem title="Email" value={user.email} />
+        <TableRowItem title="Phone" value={user.phone} />
+        <TableRowItem
+          title="Birth date"
+          value={format(new Date(user.dateOfBirth), "dd MMM, yyyy")}
+        />
       </TableRow>
     </CustomerDashboardLayout>
   );
 };
 
-const infoList = [
-  { title: "16", subtitle: "All Orders" },
-  { title: "02", subtitle: "Awaiting Payments" },
-  { title: "00", subtitle: "Awaiting Shipment" },
-  { title: "01", subtitle: "Awaiting Delivery" },
-];
+const TableRowItem = ({ title, value }) => {
+  return (
+    <FlexBox flexDirection="column" p={1}>
+      <Small color="grey.600" mb={0.5} textAlign="left">
+        {title}
+      </Small>
+      <span>{value}</span>
+    </FlexBox>
+  );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const user = await api.getUser();
+  return { props: { user } };
+};
 
 export default Profile;

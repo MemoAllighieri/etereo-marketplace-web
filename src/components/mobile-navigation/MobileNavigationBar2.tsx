@@ -1,14 +1,19 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { Badge, Box } from "@mui/material";
-import CategoryOutlined from "components/icons/CategoryOutline";
-import Home from "components/icons/Home";
-import ShoppingBagOutlined from "components/icons/ShoppingBagOutlined";
-import User2 from "components/icons/User2";
-import { useAppContext } from "contexts/AppContext";
-import useWindowSize from "hooks/useWindowSize";
 import { FC, ReactNode, useEffect, useState } from "react";
+import { Badge, Box } from "@mui/material";
+import Home from "components/icons/Home";
+import User2 from "components/icons/User2";
+import CategoryOutlined from "components/icons/CategoryOutline";
+import ShoppingBagOutlined from "components/icons/ShoppingBagOutlined";
+import useWindowSize from "hooks/useWindowSize";
 import { layoutConstant } from "utils/constants";
-import { iconStyle, StyledBox, StyledDrawer, StyledNavLink, Wrapper } from "./styles";
+import { useAppContext } from "contexts/AppContext";
+import {
+  iconStyle,
+  StyledBox,
+  StyledDrawer,
+  StyledNavLink,
+  Wrapper,
+} from "./styles";
 
 // ===================================================
 type Props = { children?: ReactNode };
@@ -40,11 +45,16 @@ const MobileNavigationBar2: FC<Props> = ({ children }) => {
 
     window.addEventListener("scroll", listner);
     return () => window.removeEventListener("scroll", listner);
-  }, []);
+  }, [mobileNavHeight, total]);
 
   return width <= 900 ? (
     <Box position="relative" display="flex" flexDirection="column">
-      <StyledDrawer open={open} anchor="left" totalheight={totalHeight} onClose={handleDrawerClose}>
+      <StyledDrawer
+        open={open}
+        anchor="left"
+        totalheight={totalHeight}
+        onClose={handleDrawerClose}
+      >
         {children}
       </StyledDrawer>
 
@@ -59,20 +69,27 @@ const MobileNavigationBar2: FC<Props> = ({ children }) => {
                   </Badge>
                 )}
 
-                {item.title !== "Cart" && <item.icon sx={iconStyle} fontSize="small" />}
+                {item.title !== "Cart" && (
+                  <item.icon sx={iconStyle} fontSize="small" />
+                )}
                 {item.title}
               </StyledNavLink>
             );
           } else {
             return (
-              <StyledBox onClick={open ? handleDrawerClose : handleDrawerOpen} key={item.title}>
+              <StyledBox
+                onClick={open ? handleDrawerClose : handleDrawerOpen}
+                key={item.title}
+              >
                 {item.title === "Cart" && (
                   <Badge badgeContent={state.cart.length} color="primary">
                     <item.icon fontSize="small" sx={iconStyle} />
                   </Badge>
                 )}
 
-                {item.title !== "Cart" && <item.icon sx={iconStyle} fontSize="small" />}
+                {item.title !== "Cart" && (
+                  <item.icon sx={iconStyle} fontSize="small" />
+                )}
                 {item.title}
               </StyledBox>
             );

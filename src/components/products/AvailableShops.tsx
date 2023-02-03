@@ -1,15 +1,14 @@
-import { Box, Card, Grid } from "@mui/material";
-import BazarAvatar from "components/BazarAvatar";
-import { FlexRowCenter } from "components/flex-box";
-import { H3, H4 } from "components/Typography";
+import { FC } from "react";
 import Link from "next/link";
-import React from "react";
+import { Avatar, Box, Card, Grid } from "@mui/material";
+import { H3, H4 } from "components/Typography";
+import { FlexRowCenter } from "components/flex-box";
 
 // ====================================================
 type AvailableShopsProps = {};
 // ====================================================
 
-const AvailableShops: React.FC<AvailableShopsProps> = () => {
+const AvailableShops: FC<AvailableShopsProps> = () => {
   return (
     <Box mb={7.5}>
       <H3 mb={3}>Also Available at</H3>
@@ -17,10 +16,15 @@ const AvailableShops: React.FC<AvailableShopsProps> = () => {
       <Grid container spacing={4}>
         {shopList.map((item) => (
           <Grid item lg={2} md={3} sm={4} xs={12} key={item.name}>
-            <Link href="/shops/53324">
+            <Link href="/shops/scarlett-beauty">
               <a>
-                <FlexRowCenter p={3.25} width="100%" component={Card} flexDirection="column">
-                  <BazarAvatar height={48} width={48} src={item.imgUrl} />
+                <FlexRowCenter
+                  p={3.25}
+                  width="100%"
+                  component={Card}
+                  flexDirection="column"
+                >
+                  <Avatar src={item.imgUrl} sx={{ width: 48, height: 48 }} />
                   <H4 mt={1.5} color="grey.800">
                     {item.name}
                   </H4>

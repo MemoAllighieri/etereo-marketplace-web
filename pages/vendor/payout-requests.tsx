@@ -1,3 +1,5 @@
+import { ReactElement } from "react";
+import { GetStaticProps } from "next";
 import { Box, Card, Stack, Table, TableContainer } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import TableHeader from "components/data-table/TableHeader";
@@ -11,7 +13,8 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "pages-sections/admin";
-import React, { ReactElement } from "react";
+import { currency } from "lib";
+import api from "utils/__api__/vendor";
 
 const tableHeading = [
   { id: "no", label: "No", align: "left" },
@@ -27,7 +30,7 @@ PayoutRequests.getLayout = function getLayout(page: ReactElement) {
 };
 // =============================================================================
 
-export default function PayoutRequests() {
+export default function PayoutRequests({ payoutRequests }) {
   const {
     order,
     orderBy,
@@ -36,7 +39,7 @@ export default function PayoutRequests() {
     filteredList,
     handleChangePage,
     handleRequestSort,
-  } = useMuiTable({ listData, defaultSort: "no" });
+  } = useMuiTable({ listData: payoutRequests, defaultSort: "no" });
 
   return (
     <Box py={4}>
@@ -51,8 +54,8 @@ export default function PayoutRequests() {
                 hideSelectBtn
                 orderBy={orderBy}
                 heading={tableHeading}
-                rowCount={listData.length}
                 numSelected={selected.length}
+                rowCount={filteredList.length}
                 onRequestSort={handleRequestSort}
               />
 
@@ -64,7 +67,7 @@ export default function PayoutRequests() {
                       {payout.date}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {payout.amount}
+                      {currency(payout.amount)}
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       <StatusWrapper status={payout.status}>
@@ -84,7 +87,7 @@ export default function PayoutRequests() {
         <Stack alignItems="center" my={4}>
           <TablePagination
             onChange={handleChangePage}
-            count={Math.ceil(listData.length / rowsPerPage)}
+            count={Math.ceil(filteredList.length / rowsPerPage)}
           />
         </Stack>
       </Card>
@@ -92,69 +95,7 @@ export default function PayoutRequests() {
   );
 }
 
-// list data
-const listData = [
-  {
-    no: 1,
-    amount: "$1,200",
-    date: "20-04-2022",
-    status: "Accepted",
-    message: "I am requested to payout this amount of money.",
-  },
-  {
-    no: 2,
-    amount: "$250",
-    date: "19-04-2022",
-    status: "Pending",
-    message: "I am requested to payout this amount of money.",
-  },
-  {
-    no: 3,
-    amount: "$9,300",
-    date: "17-04-2022",
-    status: "Processing",
-    message: "I am requested to payout this amount of money.",
-  },
-  {
-    no: 4,
-    amount: "$2,200",
-    date: "14-04-2022",
-    status: "Pending",
-    message: "I am requested to payout this amount of money.",
-  },
-  {
-    no: 5,
-    amount: "$700",
-    date: "08-04-2022",
-    status: "Accepted",
-    message: "I am requested to payout this amount of money.",
-  },
-  {
-    no: 6,
-    amount: "$930",
-    date: "01-04-2022",
-    status: "Pending",
-    message: "I am requested to payout this amount of money.",
-  },
-  {
-    no: 7,
-    amount: "$450",
-    date: "26-03-2022",
-    status: "Processing",
-    message: "I am requested to payout this amount of money.",
-  },
-  {
-    no: 8,
-    amount: "$360",
-    date: "16-03-2022",
-    status: "Accepted",
-    message: "I am requested to payout this amount of money.",
-  },
-  {
-    no: 9,
-    amount: "$120",
-    date: "12-03-2022",
-    status: "Pending",
-    message: "I am requested to payout this amount of money.",
-  },
-];
+export const getStaticProps: GetStaticProps = async () => {
+  const payoutRequests = await api.getAllPayoutRequests();
+  return { props: { payoutRequests } };
+};

@@ -15,11 +15,13 @@ interface CustomPaletteColor {
 
 declare module "@mui/material/styles" {
   interface Palette {
+    dark: CustomPaletteColor;
     paste: CustomPaletteColor;
     marron: CustomPaletteColor;
   }
 
   interface PaletteOptions {
+    dark: CustomPaletteColor;
     paste: CustomPaletteColor;
     marron: CustomPaletteColor;
   }
@@ -138,16 +140,20 @@ export const warning = {
   contrastText: "#FFFFFF",
 };
 
+export const dark = { main: "#222" };
+export const white = { main: "#fff" };
+
 export const themeColors = {
+  dark,
+  grey,
+  paste,
   error,
+  marron,
   warning,
   success,
   secondary,
-  grey: { ...grey },
-  info: { ...blue },
+  info: blue,
   divider: grey[200],
-  paste: { ...paste },
-  marron: { ...marron },
   background: { default: grey[100] },
   text: { primary: grey[900], secondary: grey[800], disabled: grey[400] },
 };

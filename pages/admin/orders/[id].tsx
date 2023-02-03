@@ -1,18 +1,11 @@
+import { ReactElement, useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import VendorDashboardLayout from "components/layouts/vendor-dashboard";
+import { useRouter } from "next/router";
 import { H3 } from "components/Typography";
+import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import { OrderDetails } from "pages-sections/admin";
-import React, { ReactElement } from "react";
-
-const OrderEdit = () => {
-  return (
-    <Box py={4}>
-      <H3 mb={2}>Order Details</H3>
-
-      <OrderDetails />
-    </Box>
-  );
-};
+import Order from "models/Order.model";
+import api from "utils/__api__/dashboard";
 
 // =============================================================================
 OrderEdit.getLayout = function getLayout(page: ReactElement) {
@@ -20,4 +13,22 @@ OrderEdit.getLayout = function getLayout(page: ReactElement) {
 };
 // =============================================================================
 
-export default OrderEdit;
+export default function OrderEdit() {
+  const { query } = useRouter();
+  const [orderDetails, setOrderDetails] = useState<Order>(null);
+
+  useEffect(() => {
+    api.getOrder(query.id as string).then((data) => setOrderDetails(data));
+  }, [query.id]);
+
+  if (!orderDetails) {
+    return <h1>Loading...</h1>;
+  }
+
+  return (
+    <Box py={4}>
+      <H3 mb={2}>Order Details</H3>
+      <OrderDetails order={orderDetails} />
+    </Box>
+  );
+}

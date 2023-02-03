@@ -1,123 +1,106 @@
-import { Box, Button, Container, styled } from "@mui/material";
-import BazarCard from "components/BazarCard";
+import { Done } from "@mui/icons-material";
+import { Box, Container, Grid, styled } from "@mui/material";
 import { FlexBox } from "components/flex-box";
-import { H2, H3, Paragraph } from "components/Typography";
-import Link from "next/link";
-import React from "react";
+import LazyImage from "components/LazyImage";
+import { H2, Paragraph, Span } from "components/Typography";
 
-const SectionWrapper = styled("div")(({ theme }) => ({
-  background: `${theme.palette.grey[100]}`,
-  paddingTop: "6rem",
-  paddingBottom: "6rem",
+const ImageBox = styled(Box)(({ theme }) => ({
+  padding: 32,
+  display: "flex",
+  borderRadius: 16,
+  justifyContent: "center",
+  backgroundColor: theme.palette.grey[300],
 }));
+
+const model = [
+  "Product model",
+  "User model",
+  "Shop model",
+  "Order model",
+  "Address model",
+  "20+ more models",
+];
 
 const Section5 = () => {
   return (
-    <SectionWrapper id="price">
-      <Container id="section-3" sx={{ position: "relative" }}>
-        <H2
-          color="secondary.main"
-          maxWidth="830px"
-          mx="auto"
-          mb={9}
-          textAlign="center"
-          fontSize="40px"
-          fontWeight="900"
-        >
-          Build your <br /> you Ecommerce Store?
-        </H2>
-
-        <FlexBox flexWrap="wrap" justifyContent="center" m={-2.65}>
-          <BazarCard
-            sx={{
-              minWidth: "270px",
-              textAlign: "center",
-              pt: "3rem",
-              pb: "2rem",
-              px: "1rem",
-              m: "1.325rem",
-            }}
-            elevation={2}
-            hoverEffect
+    <Box mb={4}>
+      <Container>
+        <Box my={25}>
+          <Grid
+            container
+            spacing={{ md: 8, xs: 4 }}
+            alignItems="center"
+            justifyContent="center"
           >
-            <H3>Regular</H3>
-            <Box position="relative" display="inline-block" mb={3}>
-              <H3 fontSize="72px" color="secondary.main">
-                28
-              </H3>
-              <Box
-                position="absolute"
-                top="1rem"
-                left="-1rem"
-                fontWeight="600"
-                fontSize="16px"
-              >
-                $
+            <Grid item lg={4} md={5} sm={6} xs={10}>
+              <ImageBox>
+                <LazyImage
+                  width={413}
+                  height={660}
+                  src="/assets/images/landing/product-model.png"
+                />
+              </ImageBox>
+            </Grid>
+
+            <Grid item lg={4} md={5} sm={6} xs={10}>
+              <H2 fontSize={{ md: 28, xs: 27 }}>
+                Data structure with Typescript Data models
+              </H2>
+
+              <Box mt={3}>
+                {model.map((item) => (
+                  <FlexBox
+                    mb={1}
+                    gap={1}
+                    key={item}
+                    fontWeight={500}
+                    color="grey.900"
+                    alignItems="center"
+                  >
+                    <Done color="success" />
+                    <Span fontSize={16}>{item}</Span>
+                  </FlexBox>
+                ))}
               </Box>
-            </Box>
+            </Grid>
+          </Grid>
+        </Box>
 
-            <Paragraph maxWidth="216px" mx="auto" mb={16.25}>
-              Can be used in a single end product which end users{" "}
-              <b>are not charged</b> for.
-            </Paragraph>
-            <Link
-              href="https://material-ui.com/store/items/bazar-pro-react-ecommerce-template/"
-              passHref={true}
-            >
-              <Button
-                variant="outlined"
-                color="secondary"
-                sx={{ mx: "auto", display: "block" }}
-              >
-                Purchase Now
-              </Button>
-            </Link>
-          </BazarCard>
-
-          <BazarCard
-            sx={{
-              color: "white",
-              minWidth: "270px",
-              textAlign: "center",
-              pt: "3rem",
-              pb: "2rem",
-              px: "1rem",
-              m: "1.325rem",
-              bgcolor: "primary.main",
-            }}
-            elevation={2}
-            hoverEffect
+        <Box my={25}>
+          <Grid
+            container
+            spacing={{ md: 8, xs: 4 }}
+            alignItems="center"
+            justifyContent="center"
           >
-            <H3>Extended License</H3>
-            <Box position="relative" display="inline-block" mb={3}>
-              <H3 fontSize="72px">700</H3>
-              <Box
-                position="absolute"
-                top="1rem"
-                left="-1rem"
-                fontWeight="600"
-                fontSize="16px"
-              >
-                $
-              </Box>
-            </Box>
-
-            <Paragraph maxWidth="216px" mx="auto" mb={16.25}>
-              Can be used in a single end product which end users{" "}
-              <b>are not charged</b> for.
-            </Paragraph>
-
-            <Button
-              variant="outlined"
-              color="inherit"
-              sx={{ mx: "auto", display: "block" }}
+            <Grid
+              item
+              lg={4}
+              md={5}
+              xs={10}
+              textAlign={{ xs: "center", md: "start" }}
             >
-              Purchase Now
-            </Button>
-          </BazarCard>
-        </FlexBox>
+              <H2 fontSize={28}>REST API endpoints</H2>
+
+              <Paragraph fontSize={16}>
+                Customize and use existing data structure to implement your
+                server easily.
+              </Paragraph>
+            </Grid>
+
+            <Grid item md={6} xs={12}>
+              <ImageBox>
+                <LazyImage
+                  width={634}
+                  height={312}
+                  src="/assets/images/landing/rest-api-endpoint.png"
+                />
+              </ImageBox>
+            </Grid>
+          </Grid>
+        </Box>
       </Container>
-    </SectionWrapper>
+    </Box>
   );
 };
 

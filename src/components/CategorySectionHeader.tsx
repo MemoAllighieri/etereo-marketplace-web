@@ -1,9 +1,9 @@
-import { ArrowLeft, ArrowRight } from "@mui/icons-material";
-import useSettings from "hooks/useSettings";
+import { FC, ReactNode } from "react";
 import Link from "next/link";
-import React, { ReactNode } from "react";
-import { FlexBetween, FlexBox } from "./flex-box";
+import { ArrowLeft, ArrowRight } from "@mui/icons-material";
 import { H2 } from "./Typography";
+import useSettings from "hooks/useSettings";
+import { FlexBetween, FlexBox } from "./flex-box";
 
 // ===================================================
 type CategorySectionHeaderProps = {
@@ -13,7 +13,7 @@ type CategorySectionHeaderProps = {
 };
 // ===================================================
 
-const CategorySectionHeader: React.FC<CategorySectionHeaderProps> = (props) => {
+const CategorySectionHeader: FC<CategorySectionHeaderProps> = (props) => {
   const { title, seeMoreLink, icon } = props;
 
   const { settings } = useSettings();

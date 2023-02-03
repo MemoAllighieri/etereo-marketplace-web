@@ -1,21 +1,29 @@
+import { FC, Fragment } from "react";
 import { Grid, Pagination } from "@mui/material";
 import { FlexBetween } from "components/flex-box";
 import ProductCard1 from "components/product-cards/ProductCard1";
 import { Span } from "components/Typography";
-import productDatabase from "data/product-database";
-import React, { Fragment } from "react";
+import Product from "models/Product.model";
 
 // ========================================================
-type ProductCard1ListProps = {};
+type ProductCard1ListProps = { products: Product[] };
 // ========================================================
 
-const ProductCard1List: React.FC<ProductCard1ListProps> = () => {
+const ProductCard1List: FC<ProductCard1ListProps> = ({ products }) => {
   return (
     <Fragment>
       <Grid container spacing={3}>
-        {productDatabase.slice(95, 104).map((item, ind) => (
-          <Grid item lg={4} sm={6} xs={12} key={ind}>
-            <ProductCard1 {...item} />
+        {products.map((item: Product) => (
+          <Grid item lg={4} sm={6} xs={12} key={item.id}>
+            <ProductCard1
+              id={item.id}
+              slug={item.slug}
+              title={item.title}
+              price={item.price}
+              rating={item.rating}
+              imgUrl={item.thumbnail}
+              discount={item.discount}
+            />
           </Grid>
         ))}
       </Grid>

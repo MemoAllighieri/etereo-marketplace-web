@@ -1,16 +1,23 @@
-import { Box, Button, Container, Grid, styled } from "@mui/material";
-import { FlexRowCenter } from "components/flex-box";
-import { H2, H4, Paragraph } from "components/Typography";
 import Link from "next/link";
 import { Dispatch, FC, SetStateAction } from "react";
+import { Box, Button, Container, Grid, styled } from "@mui/material";
+import { FlexRowCenter } from "components/flex-box";
+import { H2, H4, Paragraph, Span } from "components/Typography";
 import PageCard from "./PageCard";
 
-const FilterButton = styled(Button)<{ selected: number }>(({ theme, selected }) => ({
-  color: selected ? theme.palette.primary.main : "inherit",
-  ":hover": {
-    backgroundColor: "transparent",
-    color: theme.palette.primary.main,
-  },
+const FilterButton = styled(Button)<{ selected: number }>(
+  ({ theme, selected }) => ({
+    color: selected ? theme.palette.primary.main : "inherit",
+    ":hover": {
+      backgroundColor: "transparent",
+      color: theme.palette.primary.main,
+    },
+  })
+);
+
+const TitleBadge = styled(Span)(({ theme }) => ({
+  color: theme.palette.grey[500],
+  margin: "0 4px",
 }));
 
 // ==================================================================
@@ -21,26 +28,43 @@ type Props = {
 // ==================================================================
 
 const Section3: FC<Props> = ({ filterDemo, setFilterDemo }) => {
-  const pages = [...demoPageList, ...shopPageList, ...vendorPageList, ...customerPageList];
-  const filtered = pages.filter((item) => (filterDemo !== "" ? item.page === filterDemo : true));
+  const pages = [
+    ...demoPageList,
+    ...shopPageList,
+    ...vendorPageList,
+    ...customerPageList,
+  ];
+  const filtered = pages.filter((item) =>
+    filterDemo !== "" ? item.page === filterDemo : true
+  );
 
   return (
     <Box
       mb={14}
       id="demos"
-      sx={{ background: "url(/assets/images/landing/landing-bg-2.svg) center/contain no-repeat" }}
+      sx={{
+        background:
+          "url(/assets/images/landing/landing-bg-2.svg) center/contain no-repeat",
+      }}
     >
       <Container id="section-3" sx={{ position: "relative" }}>
-        <Box maxWidth="830px" mx="auto" mb="4rem" textAlign="center">
+        <Box maxWidth="830px" mx="auto" mb="2.5rem" textAlign="center">
           <H4 color="primary.main" fontSize="58px" fontWeight="900">
-            55+
+            58+
           </H4>
 
           <Paragraph color="primary.main" fontSize="18px">
             Server side rendered
           </Paragraph>
 
-          <H2 color="secondary.main" fontSize="40px" fontWeight="900" mb={4}>
+          <H2
+            mb={4}
+            fontSize={28}
+            fontWeight="700"
+            textAlign="center"
+            color="secondary.main"
+            textTransform="uppercase"
+          >
             Demos & Pages
           </H2>
         </Box>
@@ -91,24 +115,13 @@ const Section3: FC<Props> = ({ filterDemo, setFilterDemo }) => {
           </Grid>
 
           {filtered.map((item, i) => (
-            <Grid
-              item
-              lg={4}
-              sm={6}
-              xs={12}
-              key={i}
-              data-aos="fade-up"
-              data-aos-duration={i + 1 * 500}
-            >
+            <Grid item lg={4} sm={6} xs={12} key={i}>
               <PageCard {...item} />
             </Grid>
           ))}
         </Grid>
 
-        <Link
-          href="https://material-ui.com/store/items/bazar-pro-react-ecommerce-template/"
-          passHref
-        >
+        <Link href="https://tinyurl.com/get-bazaar" passHref legacyBehavior>
           <a>
             <Button
               color="primary"
@@ -131,112 +144,167 @@ const Section3: FC<Props> = ({ filterDemo, setFilterDemo }) => {
 
 const demoPageList = [
   {
-    imgUrl: "/assets/images/landing/page-1.png",
-    previewUrl: "/superstore-shop",
-    title: "Super Store",
+    imgUrl: "/assets/images/landing/home/super-store.jpg",
+    previewUrl: "/market-1",
+    title: (
+      <>
+        Market <TitleBadge>(1)</TitleBadge>
+      </>
+    ),
     page: "homepage",
   },
   {
-    imgUrl: "/assets/images/landing/furniture.png",
+    imgUrl: "/assets/images/landing/home/market-2.jpg",
+    previewUrl: "/market-2",
+    title: (
+      <>
+        Market <TitleBadge>(2)</TitleBadge>
+      </>
+    ),
+    page: "homepage",
+    status: "New",
+  },
+  {
+    imgUrl: "/assets/images/landing/home/fashion-2.jpg",
+    previewUrl: "/fashion-shop-2",
+    title: (
+      <>
+        Fashion <TitleBadge>(2)</TitleBadge>
+      </>
+    ),
+    page: "homepage",
+    status: "New",
+  },
+  {
+    imgUrl: "/assets/images/landing/home/gift-shop.jpg",
+    previewUrl: "/gift-shop",
+    title: "Gift",
+    page: "homepage",
+  },
+  {
+    imgUrl: "/assets/images/landing/home/grocery1.jpg",
+    previewUrl: "/grocery1",
+    title: (
+      <>
+        Grocery <TitleBadge>(1)</TitleBadge>
+      </>
+    ),
+    page: "homepage",
+  },
+  {
+    imgUrl: "/assets/images/landing/home/gadget-electronics.jpg",
+    previewUrl: "/gadget-shop",
+    title: "Gadget & Electronics",
+    page: "homepage",
+  },
+
+  {
+    imgUrl: "/assets/images/landing/home/furniture.jpg",
     previewUrl: "/furniture-shop",
     title: "Furniture",
     page: "homepage",
   },
+
   {
-    imgUrl: "/assets/images/landing/grocery1.png",
-    previewUrl: "/grocery1",
-    title: "Grocery 1",
-    page: "homepage",
-  },
-  {
-    imgUrl: "/assets/images/landing/page-2.png",
+    imgUrl: "/assets/images/landing/home/grocery2.jpg",
     previewUrl: "/grocery2",
-    title: "Grocery 2",
+    title: (
+      <>
+        Grocery <TitleBadge>(2)</TitleBadge>
+      </>
+    ),
     page: "homepage",
   },
   {
-    imgUrl: "/assets/images/landing/grocery3.png",
+    imgUrl: "/assets/images/landing/home/grocery3.jpg",
     previewUrl: "/grocery3",
-    title: "Grocery 3",
+    title: (
+      <>
+        Grocery <TitleBadge>(3)</TitleBadge>
+      </>
+    ),
     page: "homepage",
   },
   {
-    imgUrl: "/assets/images/landing/healthbeauty.png",
+    imgUrl: "/assets/images/landing/home/healthbeauty.jpg",
     previewUrl: "/healthbeauty-shop",
     title: "Health and Beauty",
     page: "homepage",
   },
   {
     imgUrl: "/assets/images/landing/page-3.png",
-    previewUrl: "/fashion-shop",
-    title: "Fashion",
+    previewUrl: "/fashion-shop-1",
+    title: (
+      <>
+        Fashion <TitleBadge>(1)</TitleBadge>
+      </>
+    ),
     page: "homepage",
   },
   {
-    imgUrl: "/assets/images/landing/gift-shop.png",
-    previewUrl: "/gift-shop",
-    title: "Gift Store",
+    imgUrl: "/assets/images/landing/home/fashion-3.jpg",
+    previewUrl: "/fashion-shop-3",
+    title: (
+      <>
+        Fashion <TitleBadge>(3)</TitleBadge>
+      </>
+    ),
     page: "homepage",
-  },
-  {
-    imgUrl: "/assets/images/landing/page-4.png",
-    previewUrl: "/gadget-shop",
-    title: "Gadget",
-    page: "homepage",
+    status: "New",
   },
 ];
 
 const shopPageList = [
   {
-    imgUrl: "/assets/images/landing/shop/page-7.png",
+    imgUrl: "/assets/images/landing/shop/sale-page-1.jpg",
     previewUrl: "/sale-page-1",
     title: "Sale Page",
     page: "shop",
   },
   {
-    imgUrl: "/assets/images/landing/shop/page-8.png",
+    imgUrl: "/assets/images/landing/shop/sale-page-2.jpg",
     previewUrl: "/sale-page-2",
     title: "Sale Page (Small Navigation)",
     page: "shop",
   },
   {
-    imgUrl: "/assets/images/landing/shop/page-2.png",
-    previewUrl: "/shops/4345643",
+    imgUrl: "/assets/images/landing/shop/vendor-store.jpg",
+    previewUrl: "/shops/scarlett-beauty",
     title: "Vendor Shop",
     page: "shop",
   },
   {
-    imgUrl: "/assets/images/landing/shop/search-product.png",
+    imgUrl: "/assets/images/landing/shop/search-product.jpg",
     previewUrl: "/product/search/mobile%20phone",
     title: "Search",
     page: "shop",
   },
   {
-    imgUrl: "/assets/images/landing/shop/page-6.png",
-    previewUrl: "/product/456346",
+    imgUrl: "/assets/images/landing/shop/product-details.jpg",
+    previewUrl: "/product/classic-rolex-watch",
     title: "Product Details",
     page: "shop",
   },
   {
-    imgUrl: "/assets/images/landing/shop/page-3.png",
+    imgUrl: "/assets/images/landing/shop/cart.jpg",
     previewUrl: "/cart",
     title: "Cart",
     page: "shop",
   },
   {
-    imgUrl: "/assets/images/landing/shop/page-4.png",
+    imgUrl: "/assets/images/landing/shop/checkout.jpg",
     previewUrl: "/checkout",
     title: "Checkout",
     page: "shop",
   },
   {
-    imgUrl: "/assets/images/landing/shop/page-5.png",
+    imgUrl: "/assets/images/landing/shop/checkout-alternative.jpg",
     previewUrl: "/checkout-alternative",
     title: "Checkout Alternative",
     page: "shop",
   },
   {
-    imgUrl: "/assets/images/landing/shop/page-1.png",
+    imgUrl: "/assets/images/landing/shop/shop-list.jpg",
     previewUrl: "/shops",
     title: "Shop List",
     page: "shop",
@@ -295,7 +363,7 @@ const vendorPageList = [
   },
   {
     imgUrl: "/assets/images/landing/vendor/order-details.jpg",
-    previewUrl: "/admin/orders/1",
+    previewUrl: "/admin/orders/f0ba538b-c8f3-45ce-b6c1-209cf07ba5f8",
     title: "Order Details",
     status: "New",
     page: "admin",
@@ -438,62 +506,62 @@ const vendorPageList = [
 
 const customerPageList = [
   {
-    imgUrl: "/assets/images/landing/customer/page-5.png",
+    imgUrl: "/assets/images/landing/customer/profile.jpg",
     previewUrl: "/profile",
     title: "Profile",
     page: "user",
   },
   {
-    imgUrl: "/assets/images/landing/customer/page-6.png",
-    previewUrl: "/profile/edit",
+    imgUrl: "/assets/images/landing/customer/edit-profile.jpg",
+    previewUrl: "/profile/e42e28ea-528f-4bc8-81fb-97f658d67d75",
     title: "Edit Profile",
     page: "user",
   },
   {
-    imgUrl: "/assets/images/landing/customer/page-2.png",
+    imgUrl: "/assets/images/landing/customer/order-list.jpg",
     previewUrl: "/orders",
     title: "My Orders",
     page: "user",
   },
   {
-    imgUrl: "/assets/images/landing/customer/page-3.png",
-    previewUrl: "/orders/23234",
+    imgUrl: "/assets/images/landing/customer/order-details.jpg",
+    previewUrl: "/orders/f0ba538b-c8f3-45ce-b6c1-209cf07ba5f8",
     title: "Order Details",
     page: "user",
   },
   {
-    imgUrl: "/assets/images/landing/customer/page-1.png",
+    imgUrl: "/assets/images/landing/customer/my-addresses.jpg",
     previewUrl: "/address",
     title: "My Addresses",
     page: "user",
   },
   {
-    imgUrl: "/assets/images/landing/customer/add-address.png",
-    previewUrl: "/address/512474",
+    imgUrl: "/assets/images/landing/customer/add-new-addresses.jpg",
+    previewUrl: "/address/d27d0e28-c35e-4085-af1e-f9f1b1bd9c34",
     title: "Add Addresses",
     page: "user",
   },
 
   {
-    imgUrl: "/assets/images/landing/customer/page-4.png",
+    imgUrl: "/assets/images/landing/customer/payment.jpg",
     previewUrl: "/payment-methods",
     title: "Payment Methods",
     page: "user",
   },
   {
-    imgUrl: "/assets/images/landing/customer/page-7.png",
+    imgUrl: "/assets/images/landing/customer/support-ticket.jpg",
     previewUrl: "/support-tickets",
     title: "Support Tickets",
     page: "user",
   },
   {
-    imgUrl: "/assets/images/landing/customer/page-8.png",
-    previewUrl: "/support-tickets/32432423",
+    imgUrl: "/assets/images/landing/customer/support-ticket-detials.jpg",
+    previewUrl: "/support-tickets/product-broken.-i-need-refund",
     title: "Ticket Details",
     page: "user",
   },
   {
-    imgUrl: "/assets/images/landing/customer/page-9.png",
+    imgUrl: "/assets/images/landing/customer/wish-list.jpg",
     previewUrl: "/wish-list",
     title: "Wish List",
     page: "user",

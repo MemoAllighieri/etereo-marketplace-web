@@ -1,13 +1,13 @@
+import { FC, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import Carousel from "components/carousel/Carousel";
 import ProductCard3 from "components/product-cards/ProductCard3";
 import useWindowSize from "hooks/useWindowSize";
-import React, { FC, useEffect, useState } from "react";
+import Product from "models/Product.model";
 
-// component props interface
-interface CarouselProps {
-  productList: any[];
-}
+// ===============================================================
+type CarouselProps = { productList: Product[] };
+// ===============================================================
 
 const CarouselSection: FC<CarouselProps> = ({ productList }) => {
   const [visibleSlides, setVisibleSlides] = useState(4);
@@ -39,12 +39,12 @@ const CarouselSection: FC<CarouselProps> = ({ productList }) => {
         {productList.map((item, ind) => (
           <ProductCard3
             key={ind}
-            id={item.id}
-            imgUrl={item.imgUrl}
-            title={item.name}
-            rating={item.rating}
+            slug={item.slug}
+            title={item.title}
             price={item.price}
             off={item.discount}
+            rating={item.rating}
+            imgUrl={item.thumbnail}
             hideFavoriteIcon
           />
         ))}

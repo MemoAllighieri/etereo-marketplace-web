@@ -1,13 +1,13 @@
+import { FC, Fragment, ReactElement } from "react";
 import { CameraAlt } from "@mui/icons-material";
 import { Avatar, Badge, Box, Button, Card, Grid, SxProps } from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
+import * as yup from "yup";
+import { Formik } from "formik";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import { H3 } from "components/Typography";
 import countryList from "data/countryList";
-import { Formik } from "formik";
-import React, { FC, Fragment, ReactElement } from "react";
-import * as yup from "yup";
 
 // upload button
 type UploadButtonProps = { id: string; style?: SxProps };
@@ -60,7 +60,7 @@ AccountSetting.getLayout = function getLayout(page: ReactElement) {
 // =============================================================================
 
 export default function AccountSetting() {
-  const initialValues = {
+  const INITIAL_VALUES = {
     city: "",
     email: "",
     contact: "",
@@ -118,9 +118,9 @@ export default function AccountSetting() {
         </Box>
 
         <Formik
-          initialValues={initialValues}
-          validationSchema={accountSchema}
           onSubmit={handleFormSubmit}
+          initialValues={INITIAL_VALUES}
+          validationSchema={accountSchema}
         >
           {({
             values,
@@ -145,9 +145,12 @@ export default function AccountSetting() {
                       onChange={handleChange}
                       value={values.first_name}
                       error={!!touched.first_name && !!errors.first_name}
-                      helperText={touched.first_name && errors.first_name}
+                      helperText={
+                        (touched.first_name && errors.first_name) as string
+                      }
                     />
                   </Grid>
+
                   <Grid item md={6} xs={12}>
                     <TextField
                       fullWidth
@@ -159,9 +162,12 @@ export default function AccountSetting() {
                       onChange={handleChange}
                       value={values.last_name}
                       error={!!touched.last_name && !!errors.last_name}
-                      helperText={touched.last_name && errors.last_name}
+                      helperText={
+                        (touched.last_name && errors.last_name) as string
+                      }
                     />
                   </Grid>
+
                   <Grid item md={6} xs={12}>
                     <TextField
                       fullWidth
@@ -174,9 +180,10 @@ export default function AccountSetting() {
                       value={values.email}
                       onChange={handleChange}
                       error={!!touched.email && !!errors.email}
-                      helperText={touched.email && errors.email}
+                      helperText={(touched.email && errors.email) as string}
                     />
                   </Grid>
+
                   <Grid item md={6} xs={12}>
                     <TextField
                       fullWidth
@@ -189,9 +196,10 @@ export default function AccountSetting() {
                       value={values.contact}
                       onChange={handleChange}
                       error={!!touched.contact && !!errors.contact}
-                      helperText={touched.contact && errors.contact}
+                      helperText={(touched.contact && errors.contact) as string}
                     />
                   </Grid>
+
                   <Grid item md={6} xs={12}>
                     <Autocomplete
                       fullWidth
@@ -207,13 +215,16 @@ export default function AccountSetting() {
                           variant="outlined"
                           placeholder="Select Country"
                           error={!!touched.country && !!errors.country}
-                          helperText={touched.country && errors.country}
+                          helperText={
+                            (touched.country && errors.country) as string
+                          }
                           {...params}
                           size="medium"
                         />
                       )}
                     />
                   </Grid>
+
                   <Grid item md={6} xs={12}>
                     <TextField
                       fullWidth
@@ -225,7 +236,7 @@ export default function AccountSetting() {
                       value={values.city}
                       onChange={handleChange}
                       error={!!touched.city && !!errors.city}
-                      helperText={touched.city && errors.city}
+                      helperText={(touched.city && errors.city) as string}
                     />
                   </Grid>
                 </Grid>

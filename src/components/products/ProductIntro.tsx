@@ -1,67 +1,51 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { Add, Remove } from "@mui/icons-material";
-import { Box, Grid } from "@mui/material";
-import BazarAvatar from "components/BazarAvatar";
-import BazarButton from "components/BazarButton";
-import BazarRating from "components/BazarRating";
-import LazyImage from "components/LazyImage";
-import { H1, H2, H3, H6 } from "components/Typography";
-import { CartItem, useAppContext } from "contexts/AppContext";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { useCallback, useState } from "react";
-import ImageViewer from "react-simple-image-viewer";
+import { FC, useState } from "react";
+import { Add, Remove } from "@mui/icons-material";
+import { Avatar, Box, Button, Chip, Grid } from "@mui/material";
+import LazyImage from "components/LazyImage";
+import BazaarRating from "components/BazaarRating";
+import { H1, H2, H3, H6 } from "components/Typography";
+import { useAppContext } from "contexts/AppContext";
 import { FlexBox, FlexRowCenter } from "../flex-box";
+import Product from "models/Product.model";
+import { currency } from "lib";
+import productVariants from "data/product-variants";
 
 // ================================================================
-type ProductIntroProps = {
-  product: { [key: string]: any };
-};
+type ProductIntroProps = { product: Product };
 // ================================================================
 
-const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
-  const { id, price, title, imgGroup } = product;
-
-  const router = useRouter();
-  const routerId = router.query.id as string;
-
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [isViewerOpen, setIsViewerOpen] = useState(false);
-  const [currentImage, setCurrentImage] = useState(0);
+const ProductIntro: FC<ProductIntroProps> = ({ product }) => {
+  const { id, price, title, images, slug, thumbnail } = product;
 
   const { state, dispatch } = useAppContext();
-  const cartList: CartItem[] = state.cart;
-  const cartItem = cartList.find((item) => item.id === id || item.id === routerId);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [selectVariants, setSelectVariants] = useState({
+    option: "option 1",
+    type: "type 1",
+  });
 
-  const handleImageClick = (ind: number) => () => {
-    setSelectedImage(ind);
+  // HANDLE CHAMGE TYPE AND OPTIONS
+  const handleChangeVariant = (variantName: string, value: string) => () => {
+    setSelectVariants((state) => ({
+      ...state,
+      [variantName.toLowerCase()]: value,
+    }));
   };
 
-  const openImageViewer = useCallback((index) => {
-    setCurrentImage(index);
-    setIsViewerOpen(true);
-  }, []);
+  // CHECK PRODUCT EXIST OR NOT IN THE CART
+  const cartItem = state.cart.find((item) => item.id === id);
 
-  const closeImageViewer = () => {
-    setCurrentImage(0);
-    setIsViewerOpen(false);
+  // HANDLE SELECT IMAGE
+  const handleImageClick = (ind: number) => () => setSelectedImage(ind);
+
+  // HANDLE CHANGE CART
+  const handleCartAmountChange = (amount: number) => () => {
+    dispatch({
+      type: "CHANGE_CART_AMOUNT",
+      payload: { price, qty: amount, name: title, imgUrl: thumbnail, id, slug },
+    });
   };
-
-  const handleCartAmountChange = useCallback(
-    (amount) => () => {
-      dispatch({
-        type: "CHANGE_CART_AMOUNT",
-        payload: {
-          price,
-          qty: amount,
-          name: title,
-          imgUrl: imgGroup[0],
-          id: id || routerId,
-        },
-      });
-    },
-    []
-  );
 
   return (
     <Box width="100%">
@@ -69,29 +53,17 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
         <Grid item md={6} xs={12} alignItems="center">
           <FlexBox justifyContent="center" mb={6}>
             <LazyImage
-              width={300}
               alt={title}
+              width={300}
               height={300}
               loading="eager"
               objectFit="contain"
-              src={product.imgGroup[selectedImage]}
-              onClick={() => openImageViewer(imgGroup.indexOf(imgGroup[selectedImage]))}
+              src={product.images[selectedImage]}
             />
-            {isViewerOpen && (
-              <ImageViewer
-                src={imgGroup}
-                onClose={closeImageViewer}
-                currentIndex={currentImage}
-                backgroundStyle={{
-                  backgroundColor: "rgba(0,0,0,0.9)",
-                  zIndex: 1501,
-                }}
-              />
-            )}
           </FlexBox>
 
           <FlexBox overflow="auto">
-            {imgGroup.map((url, ind) => (
+            {images.map((url, ind) => (
               <FlexRowCenter
                 key={ind}
                 width={64}
@@ -103,50 +75,77 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
                 ml={ind === 0 ? "auto" : 0}
                 style={{ cursor: "pointer" }}
                 onClick={handleImageClick(ind)}
-                mr={ind === imgGroup.length - 1 ? "auto" : "10px"}
-                borderColor={selectedImage === ind ? "primary.main" : "grey.400"}
+                mr={ind === images.length - 1 ? "auto" : "10px"}
+                borderColor={
+                  selectedImage === ind ? "primary.main" : "grey.400"
+                }
               >
-                <BazarAvatar src={url} variant="square" height={40} />
+                <Avatar src={url} variant="square" sx={{ height: 40 }} />
               </FlexRowCenter>
             ))}
           </FlexBox>
         </Grid>
 
         <Grid item md={6} xs={12} alignItems="center">
-          <H1 mb={2}>{title}</H1>
+          <H1 mb={1}>{title}</H1>
 
-          <FlexBox alignItems="center" mb={2}>
+          <FlexBox alignItems="center" mb={1}>
             <Box>Brand:</Box>
-            <H6 ml={1}>Xiaomi</H6>
+            <H6>Xiaomi</H6>
           </FlexBox>
 
           <FlexBox alignItems="center" mb={2}>
             <Box lineHeight="1">Rated:</Box>
             <Box mx={1} lineHeight="1">
-              <BazarRating color="warn" fontSize="1.25rem" value={4} readOnly />
+              <BazaarRating
+                color="warn"
+                fontSize="1.25rem"
+                value={4}
+                readOnly
+              />
             </Box>
             <H6 lineHeight="1">(50)</H6>
           </FlexBox>
 
-          <Box mb={3}>
+          {productVariants.map((variant) => (
+            <Box key={variant.id} mb={2}>
+              <H6 mb={1}>{variant.title}</H6>
+
+              {variant.values.map(({ id, value }) => (
+                <Chip
+                  key={id}
+                  label={value}
+                  onClick={handleChangeVariant(variant.title, value)}
+                  sx={{ borderRadius: "4px", mr: 1, cursor: "pointer" }}
+                  color={
+                    selectVariants[variant.title.toLowerCase()] === value
+                      ? "primary"
+                      : "default"
+                  }
+                />
+              ))}
+            </Box>
+          ))}
+
+          <Box pt={1} mb={3}>
             <H2 color="primary.main" mb={0.5} lineHeight="1">
-              ${price.toFixed(2)}
+              {currency(price)}
             </H2>
             <Box color="inherit">Stock Available</Box>
           </Box>
 
           {!cartItem?.qty ? (
-            <BazarButton
+            <Button
               color="primary"
               variant="contained"
               onClick={handleCartAmountChange(1)}
               sx={{ mb: 4.5, px: "1.75rem", height: 40 }}
             >
               Add to Cart
-            </BazarButton>
+            </Button>
           ) : (
             <FlexBox alignItems="center" mb={4.5}>
-              <BazarButton
+              <Button
                 size="small"
                 sx={{ p: 1 }}
                 color="primary"
@@ -154,13 +153,13 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
                 onClick={handleCartAmountChange(cartItem?.qty - 1)}
               >
                 <Remove fontSize="small" />
-              </BazarButton>
+              </Button>
 
               <H3 fontWeight="600" mx={2.5}>
                 {cartItem?.qty.toString().padStart(2, "0")}
               </H3>
 
-              <BazarButton
+              <Button
                 size="small"
                 sx={{ p: 1 }}
                 color="primary"
@@ -168,13 +167,13 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
                 onClick={handleCartAmountChange(cartItem?.qty + 1)}
               >
                 <Add fontSize="small" />
-              </BazarButton>
+              </Button>
             </FlexBox>
           )}
 
           <FlexBox alignItems="center" mb={2}>
             <Box>Sold By:</Box>
-            <Link href="/shops/fdfdsa">
+            <Link href="/shops/scarlett-beauty" passHref>
               <a>
                 <H6 ml={1}>Mobile Store</H6>
               </a>

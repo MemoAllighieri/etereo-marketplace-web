@@ -1,18 +1,17 @@
-import { Box, Container, styled } from "@mui/material";
-import BazarCard from "components/BazarCard";
-import NavLink2 from "components/nav-link/NavLink2";
-import { H2, Paragraph } from "components/Typography";
 import { FC } from "react";
+import { Box, Container, styled } from "@mui/material";
+import BazaarCard from "components/BazaarCard";
+import { NavLink2 } from "components/nav-link";
+import { H2, Paragraph } from "components/Typography";
 
 // styled component
-const StyledCard = styled(BazarCard)(({ theme }) => ({
+const StyledCard = styled(BazaarCard)(({ theme }) => ({
   padding: "3rem 4rem",
   borderRadius: "0",
-  backgroundImage:
-    "linear-gradient(to right,#fff 60%, transparent), url(/assets/images/products/bg-gradient.png)",
   backgroundRepeat: "no-repeat",
   backgroundPosition: "top right",
   boxShadow: theme.shadows[4],
+  backgroundImage: `linear-gradient(to right,#fff 60%, transparent), url(/assets/images/products/bg-gradient.png)`,
   "&:hover": { boxShadow: theme.shadows[2] },
   [theme.breakpoints.down("sm")]: { padding: "2rem" },
 }));

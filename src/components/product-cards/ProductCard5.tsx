@@ -1,17 +1,14 @@
+import { FC } from "react";
 import { Box } from "@mui/material";
 import HoverBox from "components/HoverBox";
 import LazyImage from "components/LazyImage";
 import { H4 } from "components/Typography";
-import React from "react";
 
 // ==========================================================
-type ProductCard5Props = {
-  title: string;
-  imgUrl: string;
-};
+type ProductCardProps = { title: string; imgUrl: string };
 // ==========================================================
 
-const ProductCard5: React.FC<ProductCard5Props> = ({ imgUrl, title }) => {
+const ProductCard5: FC<ProductCardProps> = ({ imgUrl, title }) => {
   return (
     <Box>
       <HoverBox borderRadius="5px" mb={1}>

@@ -75,7 +75,9 @@ const EditAddressForm: FC<EditAddressFormProps> = (props) => {
                   label="Enter Your Name"
                   value={formik.values.name}
                   onChange={formik.handleChange}
-                  helperText={formik.touched.name && formik.errors.name}
+                  helperText={
+                    (formik.touched.name && formik.errors.name) as string
+                  }
                   error={formik.touched.name && Boolean(formik.errors.name)}
                 />
               </Grid>
@@ -90,7 +92,10 @@ const EditAddressForm: FC<EditAddressFormProps> = (props) => {
                   error={
                     formik.touched.address1 && Boolean(formik.errors.address1)
                   }
-                  helperText={formik.touched.address1 && formik.errors.address1}
+                  helperText={
+                    (formik.touched.address1 &&
+                      formik.errors.address1) as string
+                  }
                 />
               </Grid>
 
@@ -105,7 +110,10 @@ const EditAddressForm: FC<EditAddressFormProps> = (props) => {
                   error={
                     formik.touched.address2 && Boolean(formik.errors.address2)
                   }
-                  helperText={formik.touched.address2 && formik.errors.address2}
+                  helperText={
+                    (formik.touched.address2 &&
+                      formik.errors.address2) as string
+                  }
                 />
               </Grid>
 
@@ -118,7 +126,9 @@ const EditAddressForm: FC<EditAddressFormProps> = (props) => {
                   value={formik.values.phone}
                   onChange={formik.handleChange}
                   error={formik.touched.phone && Boolean(formik.errors.phone)}
-                  helperText={formik.touched.phone && formik.errors.phone}
+                  helperText={
+                    (formik.touched.phone && formik.errors.phone) as string
+                  }
                 />
               </Grid>
             </Grid>

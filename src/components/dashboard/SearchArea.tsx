@@ -1,8 +1,8 @@
+import { FC } from "react";
 import { Add } from "@mui/icons-material";
 import { Button, Theme, useMediaQuery } from "@mui/material";
 import { FlexBox } from "components/flex-box";
 import SearchInput from "components/SearchInput";
-import React, { FC } from "react";
 
 // ===============================================================
 type SearchAreaProps = {
@@ -14,7 +14,7 @@ type SearchAreaProps = {
 // ===============================================================
 
 const SearchArea: FC<SearchAreaProps> = (props) => {
-  const { searchPlaceholder, buttonText } = props;
+  const { searchPlaceholder, buttonText, handleBtnClick } = props;
   const downSM = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
 
   return (
@@ -26,6 +26,7 @@ const SearchArea: FC<SearchAreaProps> = (props) => {
         fullWidth={downSM}
         variant="contained"
         startIcon={<Add />}
+        onClick={handleBtnClick}
         sx={{ minHeight: 44 }}
       >
         {buttonText}

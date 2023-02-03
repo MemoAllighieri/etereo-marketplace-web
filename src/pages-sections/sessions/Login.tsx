@@ -1,20 +1,21 @@
-import { Card, CardProps } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import BazarButton from "components/BazarButton";
-import BazarTextField from "components/BazarTextField";
-import { H3, Small } from "components/Typography";
-import { useFormik } from "formik";
-import React, { useCallback, useState } from "react";
+import { useCallback, useState, FC } from "react";
+import { Button, Card, CardProps, Box, styled } from "@mui/material";
+import Link from "next/link";
 import * as yup from "yup";
-import EyeToggleButton from "./EyeToggleButton";
+import { useFormik } from "formik";
+import { H1, H6 } from "components/Typography";
+import BazaarImage from "components/BazaarImage";
+import BazaarTextField from "components/BazaarTextField";
 import SocialButtons from "./SocialButtons";
+import EyeToggleButton from "./EyeToggleButton";
+import { FlexBox, FlexRowCenter } from "components/flex-box";
 
 const fbStyle = { background: "#3B5998", color: "white" };
 const googleStyle = { background: "#4285F4", color: "white" };
 
 type WrapperProps = { passwordVisibility?: boolean };
 
-export const Wrapper = styled<React.FC<WrapperProps & CardProps>>(
+export const Wrapper = styled<FC<WrapperProps & CardProps>>(
   ({ children, passwordVisibility, ...rest }) => (
     <Card {...rest}>{children}</Card>
   )
@@ -53,21 +54,16 @@ const Login = () => {
   return (
     <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
       <form onSubmit={handleSubmit}>
-        <H3 textAlign="center" mb={1}>
-          Welcome To Ecommerce
-        </H3>
-        <Small
-          mb={4.5}
-          display="block"
-          fontSize="12px"
-          fontWeight="600"
-          color="grey.800"
-          textAlign="center"
-        >
-          Log in with email & password
-        </Small>
+        <BazaarImage
+          src="/assets/images/bazaar-black-sm.svg"
+          sx={{ m: "auto" }}
+        />
 
-        <BazarTextField
+        <H1 textAlign="center" mt={1} mb={4} fontSize={16}>
+          Welcome To Bazaar
+        </H1>
+
+        <BazaarTextField
           mb={1.5}
           fullWidth
           name="email"
@@ -80,10 +76,10 @@ const Login = () => {
           label="Email or Phone Number"
           placeholder="exmple@mail.com"
           error={!!touched.email && !!errors.email}
-          helperText={touched.email && errors.email}
+          helperText={(touched.email && errors.email) as string}
         />
 
-        <BazarTextField
+        <BazaarTextField
           mb={2}
           fullWidth
           size="small"
@@ -97,7 +93,7 @@ const Login = () => {
           placeholder="*********"
           type={passwordVisibility ? "text" : "password"}
           error={!!touched.password && !!errors.password}
-          helperText={touched.password && errors.password}
+          helperText={(touched.password && errors.password) as string}
           InputProps={{
             endAdornment: (
               <EyeToggleButton
@@ -108,18 +104,46 @@ const Login = () => {
           }}
         />
 
-        <BazarButton
+        <Button
           fullWidth
           type="submit"
           color="primary"
           variant="contained"
-          sx={{ mb: "1.65rem", height: 44 }}
+          sx={{ height: 44 }}
         >
           Login
-        </BazarButton>
+        </Button>
       </form>
 
-      <SocialButtons redirect="/signup" redirectText="Sign Up" />
+      <SocialButtons />
+
+      <FlexRowCenter mt="1.25rem">
+        <Box>Don&apos;t have account?</Box>
+        <Link href="/signup" passHref legacyBehavior>
+          <a>
+            <H6 ml={1} borderBottom="1px solid" borderColor="grey.900">
+              Sign Up
+            </H6>
+          </a>
+        </Link>
+      </FlexRowCenter>
+
+      <FlexBox
+        justifyContent="center"
+        bgcolor="grey.200"
+        borderRadius="4px"
+        py={2.5}
+        mt="1.25rem"
+      >
+        Forgot your password?
+        <Link href="/reset-password" passHref legacyBehavior>
+          <a>
+            <H6 ml={1} borderBottom="1px solid" borderColor="grey.900">
+              Reset It
+            </H6>
+          </a>
+        </Link>
+      </FlexBox>
     </Wrapper>
   );
 };

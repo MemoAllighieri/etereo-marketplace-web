@@ -1,9 +1,9 @@
+import { FC } from "react";
+import Link from "next/link";
 import { alpha, Box, styled } from "@mui/material";
 import LazyImage from "components/LazyImage";
-import NavLink2 from "components/nav-link/NavLink2";
+import { NavLink2 } from "components/nav-link";
 import { H3, Paragraph } from "components/Typography";
-import Link from "next/link";
-import React, { FC } from "react";
 
 // styled component
 const Wrapper = styled(Box)(({ theme }) => ({
@@ -14,12 +14,10 @@ const Wrapper = styled(Box)(({ theme }) => ({
   boxShadow: theme.shadows[4],
   transition: "all 250ms ease-in-out",
   backgroundColor: alpha(theme.palette.background.paper, 1),
-  "&:hover": { boxShadow: theme.shadows[2] },
-  "& .content": { paddingLeft: "2rem" },
   "& img": { transform: "scale(1.2)" },
-  [theme.breakpoints.down("sm")]: {
-    "& .content": { padding: "1.5rem" },
-  },
+  "& .content": { paddingLeft: "2rem" },
+  "&:hover": { boxShadow: theme.shadows[2] },
+  [theme.breakpoints.down("sm")]: { "& .content": { padding: "1.5rem" } },
 }));
 
 // =====================================================

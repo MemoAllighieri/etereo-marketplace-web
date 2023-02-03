@@ -1,8 +1,8 @@
+import { FC } from "react";
 import { Button, Grid, styled } from "@mui/material";
-import BazarImage from "components/BazarImage";
+import BazaarImage from "components/BazaarImage";
 import { FlexBetween } from "components/flex-box";
 import { Paragraph } from "components/Typography";
-import { FC } from "react";
 
 // styled component
 const StyledBox = styled(FlexBetween)(({ theme }) => ({
@@ -35,40 +35,50 @@ const StyledBox = styled(FlexBetween)(({ theme }) => ({
 
 // ==================================================
 type CarouselCard1Props = {
-  body?: string;
-  carousel?: any;
-  heading?: string;
+  title?: string;
+  imgUrl?: string;
+  buttonLik?: string;
+  buttonText?: string;
+  description?: string;
+  buttonColor?: "dark" | "primary";
 };
 // ==================================================
 
-const CarouselCard1: FC<CarouselCard1Props> = ({ carousel }) => {
+const CarouselCard1: FC<CarouselCard1Props> = ({
+  title,
+  imgUrl,
+  buttonLik,
+  buttonText,
+  description,
+  buttonColor = "primary",
+}) => {
   return (
     <StyledBox>
       <Grid container spacing={3} alignItems="center" justifyContent="center">
         <Grid item className="grid-item" sm={5} xs={12}>
-          <h1 className="title">{carousel.title}</h1>
+          <h1 className="title">{title}</h1>
           <Paragraph color="secondary.main" mb={2.7}>
-            {carousel.description}
+            {description}
           </Paragraph>
 
-          <a href={carousel.buttonLik}>
+          <a href={buttonLik}>
             <Button
               size="large"
-              color="primary"
+              color={buttonColor}
               disableElevation
               variant="contained"
               className="button-link"
               sx={{ height: 44, borderRadius: "4px" }}
             >
-              {carousel.buttonText}
+              {buttonText}
             </Button>
           </a>
         </Grid>
 
         <Grid item sm={5} xs={12}>
-          <BazarImage
+          <BazaarImage
+            src={imgUrl}
             alt="apple-watch-1"
-            src={carousel.photoUrl}
             sx={{
               mx: "auto",
               maxHeight: 400,

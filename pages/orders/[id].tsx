@@ -1,26 +1,38 @@
+import { Fragment } from "react";
+import { useRouter } from "next/router";
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { format } from "date-fns";
 import { Done, ShoppingBag } from "@mui/icons-material";
-import { Avatar, Box, Button, Card, Divider, Grid, Typography, useTheme } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import { FlexBetween, FlexBox } from "components/flex-box";
-import UserDashboardHeader from "components/header/UserDashboardHeader";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  Divider,
+  Grid,
+  Typography,
+  styled,
+} from "@mui/material";
+import TableRow from "components/TableRow";
 import Delivery from "components/icons/Delivery";
 import PackageBox from "components/icons/PackageBox";
 import TruckFilled from "components/icons/TruckFilled";
+import { H5, H6, Paragraph } from "components/Typography";
+import { FlexBetween, FlexBox } from "components/flex-box";
+import UserDashboardHeader from "components/header/UserDashboardHeader";
 import CustomerDashboardLayout from "components/layouts/customer-dashboard";
 import CustomerDashboardNavigation from "components/layouts/customer-dashboard/Navigations";
-import TableRow from "components/TableRow";
-import { H5, H6, Paragraph } from "components/Typography";
-import productDatabase from "data/product-database";
-import { format } from "date-fns";
 import useWindowSize from "hooks/useWindowSize";
-import { Fragment } from "react";
+import { currency } from "lib";
+import Order from "models/Order.model";
+import api from "utils/__api__/orders";
 
+// styled components
 const StyledFlexbox = styled(FlexBetween)(({ theme }) => ({
   flexWrap: "wrap",
   marginTop: "2rem",
   marginBottom: "2rem",
   [theme.breakpoints.down("sm")]: { flexDirection: "column" },
-
   "& .line": {
     height: 4,
     minWidth: 50,
@@ -29,32 +41,45 @@ const StyledFlexbox = styled(FlexBetween)(({ theme }) => ({
   },
 }));
 
-type OrderStatus = "packaging" | "shipping" | "delivering" | "complete";
+type OrderStatus = "Packaging" | "Shipping" | "Delivering" | "Complete";
 
-const OrderDetails = () => {
-  const orderStatus: OrderStatus = "shipping";
-  const orderStatusList = ["packaging", "shipping", "delivering", "complete"];
+// =============================================================
+type Props = { order: Order };
+// =============================================================
+
+const OrderDetails: NextPage<Props> = ({ order }) => {
+  const router = useRouter();
+  const width = useWindowSize();
+  const orderStatus: OrderStatus = "Shipping";
+  const orderStatusList = ["Packaging", "Shipping", "Delivering", "Complete"];
   const stepIconList = [PackageBox, TruckFilled, Delivery];
 
-  const statusIndex = orderStatusList.indexOf(orderStatus);
-  const width = useWindowSize();
-  const theme = useTheme();
   const breakpoint = 350;
-  console.log(theme.breakpoints.up("md"));
+  const statusIndex = orderStatusList.indexOf(orderStatus);
+
+  // SECTION TITLE HEADER
+  const HEADER_BUTTON = (
+    <Button color="primary" sx={{ bgcolor: "primary.light", px: 4 }}>
+      Order Again
+    </Button>
+  );
+
+  // Show a loading state when the fallback is rendered
+  if (router.isFallback) {
+    return <h1>Loading...</h1>;
+  }
 
   return (
     <CustomerDashboardLayout>
+      {/* TITLE HEADER AREA */}
       <UserDashboardHeader
         icon={ShoppingBag}
         title="Order Details"
         navigation={<CustomerDashboardNavigation />}
-        button={
-          <Button color="primary" sx={{ bgcolor: "primary.light", px: 4 }}>
-            Order Again
-          </Button>
-        }
+        button={HEADER_BUTTON}
       />
 
+      {/* ORDER PROGRESS AREA */}
       <Card sx={{ p: "2rem 1.5rem", mb: "30px" }}>
         <StyledFlexbox>
           {stepIconList.map((Icon, ind) => (
@@ -70,6 +95,7 @@ const OrderDetails = () => {
                 >
                   <Icon color="inherit" sx={{ fontSize: "32px" }} />
                 </Avatar>
+
                 {ind < statusIndex && (
                   <Box position="absolute" right="0" top="0">
                     <Avatar
@@ -85,8 +111,12 @@ const OrderDetails = () => {
                   </Box>
                 )}
               </Box>
+
               {ind < stepIconList.length - 1 && (
-                <Box className="line" bgcolor={ind < statusIndex ? "primary.main" : "grey.300"} />
+                <Box
+                  className="line"
+                  bgcolor={ind < statusIndex ? "primary.main" : "grey.300"}
+                />
               )}
             </Fragment>
           ))}
@@ -105,6 +135,7 @@ const OrderDetails = () => {
         </FlexBox>
       </Card>
 
+      {/* ORDERED PRODUCT LIST */}
       <Card sx={{ p: 0, mb: "30px" }}>
         <TableRow
           sx={{
@@ -118,33 +149,47 @@ const OrderDetails = () => {
             <Typography fontSize={14} color="grey.600" mr={0.5}>
               Order ID:
             </Typography>
-            <Typography fontSize={14}>9001997718074513</Typography>
+
+            <Typography fontSize={14}>{order.id}</Typography>
           </FlexBox>
 
           <FlexBox className="pre" m={0.75} alignItems="center">
             <Typography fontSize={14} color="grey.600" mr={0.5}>
               Placed on:
             </Typography>
-            <Typography fontSize={14}>{format(new Date(), "dd MMM, yyyy")}</Typography>
+
+            <Typography fontSize={14}>
+              {format(new Date(order.createdAt), "dd MMM, yyyy")}
+            </Typography>
           </FlexBox>
 
           <FlexBox className="pre" m={0.75} alignItems="center">
             <Typography fontSize={14} color="grey.600" mr={0.5}>
               Delivered on:
             </Typography>
-            <Typography fontSize={14}>{format(new Date(), "dd MMM, yyyy")}</Typography>
+
+            <Typography fontSize={14}>
+              {format(new Date(), "dd MMM, yyyy")}
+            </Typography>
           </FlexBox>
         </TableRow>
 
         <Box py={1}>
-          {productDatabase.slice(179, 182).map((item) => (
-            <FlexBox px={2} py={1} flexWrap="wrap" alignItems="center" key={item.id}>
+          {order.items.map((item, ind) => (
+            <FlexBox
+              px={2}
+              py={1}
+              flexWrap="wrap"
+              alignItems="center"
+              key={ind}
+            >
               <FlexBox flex="2 2 260px" m={0.75} alignItems="center">
-                <Avatar src={item.imgUrl} sx={{ height: 64, width: 64 }} />
+                <Avatar src={item.product_img} sx={{ height: 64, width: 64 }} />
                 <Box ml={2.5}>
-                  <H6 my="0px">{item.title}</H6>
+                  <H6 my="0px">{item.product_name}</H6>
+
                   <Typography fontSize="14px" color="grey.600">
-                    ${item.price} x 1
+                    {currency(item.product_price)} x {item.product_quantity}
                   </Typography>
                 </Box>
               </FlexBox>
@@ -165,6 +210,7 @@ const OrderDetails = () => {
         </Box>
       </Card>
 
+      {/* SHIPPING AND ORDER SUMMERY */}
       <Grid container spacing={3}>
         <Grid item lg={6} md={6} xs={12}>
           <Card sx={{ p: "20px 30px" }}>
@@ -173,7 +219,7 @@ const OrderDetails = () => {
             </H5>
 
             <Paragraph fontSize={14} my={0}>
-              Kelly Williams 777 Brockton Avenue, Abington MA 2351
+              {order.shippingAddress}
             </Paragraph>
           </Card>
         </Grid>
@@ -188,28 +234,31 @@ const OrderDetails = () => {
               <Typography fontSize={14} color="grey.600">
                 Subtotal:
               </Typography>
-              <H6 my="0px">$335</H6>
+
+              <H6 my="0px">{currency(order.totalPrice)}</H6>
             </FlexBetween>
 
             <FlexBetween mb={1}>
               <Typography fontSize={14} color="grey.600">
                 Shipping fee:
               </Typography>
-              <H6 my="0px">$10</H6>
+
+              <H6 my="0px">{currency(0)}</H6>
             </FlexBetween>
 
             <FlexBetween mb={1}>
               <Typography fontSize={14} color="grey.600">
                 Discount:
               </Typography>
-              <H6 my="0px">-$30</H6>
+
+              <H6 my="0px">{currency(order.discount)}</H6>
             </FlexBetween>
 
             <Divider sx={{ mb: 1 }} />
 
             <FlexBetween mb={2}>
               <H6 my="0px">Total</H6>
-              <H6 my="0px">$315</H6>
+              <H6 my="0px">{currency(order.totalPrice)}</H6>
             </FlexBetween>
 
             <Typography fontSize={14}>Paid by Credit/Debit Card</Typography>
@@ -218,6 +267,20 @@ const OrderDetails = () => {
       </Grid>
     </CustomerDashboardLayout>
   );
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = await api.getIds();
+
+  return {
+    paths: paths, //indicates that no page needs be created at build time
+    fallback: "blocking", //indicates the type of fallback
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const order = await api.getOrder(String(params.id));
+  return { props: { order } };
 };
 
 export default OrderDetails;

@@ -1,16 +1,16 @@
+import { ReactElement } from "react";
+import { GetStaticProps } from "next";
 import { Box, Card, Stack, Table, TableContainer } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
+import { H3 } from "components/Typography";
+import Scrollbar from "components/Scrollbar";
 import SearchArea from "components/dashboard/SearchArea";
 import TableHeader from "components/data-table/TableHeader";
 import TablePagination from "components/data-table/TablePagination";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
-import Scrollbar from "components/Scrollbar";
-import { H3 } from "components/Typography";
 import useMuiTable from "hooks/useMuiTable";
-import { GetStaticProps } from "next";
 import { CustomerRow } from "pages-sections/admin";
-import React, { ReactElement } from "react";
-import api from "utils/api/dashboard";
+import api from "utils/__api__/dashboard";
 
 // table column list
 const tableHeading = [
@@ -63,14 +63,14 @@ export default function CustomerList({ customers }: CustomerListProps) {
                 hideSelectBtn
                 orderBy={orderBy}
                 heading={tableHeading}
-                rowCount={customers.length}
                 numSelected={selected.length}
+                rowCount={filteredList.length}
                 onRequestSort={handleRequestSort}
               />
 
               <TableBody>
-                {filteredList.map((customer, index) => (
-                  <CustomerRow customer={customer} key={index} />
+                {filteredList.map((customer) => (
+                  <CustomerRow customer={customer} key={customer.id} />
                 ))}
               </TableBody>
             </Table>
@@ -80,7 +80,7 @@ export default function CustomerList({ customers }: CustomerListProps) {
         <Stack alignItems="center" my={4}>
           <TablePagination
             onChange={handleChangePage}
-            count={Math.ceil(customers.length / rowsPerPage)}
+            count={Math.ceil(filteredList.length / rowsPerPage)}
           />
         </Stack>
       </Card>

@@ -1,18 +1,20 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { Add, Remove, RemoveRedEye } from "@mui/icons-material";
+import Link from "next/link";
+import { FC, Fragment, useCallback, useState } from "react";
+import { Add, Favorite, Remove, RemoveRedEye } from "@mui/icons-material";
 import ShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import { Box, Button, Chip, styled } from "@mui/material";
-import BazarCard from "components/BazarCard";
-import BazarRating from "components/BazarRating";
-import { FlexBetween, FlexBox } from "components/flex-box";
+import { useSnackbar } from "notistack";
 import LazyImage from "components/LazyImage";
+import BazaarCard from "components/BazaarCard";
 import { H3, Span } from "components/Typography";
+import BazaarRating from "components/BazaarRating";
+import { FlexBetween, FlexBox } from "components/flex-box";
+import ProductViewDialog from "components/products/ProductViewDialog";
 import { CartItem, useAppContext } from "contexts/AppContext";
-import Link from "next/link";
-import { FC, Fragment, useCallback } from "react";
+import { calculateDiscount, currency } from "lib";
 
-const StyledBazarCard = styled(BazarCard)(({ theme }) => ({
+const StyledBazaarCard = styled(BazaarCard)(({ theme }) => ({
   height: "100%",
   margin: "auto",
   display: "flex",
@@ -32,9 +34,9 @@ const ImageWrapper = styled(Box)(({ theme }) => ({
   overflow: "hidden",
   textAlign: "center",
   position: "relative",
-  display: "inline-block",
   padding: "44px 40px",
   background: "#efefef",
+  display: "inline-block",
   [theme.breakpoints.down("sm")]: { display: "block" },
 }));
 
@@ -51,25 +53,18 @@ const HoverWrapper = styled(FlexBetween)(({ theme }) => ({
   position: "absolute",
   boxShadow: theme.shadows[2],
   transition: "bottom 0.3s ease-in-out",
-  "& span": {
-    width: "100%",
-    height: "100%",
-    display: "flex",
-    padding: "0px 10px",
-    alignItems: "center",
-    "&:hover": { cursor: "pointer", background: "#f3f5f9" },
-  },
-  "& a": {
+  "& span, & a": {
     width: "100%",
     height: "100%",
     display: "flex",
     alignItems: "center",
     "&:hover": { cursor: "pointer", background: "#f3f5f9" },
   },
+  "& span": { padding: "0px 10px" },
   "& svg": { fontSize: 18, color: theme.palette.grey[600] },
 }));
 
-const StyledChip = styled(Chip)(() => ({
+const StyledChip = styled(Chip)({
   zIndex: 11,
   top: "10px",
   left: "10px",
@@ -78,9 +73,9 @@ const StyledChip = styled(Chip)(() => ({
   fontWeight: 600,
   fontSize: "10px",
   position: "absolute",
-}));
+});
 
-const ContentWrapper = styled(FlexBox)(() => ({
+const ContentWrapper = styled(FlexBox)({
   minHeight: 110,
   padding: "1rem",
   "& .title, & .categories": {
@@ -88,47 +83,69 @@ const ContentWrapper = styled(FlexBox)(() => ({
     whiteSpace: "nowrap",
     textOverflow: "ellipsis",
   },
-}));
+});
 
 // ===============================================================
-type ProductCard13Props = {
-  // className?: string;
-  // style?: CSSProperties;
-  rating?: number;
-  hoverEffect?: boolean;
-  imgUrl: string;
+type ProductCardProps = {
+  off: number;
+  slug: string;
   title: string;
   price: number;
-  off: number;
+  imgUrl: string;
+  rating?: number;
   id: string | number;
   hideRating?: boolean;
-  // showProductSize?: boolean;
+  hoverEffect?: boolean;
 };
 // ===============================================================
 
-const ProductCard13: FC<ProductCard13Props> = (props) => {
-  const { off, id, title, price, imgUrl, rating, hideRating, hoverEffect } = props;
+const ProductCard13: FC<ProductCardProps> = (props) => {
+  const {
+    off,
+    id,
+    title,
+    price,
+    imgUrl,
+    rating,
+    hideRating,
+    hoverEffect,
+    slug,
+  } = props;
 
+  const { enqueueSnackbar } = useSnackbar();
   const { state, dispatch } = useAppContext();
+  const [openModal, setOpenModal] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
-  const cartItem: CartItem | undefined = state.cart.find((item) => item.id === id);
+  const toggleIsFavorite = () => setIsFavorite((fav) => !fav);
+  const toggleDialog = useCallback(() => setOpenModal((open) => !open), []);
 
-  const handleCartAmountChange = useCallback(
-    (amount) => () => {
-      dispatch({
-        type: "CHANGE_CART_AMOUNT",
-        payload: { price, imgUrl, id, name: title, qty: amount },
-      });
-    },
-    []
+  const cartItem: CartItem | undefined = state.cart.find(
+    (item) => item.slug === slug
   );
 
-  return (
-    <StyledBazarCard hoverEffect={hoverEffect}>
-      <ImageWrapper>
-        {off !== 0 && <StyledChip color="primary" size="small" label={`${off}% off`} />}
+  const handleCartAmountChange =
+    (amount: number, type?: "add" | "remove") => () => {
+      dispatch({
+        type: "CHANGE_CART_AMOUNT",
+        payload: { price, imgUrl, id, name: title, qty: amount, slug },
+      });
 
-        <Link href={`/product/${id}`}>
+      if (type === "remove") {
+        enqueueSnackbar("Remove from Cart", { variant: "error" });
+      } else {
+        enqueueSnackbar("Added to Cart", { variant: "success" });
+      }
+    };
+
+  return (
+    <StyledBazaarCard hoverEffect={hoverEffect}>
+      <ImageWrapper>
+        {off !== 0 && (
+          <StyledChip color="primary" size="small" label={`${off}% off`} />
+        )}
+
+        <Link href={`/product/${slug}`}>
           <a>
             <LazyImage
               alt={title}
@@ -142,16 +159,23 @@ const ProductCard13: FC<ProductCard13Props> = (props) => {
         </Link>
 
         <HoverWrapper className="controller">
-          <Link href={`/product/${id}`}>
-            <a>
-              <Span>
-                <RemoveRedEye />
-              </Span>
-            </a>
-          </Link>
+          <Span onClick={toggleDialog}>
+            <RemoveRedEye />
+          </Span>
 
-          <Span sx={{ borderLeft: "1px solid", borderRight: "1px solid", borderColor: "grey.300" }}>
-            <FavoriteBorder />
+          <Span
+            onClick={toggleIsFavorite}
+            sx={{
+              borderLeft: "1px solid",
+              borderRight: "1px solid",
+              borderColor: "grey.300",
+            }}
+          >
+            {isFavorite ? (
+              <Favorite color="primary" fontSize="small" />
+            ) : (
+              <FavoriteBorder fontSize="small" color="disabled" />
+            )}
           </Span>
 
           <Span onClick={handleCartAmountChange((cartItem?.qty || 0) + 1)}>
@@ -160,9 +184,15 @@ const ProductCard13: FC<ProductCard13Props> = (props) => {
         </HoverWrapper>
       </ImageWrapper>
 
+      <ProductViewDialog
+        openDialog={openModal}
+        handleCloseDialog={toggleDialog}
+        product={{ title, price, id, slug, imgGroup: [imgUrl, imgUrl] }}
+      />
+
       <ContentWrapper>
         <Box flex="1 1 0" minWidth="0px" mr={1}>
-          <Link href={`/product/${id}`}>
+          <Link href={`/product/${slug}`}>
             <a>
               <H3
                 mb={1}
@@ -180,19 +210,19 @@ const ProductCard13: FC<ProductCard13Props> = (props) => {
 
           {!hideRating && (
             <FlexBox gap={1} alignItems="center">
-              <BazarRating value={rating || 0} color="warn" readOnly />
+              <BazaarRating value={rating || 0} color="warn" readOnly />
               <Span color="grey.600">{`(${rating})`}</Span>
             </FlexBox>
           )}
 
           <FlexBox gap={1} alignItems="center" mt={0.5}>
             <Box fontWeight={600} color="primary.main">
-              ${(price - (price * off) / 100).toFixed(2)}
+              {calculateDiscount(price, off)}
             </Box>
 
             {off !== 0 && (
               <Box color="grey.600" fontWeight={600}>
-                <del>{price?.toFixed(2)}</del>
+                <del>{currency(price)}</del>
               </Box>
             )}
           </FlexBox>
@@ -224,7 +254,7 @@ const ProductCard13: FC<ProductCard13Props> = (props) => {
                 color="primary"
                 variant="outlined"
                 sx={{ padding: "3px" }}
-                onClick={handleCartAmountChange(cartItem?.qty - 1)}
+                onClick={handleCartAmountChange(cartItem?.qty - 1, "remove")}
               >
                 <Remove fontSize="small" />
               </Button>
@@ -232,7 +262,7 @@ const ProductCard13: FC<ProductCard13Props> = (props) => {
           )}
         </FlexBox>
       </ContentWrapper>
-    </StyledBazarCard>
+    </StyledBazaarCard>
   );
 };
 

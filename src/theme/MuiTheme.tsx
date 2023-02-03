@@ -1,16 +1,18 @@
-import { CssBaseline } from "@mui/material";
-import { createTheme, responsiveFontSizes, ThemeProvider } from "@mui/material/styles";
-import useSettings from "hooks/useSettings";
-import { merge } from "merge";
+import { FC, ReactNode } from "react";
 import getConfig from "next/config";
 import { useRouter } from "next/router";
-import { FC, ReactNode } from "react";
+import { merge } from "merge";
+import { CssBaseline } from "@mui/material";
+import {
+  createTheme,
+  responsiveFontSizes,
+  ThemeProvider,
+} from "@mui/material/styles";
+import useSettings from "hooks/useSettings";
 import customThemeOptions from "./themeOptions";
 
 // =======================================================
-type MuiThemeProps = {
-  children?: ReactNode;
-};
+type MuiThemeProps = { children?: ReactNode };
 // =======================================================
 
 const MuiTheme: FC<MuiThemeProps> = ({ children }) => {
@@ -19,7 +21,9 @@ const MuiTheme: FC<MuiThemeProps> = ({ children }) => {
   const { publicRuntimeConfig } = getConfig(); // Value is coming from next.config.js
 
   const themeOptions = customThemeOptions(publicRuntimeConfig, pathname);
-  let theme = createTheme(merge({}, { ...themeOptions, direction: settings.direction }));
+  let theme = createTheme(
+    merge({}, { ...themeOptions, direction: settings.direction })
+  );
   theme = responsiveFontSizes(theme);
 
   // theme shadows

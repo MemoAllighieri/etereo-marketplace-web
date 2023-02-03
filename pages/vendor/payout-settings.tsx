@@ -1,9 +1,9 @@
-import { Box, Button, Card, Divider, Stack, TextField } from "@mui/material";
-import VendorDashboardLayout from "components/layouts/vendor-dashboard";
-import { H3, Paragraph } from "components/Typography";
-import { Formik } from "formik";
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import * as Yup from "yup";
+import { Formik } from "formik";
+import { Box, Button, Card, Divider, Stack, TextField } from "@mui/material";
+import { H3, Paragraph } from "components/Typography";
+import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 
 const cardInitialValues = {
   amount: "$250",
@@ -97,8 +97,8 @@ export default function PayoutSettings() {
                   onBlur={handleBlur}
                   value={values.amount}
                   onChange={handleChange}
-                  helperText={touched.amount && errors.amount}
                   error={Boolean(errors.amount && touched.amount)}
+                  helperText={(touched.amount && errors.amount) as string}
                 />
 
                 <TextField
@@ -109,10 +109,12 @@ export default function PayoutSettings() {
                   onChange={handleChange}
                   label="Card Holder Name"
                   value={values.cardHolderName}
-                  helperText={touched.cardHolderName && errors.cardHolderName}
                   error={Boolean(
                     errors.cardHolderName && touched.cardHolderName
                   )}
+                  helperText={
+                    (touched.cardHolderName && errors.cardHolderName) as string
+                  }
                 />
 
                 <TextField
@@ -123,8 +125,8 @@ export default function PayoutSettings() {
                   onBlur={handleBlur}
                   value={values.cardNo}
                   onChange={handleChange}
-                  helperText={touched.cardNo && errors.cardNo}
                   error={Boolean(errors.cardNo && touched.cardNo)}
+                  helperText={(touched.cardNo && errors.cardNo) as string}
                 />
 
                 <TextField
@@ -135,8 +137,8 @@ export default function PayoutSettings() {
                   onBlur={handleBlur}
                   value={values.cardCvc}
                   onChange={handleChange}
-                  helperText={touched.cardCvc && errors.cardCvc}
                   error={Boolean(errors.cardCvc && touched.cardCvc)}
+                  helperText={(touched.cardCvc && errors.cardCvc) as string}
                 />
               </Stack>
 
@@ -176,8 +178,8 @@ export default function PayoutSettings() {
                   onBlur={handleBlur}
                   value={values.amount}
                   onChange={handleChange}
-                  helperText={touched.amount && errors.amount}
                   error={Boolean(errors.amount && touched.amount)}
+                  helperText={(touched.amount && errors.amount) as string}
                 />
 
                 <TextField
@@ -188,12 +190,13 @@ export default function PayoutSettings() {
                   name="accountHolderName"
                   label="Account Holder Name"
                   value={values.accountHolderName}
-                  helperText={
-                    touched.accountHolderName && errors.accountHolderName
-                  }
                   error={Boolean(
                     errors.accountHolderName && touched.accountHolderName
                   )}
+                  helperText={
+                    (touched.accountHolderName &&
+                      errors.accountHolderName) as string
+                  }
                 />
 
                 <TextField
@@ -204,8 +207,8 @@ export default function PayoutSettings() {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.accountNo}
-                  helperText={touched.accountNo && errors.accountNo}
                   error={Boolean(errors.accountNo && touched.accountNo)}
+                  helperText={(touched.accountNo && errors.accountNo) as string}
                 />
 
                 <TextField
@@ -216,8 +219,8 @@ export default function PayoutSettings() {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.routingNo}
-                  helperText={touched.routingNo && errors.routingNo}
                   error={Boolean(errors.routingNo && touched.routingNo)}
+                  helperText={(touched.routingNo && errors.routingNo) as string}
                 />
               </Stack>
 

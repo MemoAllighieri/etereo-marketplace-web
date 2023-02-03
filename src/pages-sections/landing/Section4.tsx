@@ -37,7 +37,14 @@ const StyledContent = styled("div")(({ theme }) => ({
 const Section4 = () => {
   return (
     <Container id="technologies" sx={{ mb: "7rem" }}>
-      <H3 fontSize="40px" textAlign="center" fontWeight="900" color="secondary.main" mb={7.5}>
+      <H3
+        fontSize={28}
+        textAlign="center"
+        fontWeight="700"
+        color="secondary.main"
+        mb={8}
+        textTransform="uppercase"
+      >
         Technologies Used
       </H3>
 
@@ -46,28 +53,33 @@ const Section4 = () => {
           {list.map((item, index) => (
             <Grid item lg={3} md={4} sm={6} xs={12} key={item.title}>
               <Card
-                data-aos="fade-up"
-                data-aos-duration={index + 1 * 500}
                 elevation={3}
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
                   minHeight: "260px",
                   boxShadow: "large",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  justifyContent: "center",
                 }}
               >
                 <Box mb={2}>
                   <LazyImage
-                    src={item.imgUrl}
-                    height={60}
                     width={60}
+                    height={60}
+                    alt={item.title}
+                    src={item.imgUrl}
                     objectFit="contain"
                     objectPosition="center"
                   />
                 </Box>
-                <H4 fontSize="18px" fontWeight="700" maxWidth="200px" textAlign="center" mx="auto">
+                <H4
+                  fontSize="18px"
+                  fontWeight="700"
+                  maxWidth="200px"
+                  textAlign="center"
+                  mx="auto"
+                >
                   {item.title}
                 </H4>
               </Card>

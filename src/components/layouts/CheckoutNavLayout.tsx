@@ -1,8 +1,7 @@
-import { Box, Container, Grid } from "@mui/material";
-import Navbar from "components/navbar/Navbar";
-import Stepper from "components/stepper/Stepper";
+import { FC, ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { FC, useEffect, useState } from "react";
+import { Box, Container, Grid } from "@mui/material";
+import Stepper from "components/Stepper";
 import ShopLayout1 from "./ShopLayout1";
 
 /**
@@ -12,7 +11,11 @@ import ShopLayout1 from "./ShopLayout1";
  *  3. payment page
  */
 
-const CheckoutNavLayout: FC = ({ children }) => {
+// ======================================================
+type CheckoutNavLayoutProps = { children: ReactNode };
+// ======================================================
+
+const CheckoutNavLayout: FC<CheckoutNavLayoutProps> = ({ children }) => {
   const [selectedStep, setSelectedStep] = useState(0);
 
   const router = useRouter();
@@ -54,7 +57,7 @@ const CheckoutNavLayout: FC = ({ children }) => {
   }, [pathname]);
 
   return (
-    <ShopLayout1 navbar={<Navbar />}>
+    <ShopLayout1>
       <Container sx={{ my: 4 }}>
         <Box mb={3} display={{ sm: "block", xs: "none" }}>
           <Grid container spacing={3}>

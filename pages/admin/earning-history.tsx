@@ -1,3 +1,5 @@
+import { ReactElement } from "react";
+import { GetStaticProps } from "next";
 import { RemoveRedEye } from "@mui/icons-material";
 import { Box, Card, Stack, Table, TableContainer } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
@@ -6,16 +8,14 @@ import TablePagination from "components/data-table/TablePagination";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import Scrollbar from "components/Scrollbar";
 import { H3 } from "components/Typography";
-import currency from "currency.js";
 import useMuiTable from "hooks/useMuiTable";
-import { GetStaticProps } from "next";
 import {
   StyledIconButton,
   StyledTableCell,
   StyledTableRow,
 } from "pages-sections/admin";
-import React, { ReactElement } from "react";
-import api from "utils/api/dashboard";
+import api from "utils/__api__/dashboard";
+import { currency } from "lib";
 
 // table column list
 const tableHeading = [
@@ -79,17 +79,12 @@ export default function EarningHistory({ earnings }: EarningHistoryProps) {
                     </StyledTableCell>
 
                     <StyledTableCell align="center">
-                      {currency(item.adminCommission, {
-                        separator: ",",
-                      }).format()}
+                      {currency(item.adminCommission)}
                     </StyledTableCell>
 
                     <StyledTableCell align="center">
-                      {currency(item.sellerEarning, {
-                        separator: ",",
-                      }).format()}
+                      {currency(item.sellerEarning)}
                     </StyledTableCell>
-
                     <StyledTableCell align="left">{item.date}</StyledTableCell>
 
                     <StyledTableCell align="center">

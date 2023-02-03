@@ -1,15 +1,17 @@
+import { FC } from "react";
 import { Box, styled } from "@mui/material";
+import appIcons from "components/icons";
+import Scrollbar from "components/Scrollbar";
+import { FlexBox } from "components/flex-box";
+import { NavLink } from "components/nav-link";
+import BazaarCard from "components/BazaarCard";
+import { H4, Span } from "components/Typography";
 import Accordion from "components/accordion/Accordion";
 import AccordionHeader from "components/accordion/AccordionHeader";
-import BazarCard from "components/BazarCard";
-import { FlexBox } from "components/flex-box";
-import appIcons from "components/icons";
-import NavLink from "components/nav-link/NavLink";
-import Scrollbar from "components/Scrollbar";
-import { H4, Span } from "components/Typography";
-import React, { FC } from "react";
+import { CategoryItem } from "models/CategoryNavList.model";
 
-const NavbarRoot = styled(BazarCard)(({ theme }) => ({
+// styled components
+const NavbarRoot = styled(BazaarCard)(({ theme }) => ({
   height: "100%",
   borderRadius: "8px",
   position: "relative",
@@ -36,24 +38,21 @@ const StyledList = styled(FlexBox)(({ theme }) => ({
   },
 }));
 
-const Circle = styled("span")(() => ({
+const Circle = styled("span")({
   width: "4px",
   height: "4px",
   marginLeft: "2rem",
   marginRight: "8px",
   borderRadius: "3px",
-}));
+});
 
 // =================================================================
-type GrocerySidenavProps = {
-  navList: any[];
-};
+type Props = { navList: CategoryItem[] };
 // =================================================================
 
-const HealthBeautySidenav: FC<GrocerySidenavProps> = (props) => {
-  const { navList } = props;
-
-  const renderChild = (childList: any[]) => {
+const HealthBeautySidenav: FC<Props> = ({ navList }) => {
+  // RENDER THE NESTED CHILD
+  const renderChild = (childList: CategoryItem["child"]) => {
     return childList.map((item) => (
       <NavLink href={item.href} key={item.title} color="grey.700">
         <StyledList>

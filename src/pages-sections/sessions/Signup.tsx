@@ -1,16 +1,17 @@
-import { Checkbox, FormControlLabel } from "@mui/material";
-import BazarButton from "components/BazarButton";
-import BazarTextField from "components/BazarTextField";
-import { FlexBox } from "components/flex-box";
-import { H3, H6, Small } from "components/Typography";
-import { useFormik } from "formik";
-import React, { useCallback, useState } from "react";
+import { FC, useCallback, useState } from "react";
+import { Button, Checkbox, Box, FormControlLabel } from "@mui/material";
+import Link from "next/link";
 import * as yup from "yup";
-import EyeToggleButton from "./EyeToggleButton";
+import { useFormik } from "formik";
+import { FlexBox, FlexRowCenter } from "components/flex-box";
+import { H1, H6 } from "components/Typography";
+import BazaarImage from "components/BazaarImage";
+import BazaarTextField from "components/BazaarTextField";
 import { Wrapper } from "./Login";
 import SocialButtons from "./SocialButtons";
+import EyeToggleButton from "./EyeToggleButton";
 
-const Signup = () => {
+const Signup: FC = () => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
   const togglePasswordVisibility = useCallback(() => {
@@ -31,21 +32,16 @@ const Signup = () => {
   return (
     <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
       <form onSubmit={handleSubmit}>
-        <H3 textAlign="center" mb={1}>
-          Create Your Account
-        </H3>
-        <Small
-          mb={4.5}
-          fontSize={12}
-          display="block"
-          fontWeight={600}
-          color="grey.800"
-          textAlign="center"
-        >
-          Please fill all fields to continue
-        </Small>
+        <BazaarImage
+          src="/assets/images/bazaar-black-sm.svg"
+          sx={{ m: "auto" }}
+        />
 
-        <BazarTextField
+        <H1 textAlign="center" mt={1} mb={4} fontSize={16}>
+          Create Your Account
+        </H1>
+
+        <BazaarTextField
           mb={1.5}
           fullWidth
           name="name"
@@ -57,10 +53,10 @@ const Signup = () => {
           onChange={handleChange}
           placeholder="Ralph Adwards"
           error={!!touched.name && !!errors.name}
-          helperText={touched.name && errors.name}
+          helperText={(touched.name && errors.name) as string}
         />
 
-        <BazarTextField
+        <BazaarTextField
           mb={1.5}
           fullWidth
           name="email"
@@ -73,10 +69,10 @@ const Signup = () => {
           label="Email or Phone Number"
           placeholder="exmple@mail.com"
           error={!!touched.email && !!errors.email}
-          helperText={touched.email && errors.email}
+          helperText={(touched.email && errors.email) as string}
         />
 
-        <BazarTextField
+        <BazaarTextField
           mb={1.5}
           fullWidth
           size="small"
@@ -90,7 +86,7 @@ const Signup = () => {
           value={values.password}
           type={passwordVisibility ? "text" : "password"}
           error={!!touched.password && !!errors.password}
-          helperText={touched.password && errors.password}
+          helperText={(touched.password && errors.password) as string}
           InputProps={{
             endAdornment: (
               <EyeToggleButton
@@ -101,7 +97,7 @@ const Signup = () => {
           }}
         />
 
-        <BazarTextField
+        <BazaarTextField
           fullWidth
           size="small"
           autoComplete="on"
@@ -114,7 +110,7 @@ const Signup = () => {
           value={values.re_password}
           type={passwordVisibility ? "text" : "password"}
           error={!!touched.re_password && !!errors.re_password}
-          helperText={touched.re_password && errors.re_password}
+          helperText={(touched.re_password && errors.re_password) as string}
           InputProps={{
             endAdornment: (
               <EyeToggleButton
@@ -152,7 +148,7 @@ const Signup = () => {
           }
         />
 
-        <BazarButton
+        <Button
           fullWidth
           type="submit"
           color="primary"
@@ -160,10 +156,20 @@ const Signup = () => {
           sx={{ height: 44 }}
         >
           Create Account
-        </BazarButton>
+        </Button>
       </form>
 
-      <SocialButtons redirect="/login" redirectText="Login" />
+      <SocialButtons />
+      <FlexRowCenter mt="1.25rem">
+        <Box>Already have an account?</Box>
+        <Link href="/login" passHref legacyBehavior>
+          <a>
+            <H6 ml={1} borderBottom="1px solid" borderColor="grey.900">
+              Login
+            </H6>
+          </a>
+        </Link>
+      </FlexRowCenter>
     </Wrapper>
   );
 };

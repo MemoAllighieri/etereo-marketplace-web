@@ -1,38 +1,43 @@
-import { Avatar, Box, Theme, useMediaQuery } from "@mui/material";
-import { FlexBetween } from "components/flex-box";
-import Scrollbar from "components/Scrollbar";
+import { FC, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { FC, useState } from "react";
+import { Avatar, Box, Theme, useMediaQuery } from "@mui/material";
 import LayoutDrawer from "../LayoutDrawer";
-import {
-  BadgeValue,
-  BulletIcon,
-  ChevronLeftIcon,
-  ExternalLink,
-  ListIconWrapper,
-  ListLabel,
-  NavItemButton,
-  NavWrapper,
-  SidebarWrapper,
-  StyledText,
-} from "./LayoutStyledComponents";
+import Scrollbar from "components/Scrollbar";
+import { FlexBetween } from "components/flex-box";
 import { navigations } from "./NavigationList";
 import SidebarAccordion from "./SidebarAccordion";
+import {
+  ListLabel,
+  BadgeValue,
+  StyledText,
+  BulletIcon,
+  NavWrapper,
+  ExternalLink,
+  NavItemButton,
+  SidebarWrapper,
+  ChevronLeftIcon,
+  ListIconWrapper,
+} from "./LayoutStyledComponents";
 
 const TOP_HEADER_AREA = 70;
 
 // -----------------------------------------------------------------------------
 type DashboardSidebarProps = {
-  sidebarCompact: boolean;
-  showMobileSideBar: boolean;
+  sidebarCompact: any;
+  showMobileSideBar: any;
   setSidebarCompact: () => void;
   setShowMobileSideBar: () => void;
 };
 // -----------------------------------------------------------------------------
 
 const DashboardSidebar: FC<DashboardSidebarProps> = (props) => {
-  const { sidebarCompact, showMobileSideBar, setShowMobileSideBar, setSidebarCompact } = props;
+  const {
+    sidebarCompact,
+    showMobileSideBar,
+    setShowMobileSideBar,
+    setSidebarCompact,
+  } = props;
 
   const router = useRouter();
   const [onHover, setOnHover] = useState(false);
@@ -66,7 +71,12 @@ const DashboardSidebar: FC<DashboardSidebarProps> = (props) => {
         );
       } else if (item.type === "extLink") {
         return (
-          <ExternalLink key={index} href={item.path} rel="noopener noreferrer" target="_blank">
+          <ExternalLink
+            key={index}
+            href={item.path}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
             <NavItemButton key={item.name} name="child" active={0}>
               {item.icon ? (
                 <ListIconWrapper>
@@ -80,7 +90,9 @@ const DashboardSidebar: FC<DashboardSidebarProps> = (props) => {
 
               {/* <Box mx="auto" /> */}
 
-              {item.badge && <BadgeValue compact={COMPACT}>{item.badge.value}</BadgeValue>}
+              {item.badge && (
+                <BadgeValue compact={COMPACT}>{item.badge.value}</BadgeValue>
+              )}
             </NavItemButton>
           </ExternalLink>
         );
@@ -105,7 +117,9 @@ const DashboardSidebar: FC<DashboardSidebarProps> = (props) => {
 
               {/* <Box mx="auto" /> */}
 
-              {item.badge && <BadgeValue compact={COMPACT}>{item.badge.value}</BadgeValue>}
+              {item.badge && (
+                <BadgeValue compact={COMPACT}>{item.badge.value}</BadgeValue>
+              )}
             </NavItemButton>
           </Box>
         );
@@ -122,18 +136,23 @@ const DashboardSidebar: FC<DashboardSidebarProps> = (props) => {
         maxHeight: `calc(100vh - ${TOP_HEADER_AREA}px)`,
       }}
     >
-      <NavWrapper compact={sidebarCompact}>{renderLevels(navigations)}</NavWrapper>
+      <NavWrapper compact={sidebarCompact}>
+        {renderLevels(navigations)}
+      </NavWrapper>
     </Scrollbar>
   );
 
   if (downLg) {
     return (
-      <LayoutDrawer open={showMobileSideBar} onClose={setShowMobileSideBar}>
+      <LayoutDrawer
+        open={showMobileSideBar ? true : false}
+        onClose={setShowMobileSideBar}
+      >
         <Box p={2} maxHeight={TOP_HEADER_AREA}>
           <Image
             alt="Logo"
-            width="auto"
-            height={24}
+            width={105}
+            height={50}
             src="/assets/images/logo.svg"
             style={{ marginLeft: 8 }}
           />
@@ -146,7 +165,7 @@ const DashboardSidebar: FC<DashboardSidebarProps> = (props) => {
 
   return (
     <SidebarWrapper
-      compact={sidebarCompact}
+      compact={sidebarCompact ? 1 : 0}
       onMouseEnter={() => setOnHover(true)}
       onMouseLeave={() => sidebarCompact && setOnHover(false)}
     >
@@ -156,13 +175,12 @@ const DashboardSidebar: FC<DashboardSidebarProps> = (props) => {
         justifyContent={COMPACT ? "center" : "space-between"}
       >
         <Avatar
-          src={COMPACT ? "/assets/white-fav.svg" : "/assets/images/logo.svg"}
-          sx={{
-            borderRadius: 0,
-            width: "auto",
-            height: 24,
-            marginLeft: COMPACT ? 0 : 1,
-          }}
+          src={
+            COMPACT
+              ? "/assets/images/bazaar-white-sm.svg"
+              : "/assets/images/logo.svg"
+          }
+          sx={{ borderRadius: 0, width: "auto", marginLeft: COMPACT ? 0 : 1 }}
         />
 
         <ChevronLeftIcon

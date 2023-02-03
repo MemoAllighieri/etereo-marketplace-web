@@ -1,15 +1,13 @@
+import { FC, useEffect, useState } from "react";
 import { Box } from "@mui/material";
+import { H3 } from "components/Typography";
 import Carousel from "components/carousel/Carousel";
 import ProductCard1 from "components/product-cards/ProductCard1";
-import { H3 } from "components/Typography";
 import useWindowSize from "hooks/useWindowSize";
-import React, { FC, useEffect, useState } from "react";
+import Product from "models/Product.model";
 
 // =======================================================
-type ProductCarouselProps = {
-  title: string;
-  products: any[];
-};
+type ProductCarouselProps = { title: string; products: Product[] };
 // =======================================================
 
 const ProductCarousel: FC<ProductCarouselProps> = (props) => {
@@ -33,14 +31,24 @@ const ProductCarousel: FC<ProductCarouselProps> = (props) => {
       <Carousel
         step={3}
         showDots
-        totalSlides={12}
         showArrowOnHover={true}
         arrowButtonColor="inherit"
+        totalSlides={products.length}
         visibleSlides={visibleSlides}
       >
-        {products.map((item, ind) => (
-          <Box py={0.5} key={ind}>
-            <ProductCard1 {...item} off={50} hideRating showProductSize />
+        {products.map((item) => (
+          <Box py={0.5} key={item.id}>
+            <ProductCard1
+              hideRating
+              showProductSize
+              id={item.id}
+              slug={item.slug}
+              price={item.price}
+              title={item.title}
+              rating={item.rating}
+              imgUrl={item.thumbnail}
+              discount={item.discount}
+            />
           </Box>
         ))}
       </Carousel>

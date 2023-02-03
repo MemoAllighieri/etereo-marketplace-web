@@ -1,6 +1,6 @@
+import React, { useState } from "react";
 import { Avatar, Box, IconButton, Menu, MenuItem, styled } from "@mui/material";
 import { H6, Small } from "components/Typography";
-import React, { useState } from "react";
 
 // styled components
 const Divider = styled(Box)(({ theme }) => ({
@@ -33,6 +33,8 @@ const AccountPopover = () => {
         anchorEl={anchorEl}
         onClose={handleClose}
         onClick={handleClose}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         PaperProps={{
           elevation: 0,
           sx: {
@@ -63,8 +65,6 @@ const AccountPopover = () => {
             },
           },
         }}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <Box px={2} pt={1}>
           <H6>Gage Paquette</H6>

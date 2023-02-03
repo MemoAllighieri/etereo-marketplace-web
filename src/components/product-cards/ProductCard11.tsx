@@ -1,7 +1,7 @@
+import { FC } from "react";
 import { Box, styled } from "@mui/material";
 import LazyImage from "components/LazyImage";
 import { Paragraph } from "components/Typography";
-import React, { FC } from "react";
 
 // styled component
 const StyledParagraph = styled(Paragraph)(({ theme }) => ({
@@ -26,14 +26,14 @@ const StyledParagraph2 = styled(Paragraph)(({ theme }) => ({
 }));
 
 // ===========================================================
-type ProductCard11Props = {
+type ProductCardProps = {
   off: number;
   title: string;
   imgUrl: string;
 };
 // ===========================================================
 
-const ProductCard11: FC<ProductCard11Props> = ({ title, imgUrl, off }) => {
+const ProductCard11: FC<ProductCardProps> = ({ title, imgUrl, off }) => {
   return (
     <Box position="relative" sx={{ boxShadow: 4 }}>
       <LazyImage

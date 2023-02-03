@@ -20,11 +20,11 @@ const SidebarWrapper = styled(Box)<Compact>(({ theme, compact }) => ({
   "&:hover": compact && { width: 280 },
 }));
 
-const NavWrapper = styled(Box)<Compact>(() => ({
+const NavWrapper = styled(Box)<Compact>({
   height: "100%",
   paddingLeft: 16,
   paddingRight: 16,
-}));
+});
 
 const NavItemButton = styled(ButtonBase)<Active>(({ theme, active }) => ({
   height: 44,
@@ -70,12 +70,12 @@ const ListIconWrapper = styled(Box)(({ theme }) => ({
   },
 }));
 
-const ExternalLink = styled("a")(() => ({
+const ExternalLink = styled("a")({
   overflow: "hidden",
   whiteSpace: "pre",
   marginBottom: "8px",
   textDecoration: "none",
-}));
+});
 
 const StyledText = styled(Span)<Compact>(({ compact }) => ({
   whiteSpace: "nowrap",
@@ -92,7 +92,9 @@ const BulletIcon = styled("div")<Active>(({ theme, active }) => ({
   borderRadius: "50%",
   marginRight: "1.3rem",
   background: active ? theme.palette.info.main : theme.palette.common.white,
-  boxShadow: active ? `0px 0px 0px 4px ${alpha(theme.palette.info[500], 0.2)}` : "none",
+  boxShadow: active
+    ? `0px 0px 0px 4px ${alpha(theme.palette.info[500], 0.2)}`
+    : "none",
 }));
 
 const BadgeValue = styled(Box)<Compact>(({ compact }) => ({
@@ -102,13 +104,23 @@ const BadgeValue = styled(Box)<Compact>(({ compact }) => ({
   display: compact ? "none" : "unset",
 }));
 
-const ChevronLeftIcon = styled(ChevronLeft)<ChevronLeftProps>(({ compact, sidebarcompact }) => ({
-  color: "white",
-  cursor: "pointer",
-  transition: "transform 0.3s",
-  display: compact ? "none" : "block",
-  transform: sidebarcompact ? "rotate(180deg)" : "rotate(0deg)",
-}));
+const ChevronLeftIcon = styled(ChevronLeft)<ChevronLeftProps>(
+  ({ compact, sidebarcompact }) => ({
+    color: "rgba(255, 255, 255, .6)",
+    cursor: "pointer",
+    padding: 8,
+    height: 40,
+    width: 40,
+    borderRadius: "50%",
+    transition: "all 0.3s",
+    display: compact ? "none" : "block",
+    transform: sidebarcompact ? "rotate(180deg)" : "rotate(0deg)",
+    "&:hover": {
+      background: "rgba(255, 255, 255, .05)",
+      color: "rgba(255, 255, 255, 1)",
+    },
+  })
+);
 
 const ChevronRightIcon = styled(ChevronRight)<CollapseCompact>(
   ({ collapsed, compact, theme: { direction } }) => ({

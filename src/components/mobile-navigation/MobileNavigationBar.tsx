@@ -1,11 +1,11 @@
-import { Badge } from "@mui/material";
-import CategoryOutlined from "components/icons/CategoryOutline";
-import Home from "components/icons/Home";
-import ShoppingBagOutlined from "components/icons/ShoppingBagOutlined";
-import User2 from "components/icons/User2";
-import { useAppContext } from "contexts/AppContext";
-import useWindowSize from "hooks/useWindowSize";
 import { FC } from "react";
+import { Badge } from "@mui/material";
+import Home from "components/icons/Home";
+import User2 from "components/icons/User2";
+import CategoryOutlined from "components/icons/CategoryOutline";
+import ShoppingBagOutlined from "components/icons/ShoppingBagOutlined";
+import useWindowSize from "hooks/useWindowSize";
+import { useAppContext } from "contexts/AppContext";
 import { iconStyle, StyledNavLink, Wrapper } from "./styles";
 
 const MobileNavigationBar: FC = () => {

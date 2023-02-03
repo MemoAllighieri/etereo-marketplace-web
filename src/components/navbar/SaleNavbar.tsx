@@ -1,67 +1,68 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+import { FC } from "react";
 import { Box, Container, styled } from "@mui/material";
-import { FlexRowCenter } from "components/flex-box";
-import Scrollbar from "components/Scrollbar";
-import { FC, useCallback, useState } from "react";
 import { H5 } from "../Typography";
-
-// ==========================================================================
-type SaleNavbarProps = {
-  onChange?: (value: any) => void;
-  saleCategoryList: { icon: any; title: string }[];
-};
-// ==========================================================================
+import appIcons from "components/icons";
+import Scrollbar from "components/Scrollbar";
+import { FlexRowCenter } from "components/flex-box";
+import Category from "models/Category.model";
 
 // styled compoentents
-const StyledScrollbar = styled(Scrollbar)(() => ({
+const StyledScrollbar = styled(Scrollbar)({
   "& .simplebar-content": {
     height: "5rem",
     display: "flex",
     backgroundColor: "white",
     justifyContent: "center",
   },
-}));
+});
 
-const Title = styled(H5)<{ selected: any }>(({ selected, theme }) => ({
+const Title = styled(H5)<{ selected: number }>(({ selected, theme }) => ({
   fontSize: "12px",
   textAlign: "center",
   fontWeight: selected ? "600" : "400",
   color: selected ? theme.palette.primary.main : "inherit",
 }));
 
-const SaleNavbar: FC<SaleNavbarProps> = ({ saleCategoryList, onChange }) => {
-  const [selected, setSelected] = useState(1);
+// ==========================================================================
+type SaleNavbarProps = {
+  selected: string;
+  categories: Category[];
+  onChangeCategory: (value: string) => () => void;
+};
+// ==========================================================================
 
-  const handleCategoryClick = useCallback(
-    (categoryIndex) => () => {
-      setSelected(categoryIndex);
-      if (onChange) onChange(saleCategoryList[categoryIndex]);
-    },
-    []
-  );
-
+const SaleNavbar: FC<SaleNavbarProps> = ({
+  categories,
+  selected,
+  onChangeCategory,
+}) => {
   return (
     <Box bgcolor="background.paper">
       <Container>
         <StyledScrollbar autoHide={false}>
-          {saleCategoryList.map((item, ind) => (
-            <FlexRowCenter
-              key={ind}
-              onClick={handleCategoryClick(ind)}
-              sx={{
-                cursor: "pointer",
-                minWidth: "100px",
-                flexDirection: "column",
-                background: ind === selected ? "primary.light" : "transparent",
-              }}
-            >
-              <item.icon
-                sx={{ fontSize: "1.75rem" }}
-                color={ind === selected ? "primary" : "secondary"}
-              />
-              <Title selected={ind === selected}>{item.title}</Title>
-            </FlexRowCenter>
-          ))}
+          {categories.map((item) => {
+            const Icon = appIcons[item.icon];
+            const selectedItem = item.slug === selected ? 1 : 0;
+
+            return (
+              <FlexRowCenter
+                key={item.id}
+                onClick={onChangeCategory(item.slug)}
+                sx={{
+                  cursor: "pointer",
+                  minWidth: "100px",
+                  flexDirection: "column",
+                  background: selectedItem ? "primary.light" : "transparent",
+                }}
+              >
+                <Icon
+                  sx={{ fontSize: "1.75rem" }}
+                  color={selectedItem ? "primary" : "secondary"}
+                />
+                <Title selected={selectedItem}>{item.name}</Title>
+              </FlexRowCenter>
+            );
+          })}
         </StyledScrollbar>
       </Container>
     </Box>

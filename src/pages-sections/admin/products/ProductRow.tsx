@@ -1,16 +1,16 @@
+import { FC, useState } from "react";
+import { useRouter } from "next/router";
 import { Delete, Edit, RemoveRedEye } from "@mui/icons-material";
 import { Avatar, Box } from "@mui/material";
-import BazarSwitch from "components/BazarSwitch";
 import { FlexBox } from "components/flex-box";
+import BazaarSwitch from "components/BazaarSwitch";
 import { Paragraph, Small } from "components/Typography";
-import currency from "currency.js";
-import { useRouter } from "next/router";
-import React, { FC, useState } from "react";
+import { currency } from "lib";
 import {
-  CategoryWrapper,
-  StyledIconButton,
-  StyledTableCell,
   StyledTableRow,
+  CategoryWrapper,
+  StyledTableCell,
+  StyledIconButton,
 } from "../StyledComponents";
 
 // ========================================================================
@@ -18,9 +18,8 @@ type ProductRowProps = { product: any };
 // ========================================================================
 
 const ProductRow: FC<ProductRowProps> = ({ product }) => {
-  const { category, name, price, image, brand, id, published } = product;
+  const { category, name, price, image, brand, id, published, slug } = product;
 
-  // state
   const router = useRouter();
   const [productPulish, setProductPublish] = useState(published);
 
@@ -31,7 +30,7 @@ const ProductRow: FC<ProductRowProps> = ({ product }) => {
           <Avatar src={image} sx={{ borderRadius: "8px" }} />
           <Box>
             <Paragraph>{name}</Paragraph>
-            <Small color="grey.600">#{id}</Small>
+            <Small color="grey.600">#{id.split("-")[0]}</Small>
           </Box>
         </FlexBox>
       </StyledTableCell>
@@ -47,12 +46,10 @@ const ProductRow: FC<ProductRowProps> = ({ product }) => {
         />
       </StyledTableCell>
 
-      <StyledTableCell align="left">
-        {currency(price, { separator: "," }).format()}
-      </StyledTableCell>
+      <StyledTableCell align="left">{currency(price)}</StyledTableCell>
 
       <StyledTableCell align="left">
-        <BazarSwitch
+        <BazaarSwitch
           color="info"
           checked={productPulish}
           onChange={() => setProductPublish((state) => !state)}
@@ -60,7 +57,9 @@ const ProductRow: FC<ProductRowProps> = ({ product }) => {
       </StyledTableCell>
 
       <StyledTableCell align="center">
-        <StyledIconButton onClick={() => router.push(`/admin/products/${id}`)}>
+        <StyledIconButton
+          onClick={() => router.push(`/admin/products/${slug}`)}
+        >
           <Edit />
         </StyledIconButton>
 

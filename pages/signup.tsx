@@ -1,10 +1,12 @@
+import { NextPage } from "next";
+import SEO from "components/SEO";
 import { FlexRowCenter } from "components/flex-box";
 import Signup from "pages-sections/sessions/Signup";
-import React from "react";
 
-const SignUpPage = () => {
+const SignUpPage: NextPage = () => {
   return (
     <FlexRowCenter flexDirection="column" minHeight="100vh">
+      <SEO title="Sign up" />
       <Signup />
     </FlexRowCenter>
   );

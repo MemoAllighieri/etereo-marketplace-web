@@ -1,15 +1,15 @@
-import { Delete, Edit, RemoveRedEye } from "@mui/icons-material";
+import { FC } from "react";
 import { Avatar } from "@mui/material";
+import { Delete, Edit, RemoveRedEye } from "@mui/icons-material";
 import { FlexBox } from "components/flex-box";
 import { Paragraph } from "components/Typography";
-import currency from "currency.js";
-import React, { FC } from "react";
 import {
   StatusWrapper,
   StyledIconButton,
   StyledTableCell,
   StyledTableRow,
 } from "./StyledComponents";
+import { currency } from "lib";
 
 // ========================================================================
 type RefundRequestRowProps = { request: any };
@@ -36,7 +36,7 @@ const RefundRequestRow: FC<RefundRequestRowProps> = ({ request }) => {
       </StyledTableCell>
 
       <StyledTableCell align="left" sx={{ fontWeight: 400 }}>
-        {currency(amount, { separator: "," }).format()}
+        {currency(amount)}
       </StyledTableCell>
 
       <StyledTableCell align="left" sx={{ fontWeight: 400 }}>

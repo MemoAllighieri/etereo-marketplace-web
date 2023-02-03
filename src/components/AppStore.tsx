@@ -1,9 +1,21 @@
+import { FC } from "react";
 import { Box } from "@mui/material";
 import { FlexBox } from "./flex-box";
-import AppleStore from "./icons/AppleStore";
 import PlayStore from "./icons/PlayStore";
+import AppleStore from "./icons/AppleStore";
 
-const AppStore = () => {
+const AppStore: FC = () => {
+  // data
+  const appList = [
+    { icon: PlayStore, title: "Google Play", subtitle: "Get it on", url: "/" },
+    {
+      icon: AppleStore,
+      title: "App Store",
+      subtitle: "Download on the",
+      url: "/",
+    },
+  ];
+
   return (
     <FlexBox flexWrap="wrap" m={-1}>
       {appList.map((item) => (
@@ -14,11 +26,11 @@ const AppStore = () => {
             p="10px 16px"
             color="white"
             display="flex"
-            bgcolor="#0C2A4D"
+            bgcolor="#161d2b"
             borderRadius="5px"
             alignItems="center"
           >
-            <item.icon>{item.icon}</item.icon>
+            <item.icon />
 
             <Box>
               <Box fontSize="8px" fontWeight="600" lineHeight="1">
@@ -35,20 +47,5 @@ const AppStore = () => {
     </FlexBox>
   );
 };
-
-const appList = [
-  {
-    icon: PlayStore,
-    title: "Google Play",
-    subtitle: "Get it on",
-    url: "/",
-  },
-  {
-    icon: AppleStore,
-    title: "App Store",
-    subtitle: "Download on the",
-    url: "/",
-  },
-];
 
 export default AppStore;

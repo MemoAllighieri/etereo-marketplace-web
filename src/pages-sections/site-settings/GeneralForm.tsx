@@ -1,17 +1,8 @@
+import { FC } from "react";
 import { Box, Button, Grid, styled, TextField } from "@mui/material";
-import DropZone from "components/DropZone";
-import { Formik } from "formik";
-import React, { FC } from "react";
 import * as yup from "yup";
-
-const UploadBox = styled(Box)(({ theme }) => ({
-  cursor: "pointer",
-  padding: "5px 10px",
-  borderRadius: "4px",
-  display: "inline-block",
-  color: theme.palette.primary.main,
-  border: `1px solid ${theme.palette.primary.main}`,
-}));
+import { Formik } from "formik";
+import DropZone from "components/DropZone";
 
 // form field validation
 const validationSchema = yup.object().shape({
@@ -65,7 +56,7 @@ const GeneralForm: FC = () => {
                 onChange={handleChange}
                 value={values.site_name}
                 error={!!touched.site_name && !!errors.site_name}
-                helperText={touched.site_name && errors.site_name}
+                helperText={(touched.site_name && errors.site_name) as string}
               />
             </Grid>
             <Grid item md={6} xs={12}>
@@ -79,7 +70,10 @@ const GeneralForm: FC = () => {
                 label="Site Description"
                 value={values.site_description}
                 error={!!touched.site_description && !!errors.site_description}
-                helperText={touched.site_description && errors.site_description}
+                helperText={
+                  (touched.site_description &&
+                    errors.site_description) as string
+                }
               />
             </Grid>
 
@@ -96,7 +90,10 @@ const GeneralForm: FC = () => {
                 label="Site Banner Text"
                 value={values.site_banner_text}
                 error={!!touched.site_banner_text && !!errors.site_banner_text}
-                helperText={touched.site_banner_text && errors.site_banner_text}
+                helperText={
+                  (touched.site_banner_text &&
+                    errors.site_banner_text) as string
+                }
               />
             </Grid>
 

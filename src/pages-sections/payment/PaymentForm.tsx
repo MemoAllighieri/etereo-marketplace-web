@@ -1,25 +1,23 @@
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { FC, Fragment, useState } from "react";
 import { Box, Button, Divider, Grid, Radio, TextField } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import * as yup from "yup";
+import { Formik } from "formik";
 import Card1 from "components/Card1";
 import { FlexBox } from "components/flex-box";
 import { Paragraph } from "components/Typography";
-import { Formik } from "formik";
 import useWindowSize from "hooks/useWindowSize";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { Fragment, useState } from "react";
-import * as yup from "yup";
 
-const PaymentForm = () => {
+const PaymentForm: FC = () => {
   const [paymentMethod, setPaymentMethod] = useState("credit-card");
 
   const width = useWindowSize();
   const router = useRouter();
   const isMobile = width < 769;
 
-  const handleFormSubmit = async (values: any) => {
-    router.push("/payment");
-  };
+  const handleFormSubmit = async (values: any) => router.push("/payment");
 
   const handlePaymentMethodChange = ({ target: { name } }: any) => {
     setPaymentMethod(name);
@@ -69,7 +67,9 @@ const PaymentForm = () => {
                         onBlur={handleBlur}
                         value={values.card_no}
                         onChange={handleChange}
-                        helperText={touched.card_no && errors.card_no}
+                        helperText={
+                          (touched.card_no && errors.card_no) as string
+                        }
                       />
                     </Grid>
                     <Grid item sm={6} xs={12}>
@@ -81,7 +81,9 @@ const PaymentForm = () => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values.exp_date}
-                        helperText={touched.exp_date && errors.exp_date}
+                        helperText={
+                          (touched.exp_date && errors.exp_date) as string
+                        }
                       />
                     </Grid>
                     <Grid item sm={6} xs={12}>
@@ -92,7 +94,7 @@ const PaymentForm = () => {
                         value={values.name}
                         label="Name on Card"
                         onChange={handleChange}
-                        helperText={touched.name && errors.name}
+                        helperText={(touched.name && errors.name) as string}
                       />
                     </Grid>
                     <Grid item sm={6} xs={12}>
@@ -103,7 +105,7 @@ const PaymentForm = () => {
                         value={values.name}
                         label="Name on Card"
                         onChange={handleChange}
-                        helperText={touched.name && errors.name}
+                        helperText={(touched.name && errors.name) as string}
                       />
                     </Grid>
                   </Grid>
@@ -176,6 +178,7 @@ const PaymentForm = () => {
             </Button>
           </Link>
         </Grid>
+
         <Grid item sm={6} xs={12}>
           <Link href="/orders" passHref>
             <Button variant="contained" color="primary" type="submit" fullWidth>

@@ -1,101 +1,141 @@
+import { GetStaticProps, NextPage } from "next";
 import { Box, Stack } from "@mui/material";
-import ShopLayout2 from "components/layouts/ShopLayout2";
-import MobileNavigationBar2 from "components/mobile-navigation/MobileNavigationBar2";
-import Grocery2SideNav from "components/page-sidenav/Grocery2Sidenav";
-import Scrollbar from "components/Scrollbar";
+import SEO from "components/SEO";
 import Setting from "components/Setting";
-import SidenavContainer from "components/sidenav-container/SidenavContainer";
-import { NextPage } from "next";
-import GroceryFooter from "pages-sections/grocery2/GroceryFooter";
-import GrocerySection1 from "pages-sections/grocery2/GrocerySection1";
-import GrocerySection2 from "pages-sections/grocery2/GrocerySection2";
-import GrocerySection3 from "pages-sections/grocery2/GrocerySection3";
-import GrocerySection6 from "pages-sections/grocery2/GrocerySection6";
-import GrocerySection9 from "pages-sections/grocery2/GrocerySection9";
+import { Footer2 } from "components/footer";
+import Scrollbar from "components/Scrollbar";
+import Newsletter from "components/Newsletter";
+import ShopLayout2 from "components/layouts/ShopLayout2";
+import SidenavContainer from "components/SidenavContainer";
+import { MobileNavigationBar2 } from "components/mobile-navigation";
+import Grocery2SideNav from "components/page-sidenav/Grocery2Sidenav";
+import Section1 from "pages-sections/grocery2/Section1";
+import Section2 from "pages-sections/grocery2/Section2";
+import Section3 from "pages-sections/grocery2/Section3";
+import Section6 from "pages-sections/grocery2/Section6";
+import Section9 from "pages-sections/grocery2/Section9";
 import ProductCarousel from "pages-sections/grocery2/ProductCarousel";
-import api from "utils/api/grocery2-shop";
+import api from "utils/__api__/grocery2-shop";
+import Service from "models/Service.model";
+import Product from "models/Product.model";
+import Category from "models/Category.model";
+import { CategoryItem } from "models/CategoryNavList.model";
+import { GroceryTwoCarouselItem } from "models/Carousel.model";
 
-interface Props {
-  section2Services: any[];
-  section3Category: any[];
-  section4Products: any[];
-  section5Products: any[];
-  section6CardList: any[];
-  section7Products: any[];
-  section8Products: any[];
-  section9Testimonials: any[];
-  groceryNavigationList: any[];
-}
-const Home2: NextPage<Props> = (props) => {
-  const {
-    section2Services,
-    section3Category,
-    section4Products,
-    section5Products,
-    section6CardList,
-    section7Products,
-    section8Products,
-    section9Testimonials,
-    groceryNavigationList,
-  } = props;
+// ========================================================
+type Grocery2Props = {
+  categories: Category[];
+  serviceList: Service[];
+  dairyProducts: Product[];
+  featuredProducts: Product[];
+  bestSellProducts: Product[];
+  bestHomeProducts: Product[];
+  navigationList: CategoryItem[];
+  mainCarouselData: GroceryTwoCarouselItem[];
+  testimonials: any[];
+  discountBanners: any[];
+};
+// ========================================================
 
+const Grocery2: NextPage<Grocery2Props> = (props) => {
   return (
-    <ShopLayout2>
+    <ShopLayout2 showTopbar={false}>
+      <SEO title="Grocery store template v2" />
       <Box id="grocerySection" />
 
       <SidenavContainer
         navFixedComponentID="grocerySection"
-        SideNav={() => <Grocery2SideNav groceryNavigation={groceryNavigationList} />}
+        SideNav={() => (
+          <Grocery2SideNav groceryNavigation={props.navigationList} />
+        )}
       >
         <Stack spacing={6}>
-          <GrocerySection1 />
-          <GrocerySection2 services={section2Services} />
-          <GrocerySection3 categories={section3Category} />
-          <ProductCarousel title="Featured Items" products={section4Products} />
-          <ProductCarousel title="Best Seller in Your Area" products={section5Products} />
-          <GrocerySection6 cardList={section6CardList} />
-          <ProductCarousel title="Best of Home Essentials" products={section7Products} />
-          <ProductCarousel title="Snacks, Drinks, Dairy & More" products={section8Products} />
-          <GrocerySection9 testimonials={section9Testimonials} />
-          <GroceryFooter />
+          {/* TOP HERO AREA */}
+          <Section1 carouselData={props.mainCarouselData} />
+
+          {/* SERIVICE LIST AREA */}
+          <Section2 services={props.serviceList} />
+
+          {/* SHOP BY CATEGORY LIST AREA */}
+          <Section3 categories={props.categories} />
+
+          {/* FEATURED ITEMS AREA */}
+          <ProductCarousel
+            title="Featured Items"
+            products={props.featuredProducts}
+          />
+
+          {/* BEST SELLER IN YOUR AREA */}
+          <ProductCarousel
+            title="Best Seller in Your Area"
+            products={props.bestSellProducts}
+          />
+
+          {/* DISCOUNT BANNER AREA */}
+          <Section6 cardList={props.discountBanners} />
+
+          {/* BEST OF HOME ESSENTIALS PRODUCTS AREA  */}
+          <ProductCarousel
+            title="Best of Home Essentials"
+            products={props.bestHomeProducts}
+          />
+
+          {/* SNACKS-DRINKS-DAIRY PRODUCTS AREA */}
+          <ProductCarousel
+            title="Snacks, Drinks, Dairy & More"
+            products={props.dairyProducts}
+          />
+
+          {/* CLIENT TESTIMONIALS AREA */}
+          <Section9 testimonials={props.testimonials} />
+
+          {/* FOOTER AREA */}
+          <Footer2 />
         </Stack>
       </SidenavContainer>
 
+      {/* SETTINGS IS USED ONLY FOR DEMO, YOU CAN REMOVE THIS */}
       <Setting />
 
+      {/* POPUP NEWSLETTER FORM */}
+      <Newsletter image="/assets/images/newsletter/bg-2.png" />
+
+      {/* SMALL DEVICE BOTTOM NAVIGATION */}
       <MobileNavigationBar2>
         <Scrollbar>
-          <Grocery2SideNav groceryNavigation={groceryNavigationList} />
+          <Grocery2SideNav groceryNavigation={props.navigationList} />
         </Scrollbar>
       </MobileNavigationBar2>
     </ShopLayout2>
   );
 };
 
-export async function getStaticProps() {
-  const section2 = await api.getSection2Services();
-  const section4 = await api.getSection4Products();
-  const section5 = await api.getSection5Products();
-  const section6 = await api.getSection6CardList();
-  const section7 = await api.getSection7Products();
-  const section8 = await api.getSection8Products();
-  const section3 = await api.getSection3Categories();
-  const section9 = await api.getSection9Testimonials();
-  const groceryNavigationList = await api.getGroceryNavigation();
+export const getStaticProps: GetStaticProps = async () => {
+  const serviceList = await api.getServices();
+  const categories = await api.getCategories();
+  const testimonials = await api.getTestimonials();
+  const dairyProducts = await api.getDairyProducts();
+  const navigationList = await api.getNavigationList();
+  const mainCarouselData = await api.getMainCarousel();
+  const featuredProducts = await api.getFeaturedProducts();
+  const bestHomeProducts = await api.getBestHomeProducts();
+  const bestSellProducts = await api.getBestSellProducts();
+  const discountBanners = await api.getDiscountBannerList();
 
   return {
     props: {
-      groceryNavigationList,
-      section2Services: section2,
-      section3Category: section3,
-      section4Products: section4,
-      section5Products: section5,
-      section6CardList: section6,
-      section7Products: section7,
-      section8Products: section8,
-      section9Testimonials: section9,
+      categories,
+      serviceList,
+      testimonials,
+      dairyProducts,
+      navigationList,
+      discountBanners,
+      featuredProducts,
+      bestSellProducts,
+      bestHomeProducts,
+      mainCarouselData,
     },
   };
-}
+};
 
-export default Home2;
+export default Grocery2;

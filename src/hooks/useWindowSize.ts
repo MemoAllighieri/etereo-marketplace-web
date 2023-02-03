@@ -1,26 +1,24 @@
-import debounce from "lodash/debounce";
-import { useCallback, useEffect, useState } from "react";
+import { debounce } from "@mui/material";
+import { useEffect, useState } from "react";
 
 const useWindowSize = () => {
   const [width, setWidth] = useState(0);
 
-  const windowListener = useCallback(
-    debounce(() => {
-      if (window) setWidth(window.innerWidth);
-    }, 250),
-    []
-  );
+  const windowListener = debounce(() => {
+    if (window) setWidth(window.innerWidth);
+  }, 250);
 
   useEffect(() => {
     if (window) {
       setWidth(window.innerWidth);
       window.addEventListener("resize", windowListener);
     }
+
     return () => {
-      windowListener.cancel();
+      windowListener.clear();
       window && window.removeEventListener("resize", windowListener);
     };
-  }, []);
+  }, [windowListener]);
 
   return width;
 };

@@ -9,7 +9,7 @@ Make sure that you have the last stable [NodeJS](https://nodejs.org/en/download/
 Navigate to the project root folder using terminal and install the dependencies.
 
 ```js
-yarn;
+yarn || npm install;
 ```
 
 ## Start
@@ -17,7 +17,7 @@ yarn;
 After the installation is complete, you can launch dev server by running.
 
 ```js
-yarn dev
+yarn dev || npm run dev
 ```
 
 This starts a local webserver at `http://localhost:3000` and auto detect file changes:
@@ -25,7 +25,7 @@ This starts a local webserver at `http://localhost:3000` and auto detect file ch
 ## Build
 
 ```js
-yarn build
+yarn build || npm run build
 ```
 
 ## Folder structure
@@ -46,8 +46,12 @@ bazar-react/
     ├── support
     ├── 50+ Other pages
 ├── src/
+|   ├── __server__/
+|   |   ├── __db__
+|   |   |   ├── all dummy data inside
 |   ├── animations
 |   ├── components/
+|   |   ├── icons
 |   |   ├── layouts
 |   |   |   ├── customer-dashboard
 |   |   |   ├── vendor-dashboard
@@ -55,18 +59,21 @@ bazar-react/
 |   |   └── Includes reusable atomic components
 |   ├── contexts
 |   ├── data
-|   ├── fake-db
 |   ├── hooks
+|   ├── models
 |   ├── page-sections
-|   |   └── Includes bigger components (Individual every pages sections compoents)
+|   |   └── Includes bigger components (these components contain hard coded data)
 |   ├── theme
 |   ├── utils
+|   |   ├── __api__
+|   |   |   ├── all api functions create inside
+|   ├── lib
 └── README.md
 ```
 
 ## Pages/Routing
 
-Bazar react follows [Next.js routing standard](https://nextjs.org/docs/routing/introduction).
+Bazaar react follows [Next.js routing standard](https://nextjs.org/docs/routing/introduction).
 All the routes/pages are inside `pages` folder.
 
 ## Compnents
@@ -120,11 +127,11 @@ Open `src/contexts/SettingContext.tsx` and change the value of direction to 'rtl
 
 ## REST API
 
-- REST API calls are located in `src/utils/api`
+- REST API calls are located in `src/__server__/__api__`
 
 ## Fake server
 
-- REST APIs are getting data from dummy server located in `src/fake-db/server`
+- REST APIs are getting data from dummy server located in `src/__server__/__db__`
 - This server serves dummy data. You need to implement your own server.
 
 ## Navbar Menus Structure
@@ -132,32 +139,32 @@ Open `src/contexts/SettingContext.tsx` and change the value of direction to 'rtl
 ```ts
 const navbarNavigations = [
   {
-    title: 'Home',
+    title: "Home",
     megaMenu: false,
     megaMenuWithSub: false,
     child: [
-      { title: 'Super Store', url: '/superstore-shop' },
-      { title: 'Furniture', url: '/furniture-shop' },
-      { title: 'Grocery-v1', url: '/grocery1' },
-      { title: 'Grocery-v2', url: '/grocery2' },
-      { title: 'Grocery-v3', url: '/grocery3' },
-      { title: 'Health and Beauty', url: '/healthbeauty-shop' },
-      { title: 'Fashion', url: '/fashion-shop' },
-      { title: 'Gift Store', url: '/gift-shop' },
-      { title: 'Gadget', url: '/gadget-shop' },
+      { title: "Super Store", url: "/market-1" },
+      { title: "Furniture", url: "/furniture-shop" },
+      { title: "Grocery-v1", url: "/grocery1" },
+      { title: "Grocery-v2", url: "/grocery2" },
+      { title: "Grocery-v3", url: "/grocery3" },
+      { title: "Health and Beauty", url: "/healthbeauty-shop" },
+      { title: "Fashion", url: "/fashion-shop-1" },
+      { title: "Gift Store", url: "/gift-shop" },
+      { title: "Gadget", url: "/gadget-shop" },
     ],
   },
 
   {
     megaMenu: true,
     megaMenuWithSub: false,
-    title: 'All Demos',
+    title: "All Demos",
     child: megaMenus,
   },
   {
     megaMenu: false,
     megaMenuWithSub: true,
-    title: 'Categories',
+    title: "Categories",
     child: categoriesMegaMenu,
   },
 ];
@@ -169,20 +176,20 @@ const navbarNavigations = [
 const megaMenus = [
   [
     {
-      title: 'Grocery',
+      title: "Grocery",
       child: [
-        { title: 'Grocery-v1', url: '/grocery1' },
-        { title: 'Grocery-v2', url: '/grocery2' },
-        { title: 'Grocery-v3', url: '/grocery3' },
+        { title: "Grocery-v1", url: "/grocery1" },
+        { title: "Grocery-v2", url: "/grocery2" },
+        { title: "Grocery-v3", url: "/grocery3" },
       ],
     },
     {
-      title: 'Others',
+      title: "Others",
       child: [
-        { title: 'Health and Beauty', url: '/healthbeauty-shop' },
-        { title: 'Fashion', url: '/fashion-shop' },
-        { title: 'Gift Store', url: '/gift-shop' },
-        { title: 'Gadget', url: '/gadget-shop' },
+        { title: "Health and Beauty", url: "/healthbeauty-shop" },
+        { title: "Fashion", url: "/fashion-shop-1" },
+        { title: "Gift Store", url: "/gift-shop" },
+        { title: "Gadget", url: "/gadget-shop" },
       ],
     },
   ],
@@ -194,43 +201,43 @@ const megaMenus = [
 ```ts
 const categoriesMegaMenu = [
   {
-    title: 'Fashion',
+    title: "Fashion",
     child: [
       {
         title: "Men's Fashion",
         child: [
-          { title: 'T-Shirt', url: '#', Icon: Icons.Shirt },
-          { title: 'Shirt', url: '#', Icon: Icons.Shirt },
-          { title: 'Shoes', url: '#', Icon: Icons.Shirt },
-          { title: 'Jeans Pant', url: '#', Icon: Icons.Shirt },
-          { title: 'Gabardin Pant', url: '#', Icon: Icons.Shirt },
-          { title: 'Formal Pant', url: '#', Icon: Icons.Shirt },
-          { title: 'Formal Shirt', url: '#', Icon: Icons.Shirt },
-          { title: 'Sunglass', url: '#', Icon: Icons.Shirt },
+          { title: "T-Shirt", url: "#", Icon: Icons.Shirt },
+          { title: "Shirt", url: "#", Icon: Icons.Shirt },
+          { title: "Shoes", url: "#", Icon: Icons.Shirt },
+          { title: "Jeans Pant", url: "#", Icon: Icons.Shirt },
+          { title: "Gabardin Pant", url: "#", Icon: Icons.Shirt },
+          { title: "Formal Pant", url: "#", Icon: Icons.Shirt },
+          { title: "Formal Shirt", url: "#", Icon: Icons.Shirt },
+          { title: "Sunglass", url: "#", Icon: Icons.Shirt },
         ],
       },
       {
         title: "Women's Fashion",
         child: [
-          { title: 'Clothing', url: '#' },
-          { title: 'Shoes', url: '#' },
-          { title: 'Jewelry', url: '#' },
-          { title: 'Watches', url: '#' },
-          { title: 'Hand Bags', url: '#' },
-          { title: 'Accessories', url: '#' },
-          { title: 'Makeup', url: '#' },
+          { title: "Clothing", url: "#" },
+          { title: "Shoes", url: "#" },
+          { title: "Jewelry", url: "#" },
+          { title: "Watches", url: "#" },
+          { title: "Hand Bags", url: "#" },
+          { title: "Accessories", url: "#" },
+          { title: "Makeup", url: "#" },
         ],
       },
 
       {
         title: "Girls' Fashion",
         child: [
-          { title: 'Clothing', url: '#' },
-          { title: 'Shoes', url: '#' },
-          { title: 'Jewelry', url: '#' },
-          { title: 'Watches', url: '#' },
-          { title: 'Hand Bags', url: '#' },
-          { title: 'Gadget', url: '#' },
+          { title: "Clothing", url: "#" },
+          { title: "Shoes", url: "#" },
+          { title: "Jewelry", url: "#" },
+          { title: "Watches", url: "#" },
+          { title: "Hand Bags", url: "#" },
+          { title: "Gadget", url: "#" },
         ],
       },
     ],
@@ -244,9 +251,46 @@ Need Support? Create a ticket [HERE](https://support.ui-lib.com/help-center/tick
 
 ### changelog
 
+## v3.4.0
+
+###### Jan 6, 2023
+
+- Add Language Translation Feature [Next-i18next](https://github.com/i18next/next-i18next)
+- Add Product Variants (Options and Type)
+- Fix All Dead Links
+- Improve & Rename Components/Folder Structure
+
+## v3.3.0
+
+###### Nov 12, 2022
+
+- Redesign Mock Api and Data with Model
+- Add Data Models for Product, Category, Shop Etc.
+- Add Product Preview Image Feature with Delete Button
+- Update User, Admin Dashboard all Pages With SSR
+- Add useScoller Hook
+- Add Currency function
+- Update Documentation
+- Update All Packages and Library
+
+## v3.2.0
+
+###### Aug 28, 2022
+
+- Add one Market homepage
+- Add two Fashion homepages
+- Add SEO component
+- Update layout code structure
+
+## v3.1.0
+
+###### Jul 03, 2022
+
+- Add Mega menu and Fullscreen dropdown menu
+
 ## v3.0.0
 
-###### June 16, 2022
+###### Jun 16, 2022
 
 - Add Admin/Vendor dashboard (25+ pages)
 - Add RTL Support
@@ -254,13 +298,13 @@ Need Support? Create a ticket [HERE](https://support.ui-lib.com/help-center/tick
 
 ## v2.3.0
 
-###### April 18, 2022
+###### Apr 18, 2022
 
 - Fix Build issue (added resolutions &amp; overrides in package.json)
 
 ## v2.2.0
 
-###### March 21, 2022
+###### Mar 21, 2022
 
 - Fix Eslint errors
 
@@ -268,7 +312,7 @@ Need Support? Create a ticket [HERE](https://support.ui-lib.com/help-center/tick
 
 ###### Dec 28, 2021
 
-- Add 5 new store front variations
+- Add 5 new storefront variations
 - Fix small UI issues
 
 ## v2.0.0
@@ -285,13 +329,13 @@ Need Support? Create a ticket [HERE](https://support.ui-lib.com/help-center/tick
 
 - Migrate makeStyles API to v5
 - Fix next/image issues
-- Add new page &quot;Shop v4&quot;
+- Add a new page &quot;Shop v4&quot;
 
 ## v1.1.0
 
 ###### Aug 12, 2021
 
-- Add new page &quot;Shop v3&quot;
+- Add a new page &quot;Shop v3&quot;
 
 ## v1.0.1
 
@@ -310,6 +354,11 @@ Initial release
 1. More funcional cart, cookie
 2. List of all APIs/Functions
 
-```
+### Doc points
 
-```
+. app entry poin
+. page props
+. component props
+. SEO
+. Cart
+. navigation component structure and data structure

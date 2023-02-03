@@ -1,23 +1,35 @@
+import Link from "next/link";
+import { FC, useState } from "react";
 import { ChevronRight, KeyboardArrowDown } from "@mui/icons-material";
-import { Avatar, Box } from "@mui/material";
-import { FlexRowCenter } from "components/flex-box";
-import NavLink from "components/nav-link/NavLink";
-import Scrollbar from "components/Scrollbar";
+import { Avatar, Box, SvgIconProps } from "@mui/material";
 import { H6 } from "components/Typography";
 import useSettings from "hooks/useSettings";
-import { FC, useState } from "react";
+import Scrollbar from "components/Scrollbar";
+import { FlexRowCenter } from "components/flex-box";
 import {
-  CategoryList,
-  CategoryListItem,
-  MenusContainer,
-  StyledCard,
-  SubCategoryList,
-  SubCategoryListItem,
   Wrapper,
+  StyledCard,
+  CategoryList,
+  MenusContainer,
+  SubCategoryList,
+  CategoryListItem,
+  SubCategoryListItem,
 } from "./styles";
 
 // ===============================================================
-type MegaMenuProps = { menuList: any; title: string };
+
+type NavLink = {
+  url: string;
+  img?: string;
+  title: string;
+  Icon?: (props: SvgIconProps<"svg", {}>) => JSX.Element;
+};
+
+type MenuItem = { title: string; child: NavLink[] };
+type MenuList = { title: string; child: MenuItem[] };
+
+// ===============================================================
+type MegaMenuProps = { menuList: MenuList[]; title: string };
 // ===============================================================
 
 const MegaMenu2: FC<MegaMenuProps> = ({ title, menuList }) => {
@@ -29,7 +41,8 @@ const MegaMenu2: FC<MegaMenuProps> = ({ title, menuList }) => {
   return (
     <Wrapper>
       <FlexRowCenter alignItems="flex-end" gap={0.3}>
-        {title} <KeyboardArrowDown sx={{color: 'grey.500', fontSize: '1.1rem'}} />
+        {title}{" "}
+        <KeyboardArrowDown sx={{ color: "grey.500", fontSize: "1.1rem" }} />
       </FlexRowCenter>
 
       <MenusContainer className="menu-list">
@@ -44,13 +57,17 @@ const MegaMenu2: FC<MegaMenuProps> = ({ title, menuList }) => {
                 {item}
                 <ChevronRight
                   fontSize="small"
-                  sx={{ transform: `rotate(${settings.direction === "rtl" ? "180deg" : "0"})` }}
+                  sx={{
+                    transform: `rotate(${
+                      settings.direction === "rtl" ? "180deg" : "0"
+                    })`,
+                  }}
                 />
               </CategoryListItem>
             ))}
           </CategoryList>
 
-          <Scrollbar autoHide={false} style={{ width: "100%" }}>
+          <Scrollbar autoHide={false} sx={{ width: "100%" }}>
             <Box px={6} py={2} height="100%">
               {subMenus.child.map((item, key) => {
                 return (
@@ -62,16 +79,23 @@ const MegaMenu2: FC<MegaMenuProps> = ({ title, menuList }) => {
                     <SubCategoryList>
                       {item.child.map((sub, key) => {
                         return (
-                          <SubCategoryListItem key={key}>
-                            {sub.img && (
-                              <Avatar
-                                src={sub.img}
-                                sx={{ backgroundColor: "grey.100", borderRadius: 1 }}
-                              />
-                            )}
-                            {sub.Icon && <sub.Icon sx={{ fontSize: 16 }} />}
-                            <NavLink href="#">{sub.title}</NavLink>
-                          </SubCategoryListItem>
+                          <Link href="/" key={key} passHref>
+                            <a>
+                              <SubCategoryListItem>
+                                {sub.img && (
+                                  <Avatar
+                                    src={sub.img}
+                                    sx={{
+                                      backgroundColor: "grey.100",
+                                      borderRadius: 1,
+                                    }}
+                                  />
+                                )}
+                                {sub.Icon && <sub.Icon sx={{ fontSize: 16 }} />}
+                                {sub.title}
+                              </SubCategoryListItem>
+                            </a>
+                          </Link>
                         );
                       })}
                     </SubCategoryList>

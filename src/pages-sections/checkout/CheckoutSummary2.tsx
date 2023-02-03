@@ -1,7 +1,8 @@
+import { FC } from "react";
 import { Box, Divider } from "@mui/material";
 import { FlexBetween } from "components/flex-box";
 import { Paragraph, Span } from "components/Typography";
-import React, { FC } from "react";
+import { currency } from "lib";
 
 const CheckoutSummary2: FC = () => {
   return (
@@ -18,7 +19,7 @@ const CheckoutSummary2: FC = () => {
             </Span>{" "}
             x {item.name}
           </Paragraph>
-          <Paragraph>${item.price.toFixed(2)}</Paragraph>
+          <Paragraph>{currency(item.price)}</Paragraph>
         </FlexBetween>
       ))}
 
@@ -26,7 +27,7 @@ const CheckoutSummary2: FC = () => {
 
       <FlexBetween mb={0.5}>
         <Paragraph color="grey.600">Subtotal:</Paragraph>
-        <Paragraph fontWeight="700">${(2610).toFixed(2)}</Paragraph>
+        <Paragraph fontWeight="700">{currency(2610)}</Paragraph>
       </FlexBetween>
 
       <FlexBetween mb={0.5}>
@@ -36,7 +37,7 @@ const CheckoutSummary2: FC = () => {
 
       <FlexBetween mb={0.5}>
         <Paragraph color="grey.600">Tax:</Paragraph>
-        <Paragraph fontWeight="700">${(40).toFixed(2)}</Paragraph>
+        <Paragraph fontWeight="700">{currency(40)}</Paragraph>
       </FlexBetween>
 
       <FlexBetween mb={3}>
@@ -48,7 +49,7 @@ const CheckoutSummary2: FC = () => {
 
       <FlexBetween fontWeight="700" mb={1}>
         <Paragraph>Total:</Paragraph>
-        <Paragraph fontWeight="700">${(2610).toFixed(2)}</Paragraph>
+        <Paragraph fontWeight="700">{currency(2650)}</Paragraph>
       </FlexBetween>
     </Box>
   );

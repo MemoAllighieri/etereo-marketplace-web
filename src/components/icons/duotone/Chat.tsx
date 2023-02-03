@@ -1,6 +1,6 @@
 import { SvgIcon, SvgIconProps } from "@mui/material";
 
-const Apps = (props: SvgIconProps) => {
+const Chat = (props: SvgIconProps) => {
   return (
     <SvgIcon viewBox="0 0 16 16" {...props}>
       <path
@@ -12,4 +12,4 @@ const Apps = (props: SvgIconProps) => {
   );
 };
 
-export default Apps;
+export default Chat;

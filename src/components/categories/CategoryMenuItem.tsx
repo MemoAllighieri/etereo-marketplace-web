@@ -1,8 +1,8 @@
-import { ChevronLeft, ChevronRight } from "@mui/icons-material";
-import { Box, MenuItem, styled } from "@mui/material";
-import useSettings from "hooks/useSettings";
+import { FC, ReactNode } from "react";
 import Link from "next/link";
-import { FC } from "react";
+import { Box, MenuItem, styled } from "@mui/material";
+import { ChevronLeft, ChevronRight } from "@mui/icons-material";
+import useSettings from "hooks/useSettings";
 
 //styled component
 const Wrapper = styled(Box)(({ theme }) => ({
@@ -20,7 +20,7 @@ const Wrapper = styled(Box)(({ theme }) => ({
   "&:hover": {
     "& > .category-dropdown-link": {
       color: theme.palette.primary.main,
-      background: theme.palette.primary.light,
+      background: theme.palette.action.hover,
     },
     "& > .mega-menu": { display: "block" },
   },
@@ -32,6 +32,7 @@ type CategoryMenuItemProps = {
   href: string;
   title: string;
   caret?: boolean;
+  children?: ReactNode;
 };
 // =============================================================
 

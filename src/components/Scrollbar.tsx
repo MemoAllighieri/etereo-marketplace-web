@@ -1,6 +1,6 @@
-import { alpha, styled, SxProps } from "@mui/material";
 import { FC, ReactNode } from "react";
-import SimpleBar, { Props } from "simplebar-react";
+import { alpha, styled, SxProps } from "@mui/material";
+import SimpleBar from "simplebar-react";
 
 const StyledScrollBar = styled(SimpleBar)(({ theme }) => ({
   maxHeight: "100%",
@@ -13,10 +13,14 @@ const StyledScrollBar = styled(SimpleBar)(({ theme }) => ({
   "& .simplebar-mask": { zIndex: "inherit" },
 }));
 
-// props type
-type ScrollbarProps = { children: ReactNode; sx?: SxProps };
+// =============================================================
+interface ScrollbarProps extends SimpleBar.Props {
+  sx?: SxProps;
+  children: ReactNode;
+}
+// =============================================================
 
-const Scrollbar: FC<ScrollbarProps & Props> = ({ children, sx, ...props }) => {
+const Scrollbar: FC<ScrollbarProps> = ({ children, sx, ...props }) => {
   return (
     <StyledScrollBar sx={sx} {...props}>
       {children}

@@ -1,15 +1,15 @@
+import { FC } from "react";
 import { Box, Container, Grid } from "@mui/material";
-import CarouselCard3 from "components/carousel-cards/CarouselCard3";
 import Carousel from "components/carousel/Carousel";
+import { CarouselCard3 } from "components/carousel-cards";
 import CategorySectionCreator from "components/CategorySectionCreator";
-import Navbar from "components/navbar/Navbar";
 import useSettings from "hooks/useSettings";
-import { FC, Fragment } from "react";
 import CarouselSection from "./CarouselSection";
 import HomeFourCard1 from "./homeFour-cards/HomeFourCard1";
+import Product from "models/Product.model";
 
 // =================================================================
-type Props = { topPickList: any[]; mainCarousel: any[] };
+type Props = { topPickList: Product[]; mainCarousel: Product[] };
 // =================================================================
 
 const Section1: FC<Props> = ({ topPickList, mainCarousel }) => {
@@ -26,42 +26,41 @@ const Section1: FC<Props> = ({ topPickList, mainCarousel }) => {
   const right = settings.direction === "ltr" ? "right" : "left";
 
   return (
-    <Fragment>
-      <Navbar />
-
-      <Container sx={{ pt: "3rem" }}>
-        <Grid container spacing={5}>
-          <Grid item md={5} xs={12}>
-            <Carousel
-              visibleSlides={1}
-              totalSlides={mainCarousel.length}
-              leftButtonStyle={{ ...arrowButtonStyle, [left]: 8 }}
-              rightButtonStyle={{ ...arrowButtonStyle, [right]: 8 }}
-            >
-              {mainCarousel.map((_item, ind) => (
-                <CarouselCard3 carouselData={_item} key={ind} />
-              ))}
-            </Carousel>
-          </Grid>
-
-          <Grid item md={7} xs={12}>
-            <CategorySectionCreator title="Top Picks">
-              <CarouselSection productList={topPickList} />
-
-              <Box my="3rem">
-                <HomeFourCard1
-                  title="Converse Collecitons"
-                  body="Get the most exciting deals. Starting at $59"
-                  imgUrl="/assets/images/products/red-shoe.png"
-                />
-              </Box>
-
-              <CarouselSection productList={topPickList} />
-            </CategorySectionCreator>
-          </Grid>
+    <Container sx={{ pt: "3rem" }}>
+      <Grid container spacing={5}>
+        <Grid item md={5} xs={12}>
+          <Carousel
+            visibleSlides={1}
+            totalSlides={mainCarousel.length}
+            leftButtonStyle={{ ...arrowButtonStyle, [left]: 8 }}
+            rightButtonStyle={{ ...arrowButtonStyle, [right]: 8 }}
+          >
+            {mainCarousel.map((product) => (
+              <CarouselCard3 product={product} key={product.id} />
+            ))}
+          </Carousel>
         </Grid>
-      </Container>
-    </Fragment>
+
+        <Grid item md={7} xs={12}>
+          <CategorySectionCreator title="Top Picks">
+            {/* TOP PICK LIST PRODUCT */}
+            <CarouselSection productList={topPickList} />
+
+            {/* MIDDLE BANNER AREA */}
+            <Box my="3rem">
+              <HomeFourCard1
+                title="Converse Collecitons"
+                body="Get the most exciting deals. Starting at $59"
+                imgUrl="/assets/images/products/red-shoe.png"
+              />
+            </Box>
+
+            {/* BOTTOM PICK LIST PRODUCT */}
+            <CarouselSection productList={topPickList} />
+          </CategorySectionCreator>
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 

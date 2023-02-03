@@ -1,15 +1,9 @@
-import { alpha, Grid, styled } from "@mui/material";
-import BazarImage from "components/BazarImage";
-import NavLink2 from "components/nav-link/NavLink2";
-import { H3, Paragraph } from "components/Typography";
+import { FC } from "react";
 import Link from "next/link";
-import React, { FC } from "react";
-
-interface HomeFourCard1Props {
-  body: string;
-  title: string;
-  imgUrl: string;
-}
+import { alpha, Grid, styled } from "@mui/material";
+import { NavLink2 } from "components/nav-link";
+import BazaarImage from "components/BazaarImage";
+import { H3, Paragraph } from "components/Typography";
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   backgroundColor: alpha(theme.palette.background.paper, 1),
@@ -20,13 +14,17 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: { "&": { padding: "1rem" } },
 }));
 
+// =============================================================================
+type HomeFourCard1Props = { body: string; title: string; imgUrl: string };
+// =============================================================================
+
 const HomeFourCard1: FC<HomeFourCard1Props> = ({ title, body, imgUrl }) => {
   return (
     <Link href="/sale-page-1">
       <a>
         <StyledGrid container>
           <Grid item sm={6} xs={6}>
-            <BazarImage
+            <BazaarImage
               src={imgUrl}
               alt="apple-watch-1"
               sx={{

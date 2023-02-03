@@ -1,16 +1,17 @@
+import { FC, Fragment, useEffect, useState } from "react";
 import { Box, useTheme } from "@mui/material";
+import appIcons from "components/icons";
+import { Span } from "components/Typography";
+import Scrollbar from "components/Scrollbar";
+import { FlexBox } from "components/flex-box";
+import { NavLink } from "components/nav-link";
+import BazaarCard from "components/BazaarCard";
 import Accordion from "components/accordion/Accordion";
 import AccordionHeader from "components/accordion/AccordionHeader";
-import BazarCard from "components/BazarCard";
-import { FlexBox } from "components/flex-box";
-import appIcons from "components/icons";
-import NavLink from "components/nav-link/NavLink";
-import Scrollbar from "components/Scrollbar";
-import { Span } from "components/Typography";
-import { FC, Fragment, useEffect, useState } from "react";
+import { CategoryItem } from "models/CategoryNavList.model";
 
 // ===========================================================
-type GrocerySidenavProps = { groceryNavigation: any[] };
+type GrocerySidenavProps = { groceryNavigation: CategoryItem[] };
 // ===========================================================
 
 const Grocery2SideNav: FC<GrocerySidenavProps> = ({ groceryNavigation }) => {
@@ -22,6 +23,8 @@ const Grocery2SideNav: FC<GrocerySidenavProps> = ({ groceryNavigation }) => {
       if (window.scrollY > 180) setScrolled(true);
       else setScrolled(false);
     });
+
+    return () => window.removeEventListener("scroll", null);
   }, []);
 
   const renderChild = (childList: any[], type = "parent") => {
@@ -49,14 +52,14 @@ const Grocery2SideNav: FC<GrocerySidenavProps> = ({ groceryNavigation }) => {
 
   return (
     <Scrollbar
-      style={{
+      sx={{
         boxShadow: shadows[1],
-        marginTop: scrolled ? 24 : 0,
+        marginTop: scrolled ? 3 : 0,
         transition: "all 0.4s ease-in-out",
         maxHeight: scrolled ? "100%" : `calc(100% - ${104}px)`,
       }}
     >
-      <BazarCard
+      <BazaarCard
         elevation={3}
         sx={{
           height: "100%",
@@ -92,7 +95,7 @@ const Grocery2SideNav: FC<GrocerySidenavProps> = ({ groceryNavigation }) => {
             </Box>
           );
         })}
-      </BazarCard>
+      </BazaarCard>
     </Scrollbar>
   );
 };

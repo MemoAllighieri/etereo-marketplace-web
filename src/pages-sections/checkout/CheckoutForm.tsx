@@ -1,13 +1,13 @@
+import Link from "next/link";
+import { FC, useState } from "react";
+import { useRouter } from "next/router";
 import { Button, Checkbox, Grid, TextField, Typography } from "@mui/material";
+import * as yup from "yup";
+import { Formik } from "formik";
+import Card1 from "components/Card1";
 import Autocomplete from "@mui/material/Autocomplete";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Card1 from "components/Card1";
 import countryList from "data/countryList";
-import { Formik } from "formik";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { FC, useState } from "react";
-import * as yup from "yup";
 
 const CheckoutForm: FC = () => {
   const router = useRouter();
@@ -59,7 +59,9 @@ const CheckoutForm: FC = () => {
                   onChange={handleChange}
                   value={values.shipping_name}
                   error={!!touched.shipping_name && !!errors.shipping_name}
-                  helperText={touched.shipping_name && errors.shipping_name}
+                  helperText={
+                    (touched.shipping_name && errors.shipping_name) as string
+                  }
                 />
                 <TextField
                   fullWidth
@@ -73,7 +75,8 @@ const CheckoutForm: FC = () => {
                     !!touched.shipping_contact && !!errors.shipping_contact
                   }
                   helperText={
-                    touched.shipping_contact && errors.shipping_contact
+                    (touched.shipping_contact &&
+                      errors.shipping_contact) as string
                   }
                 />
                 <TextField
@@ -86,7 +89,9 @@ const CheckoutForm: FC = () => {
                   onChange={handleChange}
                   value={values.shipping_zip}
                   error={!!touched.shipping_zip && !!errors.shipping_zip}
-                  helperText={touched.shipping_zip && errors.shipping_zip}
+                  helperText={
+                    (touched.shipping_zip && errors.shipping_zip) as string
+                  }
                 />
                 <TextField
                   fullWidth
@@ -99,7 +104,8 @@ const CheckoutForm: FC = () => {
                     !!touched.shipping_address1 && !!errors.shipping_address1
                   }
                   helperText={
-                    touched.shipping_address1 && errors.shipping_address1
+                    (touched.shipping_address1 &&
+                      errors.shipping_address1) as string
                   }
                 />
               </Grid>
@@ -115,7 +121,9 @@ const CheckoutForm: FC = () => {
                   onChange={handleChange}
                   value={values.shipping_email}
                   error={!!touched.shipping_email && !!errors.shipping_email}
-                  helperText={touched.shipping_email && errors.shipping_email}
+                  helperText={
+                    (touched.shipping_email && errors.shipping_email) as string
+                  }
                 />
                 <TextField
                   fullWidth
@@ -129,7 +137,8 @@ const CheckoutForm: FC = () => {
                     !!touched.shipping_company && !!errors.shipping_company
                   }
                   helperText={
-                    touched.shipping_company && errors.shipping_company
+                    (touched.shipping_company &&
+                      errors.shipping_company) as string
                   }
                 />
 
@@ -151,7 +160,8 @@ const CheckoutForm: FC = () => {
                         !!touched.shipping_country && !!errors.shipping_country
                       }
                       helperText={
-                        touched.shipping_country && errors.shipping_country
+                        (touched.shipping_country &&
+                          errors.shipping_country) as string
                       }
                       {...params}
                     />
@@ -169,7 +179,8 @@ const CheckoutForm: FC = () => {
                     !!touched.shipping_address2 && !!errors.shipping_address2
                   }
                   helperText={
-                    touched.shipping_address2 && errors.shipping_address2
+                    (touched.shipping_address2 &&
+                      errors.shipping_address2) as string
                   }
                 />
               </Grid>
@@ -184,12 +195,12 @@ const CheckoutForm: FC = () => {
             <FormControlLabel
               label="Same as shipping address"
               control={<Checkbox size="small" color="secondary" />}
+              onChange={handleCheckboxChange(values, setFieldValue)}
               sx={{
                 zIndex: 1,
                 position: "relative",
                 mb: sameAsShipping ? "" : "1rem",
               }}
-              onChange={handleCheckboxChange(values, setFieldValue)}
             />
 
             {!sameAsShipping && (
@@ -204,7 +215,9 @@ const CheckoutForm: FC = () => {
                     onChange={handleChange}
                     value={values.billing_name}
                     error={!!touched.billing_name && !!errors.billing_name}
-                    helperText={touched.billing_name && errors.billing_name}
+                    helperText={
+                      (touched.billing_name && errors.billing_name) as string
+                    }
                   />
                   <TextField
                     fullWidth
@@ -218,7 +231,8 @@ const CheckoutForm: FC = () => {
                       !!touched.billing_contact && !!errors.billing_contact
                     }
                     helperText={
-                      touched.billing_contact && errors.billing_contact
+                      (touched.billing_contact &&
+                        errors.billing_contact) as string
                     }
                   />
                   <TextField
@@ -231,7 +245,9 @@ const CheckoutForm: FC = () => {
                     onChange={handleChange}
                     value={values.billing_zip}
                     error={!!touched.billing_zip && !!errors.billing_zip}
-                    helperText={touched.billing_zip && errors.billing_zip}
+                    helperText={
+                      (touched.billing_zip && errors.billing_zip) as string
+                    }
                   />
                   <TextField
                     fullWidth
@@ -244,10 +260,12 @@ const CheckoutForm: FC = () => {
                       !!touched.billing_address1 && !!errors.billing_address1
                     }
                     helperText={
-                      touched.billing_address1 && errors.billing_address1
+                      (touched.billing_address1 &&
+                        errors.billing_address1) as string
                     }
                   />
                 </Grid>
+
                 <Grid item sm={6} xs={12}>
                   <TextField
                     fullWidth
@@ -259,7 +277,9 @@ const CheckoutForm: FC = () => {
                     onChange={handleChange}
                     value={values.billing_email}
                     error={!!touched.billing_email && !!errors.billing_email}
-                    helperText={touched.billing_email && errors.billing_email}
+                    helperText={
+                      (touched.billing_email && errors.billing_email) as string
+                    }
                   />
                   <TextField
                     fullWidth
@@ -273,7 +293,8 @@ const CheckoutForm: FC = () => {
                       !!touched.billing_company && !!errors.billing_company
                     }
                     helperText={
-                      touched.billing_company && errors.billing_company
+                      (touched.billing_company &&
+                        errors.billing_company) as string
                     }
                   />
                   <Autocomplete
@@ -293,7 +314,8 @@ const CheckoutForm: FC = () => {
                           !!touched.billing_country && !!errors.billing_country
                         }
                         helperText={
-                          touched.billing_country && errors.billing_country
+                          (touched.billing_country &&
+                            errors.billing_country) as string
                         }
                         {...params}
                       />
@@ -310,7 +332,8 @@ const CheckoutForm: FC = () => {
                       !!touched.billing_address2 && !!errors.billing_address2
                     }
                     helperText={
-                      touched.billing_address2 && errors.billing_address2
+                      (touched.billing_address2 &&
+                        errors.billing_address2) as string
                     }
                   />
                 </Grid>
@@ -331,6 +354,7 @@ const CheckoutForm: FC = () => {
                 </Button>
               </Link>
             </Grid>
+
             <Grid item sm={6} xs={12}>
               <Button
                 variant="contained"

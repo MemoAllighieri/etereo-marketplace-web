@@ -1,25 +1,31 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Button, Divider } from "@mui/material";
-import React, { useCallback } from "react";
+import { FC, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
+import { Box, Button, Divider } from "@mui/material";
 import { H5, Small } from "./Typography";
 
-export interface DropZoneProps {
-  onChange?: (files: []) => void;
+// ========================================================
+type DropZoneProps = {
   title?: string;
   imageSize?: string;
-}
+  onChange: (files: File[]) => void;
+};
+// ========================================================
 
-const DropZone: React.FC<DropZoneProps> = ({ onChange, title, imageSize }) => {
-  const onDrop = useCallback((acceptedFiles) => {
-    if (onChange) onChange(acceptedFiles);
-  }, []);
+const DropZone: FC<DropZoneProps> = ({
+  onChange,
+  title = "Drag & drop product image here",
+  imageSize = "Upload 280*280 image",
+}) => {
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => onChange(acceptedFiles),
+    [onChange]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    multiple: true,
-    accept: ".jpeg,.jpg,.png,.gif",
     maxFiles: 10,
+    multiple: true,
+    accept: { "image/*": [".png", ".gif", ".jpeg", ".jpg"] },
   });
 
   return (
@@ -41,7 +47,7 @@ const DropZone: React.FC<DropZoneProps> = ({ onChange, title, imageSize }) => {
     >
       <input {...getInputProps()} />
       <H5 mb={1} color="grey.600">
-        {title || "Drag & drop product image here"}
+        {title}
       </H5>
 
       <Divider
@@ -61,7 +67,7 @@ const DropZone: React.FC<DropZoneProps> = ({ onChange, title, imageSize }) => {
         Select files
       </Button>
 
-      <Small color="grey.600">{imageSize || "Upload 280*280 image"}</Small>
+      <Small color="grey.600">{imageSize}</Small>
     </Box>
   );
 };

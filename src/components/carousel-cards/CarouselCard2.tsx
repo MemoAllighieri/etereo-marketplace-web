@@ -1,10 +1,9 @@
-import { Favorite } from "@mui/icons-material";
-import { Box, Grid, styled } from "@mui/material";
-import BazarButton from "components/BazarButton";
-import BazarImage from "components/BazarImage";
-import { H2, H3, H4, Paragraph } from "components/Typography";
-import Countdown from "pages-sections/fashion-shop/countdown";
 import { FC } from "react";
+import { Favorite } from "@mui/icons-material";
+import { Box, Button, Grid, styled } from "@mui/material";
+import BazaarImage from "components/BazaarImage";
+import { H2, H3, H4, Paragraph } from "components/Typography";
+import Countdown from "pages-sections/fashion-shop-1/countdown";
 
 // styled component
 const ContentWrapper = styled(Box)(({ theme }) => ({
@@ -32,7 +31,7 @@ const CarouselCard2: FC<CarouselCard2Props> = ({
   return (
     <Grid container alignItems="center">
       <Grid item lg={6} md={5} sm={12} xs={12}>
-        <BazarImage
+        <BazaarImage
           src={imgUrl}
           alt="xiaomi-watch-1"
           sx={{ display: "block", mx: "auto", maxWidth: "100%", p: 5 }}
@@ -58,7 +57,7 @@ const CarouselCard2: FC<CarouselCard2Props> = ({
           <Countdown expireDate={expireDate} />
 
           <Box mt={3}>
-            <BazarButton
+            <Button
               color="primary"
               disableElevation
               variant="contained"
@@ -71,9 +70,9 @@ const CarouselCard2: FC<CarouselCard2Props> = ({
               }}
             >
               BUY NOW
-            </BazarButton>
+            </Button>
 
-            <BazarButton
+            <Button
               sx={{
                 px: "1rem",
                 color: "white",
@@ -84,7 +83,7 @@ const CarouselCard2: FC<CarouselCard2Props> = ({
               }}
             >
               <Favorite />
-            </BazarButton>
+            </Button>
           </Box>
         </ContentWrapper>
       </Grid>

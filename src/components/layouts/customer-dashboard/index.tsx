@@ -1,11 +1,10 @@
+import { FC, ReactNode } from "react";
 import { Container, Grid } from "@mui/material";
-import ShopLayout1 from "components/layouts/ShopLayout1";
-import Navbar from "components/navbar/Navbar";
-import React from "react";
 import Navigations from "./Navigations";
+import ShopLayout1 from "components/layouts/ShopLayout1";
 
 /**
- *  Used:
+ *  Used in:
  *  1. wish-list page
  *  2. address and address-details page
  *  3. orders and order-details page
@@ -13,12 +12,20 @@ import Navigations from "./Navigations";
  *  5. profile and edit profile page
  *  6. support-tickets page
  */
+// ======================================================
+type Props = { children: ReactNode };
+// ======================================================
 
-const CustomerDashboardLayout: React.FC = ({ children }) => (
-  <ShopLayout1 navbar={<Navbar />}>
+const CustomerDashboardLayout: FC<Props> = ({ children }) => (
+  <ShopLayout1>
     <Container sx={{ my: "2rem" }}>
       <Grid container spacing={3}>
-        <Grid item lg={3} xs={12} sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
+        <Grid
+          item
+          lg={3}
+          xs={12}
+          sx={{ display: { xs: "none", sm: "none", md: "block" } }}
+        >
           <Navigations />
         </Grid>
 

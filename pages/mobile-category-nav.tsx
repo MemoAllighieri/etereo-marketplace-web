@@ -1,34 +1,86 @@
-import { Box, Divider, Grid, Typography } from "@mui/material";
+import Link from "next/link";
+import { NextPage } from "next";
+import { Fragment, useEffect, useState } from "react";
+import { Box, Divider, Grid, styled, Typography } from "@mui/material";
+import Header from "components/header/Header";
 import Accordion from "components/accordion/Accordion";
 import AccordionHeader from "components/accordion/AccordionHeader";
-import Header from "components/header/Header";
-import MobileCategoryImageBox from "components/mobile-category-nav/MobileCategoryImageBox";
-import MobileCategoryNavStyle from "components/mobile-category-nav/MobileCategoryNavStyle";
-import MobileNavigationBar from "components/mobile-navigation/MobileNavigationBar";
+import { MobileNavigationBar } from "components/mobile-navigation";
+import CategoryCard2 from "components/category-cards/CategoryCard2";
+import SearchInputWithCategory from "components/search-box/SearchInputWithCategory";
+import { layoutConstant } from "utils/constants";
 import navigations from "data/navigations";
-import Link from "next/link";
-import { Fragment, useEffect, useState } from "react";
 
-const MobileCategoryNav = () => {
+// styled component
+const Wrapper = styled("div")(({ theme }) => ({
+  position: "relative",
+
+  "& .header": {
+    top: 0,
+    left: 0,
+    right: 0,
+    position: "fixed",
+  },
+
+  "& .main-category-holder": {
+    left: 0,
+    position: "fixed",
+    overflowY: "auto",
+    background: theme.palette.grey[300],
+    top: layoutConstant.mobileHeaderHeight,
+    bottom: layoutConstant.mobileNavHeight,
+
+    "& .main-category-box": {
+      width: "90px",
+      height: "80px",
+      display: "flex",
+      cursor: "pointer",
+      padding: "0.5rem",
+      alignItems: "center",
+      flexDirection: "column",
+      justifyContent: "center",
+      borderBottom: "1px solid",
+      borderLeftColor: theme.palette.grey[600],
+      borderBottomColor: theme.palette.grey[300],
+    },
+  },
+
+  "& .container": {
+    left: "90px",
+    flex: "1 1 0",
+    position: "fixed",
+    overflowY: "auto",
+    padding: "0.5rem 1rem",
+    top: layoutConstant.mobileHeaderHeight,
+    bottom: layoutConstant.mobileNavHeight,
+  },
+
+  "& .ellipsis": {
+    width: "100%",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+  },
+}));
+
+const MobileCategoryNav: NextPage = () => {
   const [category, setCategory] = useState<any>(null);
   const [suggestedList, setSuggestedList] = useState<any[]>([]);
   const [subCategoryList, setSubCategoryList] = useState<any[]>([]);
 
   const handleCategoryClick = (cat: any) => () => {
     let menuData = cat.menuData;
-    if (menuData) {
-      setSubCategoryList(menuData.categories || menuData);
-    } else setSubCategoryList([]);
+    if (menuData) setSubCategoryList(menuData.categories || menuData);
+    else setSubCategoryList([]);
+
     setCategory(cat);
   };
 
-  useEffect(() => {
-    setSuggestedList(suggestion);
-  }, []);
+  useEffect(() => setSuggestedList(suggestion), []);
 
   return (
-    <MobileCategoryNavStyle>
-      <Header className="header" />
+    <Wrapper>
+      <Header className="header" searchInput={<SearchInputWithCategory />} />
 
       <Box className="main-category-holder">
         {navigations.map((item) => (
@@ -39,7 +91,12 @@ const MobileCategoryNav = () => {
             borderLeft={`${category?.href === item.href ? "3" : "0"}px solid`}
           >
             <item.icon sx={{ fontSize: "28px", mb: "0.5rem" }} />
-            <Typography className="ellipsis" textAlign="center" fontSize="11px" lineHeight="1">
+            <Typography
+              className="ellipsis"
+              textAlign="center"
+              fontSize="11px"
+              lineHeight="1"
+            >
               {item.title}
             </Typography>
           </Box>
@@ -55,9 +112,9 @@ const MobileCategoryNav = () => {
           <Grid container spacing={3}>
             {suggestedList.map((item: any, ind: number) => (
               <Grid item lg={1} md={2} sm={3} xs={4} key={ind}>
-                <Link href="/product/search/423423">
+                <Link href="/product/search/mobile">
                   <a>
-                    <MobileCategoryImageBox {...item} />
+                    <CategoryCard2 {...item} />
                   </a>
                 </Link>
               </Grid>
@@ -80,9 +137,9 @@ const MobileCategoryNav = () => {
                   <Grid container spacing={3}>
                     {item.subCategories?.map((item: any, ind: number) => (
                       <Grid item lg={1} md={2} sm={3} xs={4} key={ind}>
-                        <Link href="/product/search/423423">
+                        <Link href="/product/search/mobile">
                           <a>
-                            <MobileCategoryImageBox {...item} />
+                            <CategoryCard2 {...item} />
                           </a>
                         </Link>
                       </Grid>
@@ -97,9 +154,9 @@ const MobileCategoryNav = () => {
             <Grid container spacing={3}>
               {subCategoryList.map((item, ind) => (
                 <Grid item lg={1} md={2} sm={3} xs={4} key={ind}>
-                  <Link href="/product/search/423423">
+                  <Link href="/product/search/mobile">
                     <a>
-                      <MobileCategoryImageBox {...item} />
+                      <CategoryCard2 {...item} />
                     </a>
                   </Link>
                 </Grid>
@@ -110,7 +167,7 @@ const MobileCategoryNav = () => {
       </Box>
 
       <MobileNavigationBar />
-    </MobileCategoryNavStyle>
+    </Wrapper>
   );
 };
 

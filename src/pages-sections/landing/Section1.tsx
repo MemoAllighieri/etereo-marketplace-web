@@ -1,73 +1,132 @@
 import { Box, Button, Container } from "@mui/material";
-import { FlexBox } from "components/flex-box";
-import LazyImage from "components/LazyImage";
-import { H1, Paragraph, Span } from "components/Typography";
-import Link from "next/link";
 import { Link as Scroll } from "react-scroll";
-import Typewriter from "typewriter-effect";
+import DoneIcon from "@mui/icons-material/Done";
+import LazyImage from "components/LazyImage";
+import { FlexBox, FlexRowCenter } from "components/flex-box";
+import { H1, Paragraph, Span } from "components/Typography";
 import Header from "./Header";
+import Tooltip from "@mui/material/Tooltip";
+import HelpIcon from "@mui/icons-material/Help";
+import { Fragment } from "react";
 
 const Section1 = () => {
   return (
-    <Box sx={{ background: "url(/assets/images/landing/landing-bg-1.svg) center/cover" }}>
+    <Box>
       <Header />
 
-      <Container id="section-1" sx={{ mt: 8, position: "relative" }}>
-        <Box maxWidth="830px" mx="auto" mb={8.5} textAlign="center">
-          <H1 color="secondary.main" fontSize="40px" mb={2} fontWeight="900">
-            <Box color="primary.main" fontSize="18px">
-              Next.js Ecommerce Template
+      <Container id="section-1" sx={{ mt: 12, position: "relative" }}>
+        <Box maxWidth="830px" mx="auto" mb={12} textAlign="center">
+          <H1 fontSize="40px" mb={3} fontWeight="900">
+            <Span>Build your online store with</Span>
+            <Box color="primary.main" lineHeight={1.2}>
+              Bazaar
             </Box>
-            <Typewriter
-              options={{
-                loop: true,
-                autoStart: true,
-                strings: [
-                  "Multi vendor",
-                  "Grocery",
-                  "Furniture",
-                  "Gift",
-                  "Fashion",
-                  "Health and Beauty",
-                  "Gadget",
-                ],
-              }}
-            />
           </H1>
 
-          <Paragraph color="grey.700" fontSize={16} maxWidth="540px" mx="auto" mb={4}>
-            Powerful Multi-Purpose React/Next.js Template with Multiple Niches, Multi-Vendor &
-            Single-Vendor Layouts and 150+ UI Features. Trusted by{" "}
-            <Span color="primary.main">450+</Span> Users.
+          <Paragraph
+            fontSize="18px"
+            fontWeight={500}
+            maxWidth="540px"
+            mx="auto"
+            mb={3}
+          >
+            SEO friendly Next.js Ecommerce Template. Helps you to build
+            performant online store faster.
           </Paragraph>
 
-          <FlexBox justifyContent="center" m={-1}>
-            <Link
-              href="https://material-ui.com/store/items/bazar-pro-react-ecommerce-template/"
-              passHref={true}
+          <FlexRowCenter
+            sx={{ mb: 5, flexDirection: { md: "row", xs: "column" } }}
+          >
+            <FlexBox
+              my={1}
+              mr={2}
+              alignItems="center"
+              fontWeight={500}
+              color="grey.900"
             >
-              <Button variant="contained" color="primary" sx={{ m: "0.5rem" }}>
-                Purchase Now
-              </Button>
-            </Link>
+              <DoneIcon color="success" fontSize="small" sx={{ mr: 0.6 }} />
+              SSR
+            </FlexBox>
 
+            <FlexBox
+              my={1}
+              mr={2}
+              alignItems="center"
+              fontWeight={500}
+              color="grey.900"
+            >
+              <DoneIcon color="success" fontSize="small" sx={{ mr: 0.6 }} />
+              Rest API
+            </FlexBox>
+
+            <FlexBox
+              my={1}
+              alignItems="center"
+              fontWeight={500}
+              color="grey.900"
+            >
+              <DoneIcon color="success" fontSize="small" sx={{ mr: 0.6 }} />
+              Multi vendor Support
+            </FlexBox>
+          </FlexRowCenter>
+
+          <FlexBox justifyContent="center" mb={3}>
             <Scroll to="get" duration={400} offset={-72 - 16} smooth={true}>
-              <Button variant="outlined" color="primary" sx={{ m: "0.5rem" }}>
+              <Button
+                variant="outlined"
+                color="primary"
+                size="large"
+                sx={{ m: "0.5rem" }}
+              >
+                What&apos;s inside
+              </Button>
+            </Scroll>
+
+            <Scroll to="demos" duration={400} offset={-72 - 16} smooth={true}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                sx={{ m: "0.5rem" }}
+              >
                 View Demos
               </Button>
             </Scroll>
           </FlexBox>
 
-          <Box mt={4}>
-            <a href="https://forms.gle/f8Yz9dMSvkdkbMkV6" target="_blank" rel="noreferrer">
-              <Paragraph color="grey.600" sx={{ textDecoration: "underline", cursor: "pointer" }}>
-                I need a Server & Database
-              </Paragraph>
-            </a>
-          </Box>
+          <FlexBox justifyContent="center" alignItems="center">
+            <Span sx={{ textDecoration: "underline", color: "text.secondary" }}>
+              <a
+                href="https://support.ui-lib.com/bazaar-backend/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                I need server integration
+              </a>
+            </Span>
+            <Tooltip
+              placement="right"
+              title={
+                <Paragraph>
+                  Bazaar has REST API integrated on the frontend. Click this
+                  link if you want server side help from us.
+                </Paragraph>
+              }
+            >
+              <HelpIcon
+                sx={{
+                  ml: 0.5,
+                  color: "grey.500",
+                  fontSize: "18px",
+                  "&:hover": { color: "grey.800" },
+                }}
+              />
+            </Tooltip>
+          </FlexBox>
         </Box>
 
         <LazyImage
+          alt="cover"
           width={5417}
           height={1179}
           layout="responsive"

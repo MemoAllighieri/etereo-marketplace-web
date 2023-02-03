@@ -107,7 +107,11 @@ export const totalOrderChartOptions = (theme: Theme): ApexOptions => ({
 
 export const marketShareChartOptions = (theme: Theme): ApexOptions => ({
   chart: { background: "transparent", fontFamily: theme.typography.fontFamily },
-  colors: [theme.palette.info.main, theme.palette.warning.main, theme.palette.primary.main],
+  colors: [
+    theme.palette.info.main,
+    theme.palette.warning.main,
+    theme.palette.primary.main,
+  ],
   plotOptions: {
     radialBar: {
       hollow: { size: "30%", margin: 0 },
@@ -130,7 +134,10 @@ export const marketShareChartOptions = (theme: Theme): ApexOptions => ({
   states: { hover: { filter: { type: "none" } } },
 });
 
-export const analyticsChartOptions = (theme: Theme, categories: any): ApexOptions => ({
+export const analyticsChartOptions = (
+  theme: Theme,
+  categories: any
+): ApexOptions => ({
   chart: {
     background: "transparent",
     toolbar: { show: false },

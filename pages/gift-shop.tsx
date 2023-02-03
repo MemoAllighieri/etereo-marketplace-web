@@ -1,20 +1,28 @@
+import { GetStaticProps, NextPage } from "next";
+import { useEffect, useRef, useState } from "react";
 import { Box, Container, styled } from "@mui/material";
-import ShopLayout2 from "components/layouts/ShopLayout2";
-import MobileNavigationBar2 from "components/mobile-navigation/MobileNavigationBar2";
-import PageFooter from "components/page-footer/PageFooter";
-import SideNavbar from "components/page-sidenav/SideNavbar";
-import Setting from "components/Setting";
-import GiftShopAllProducts from "pages-sections/giftshop/GiftShopAllProducts";
-import GiftShopPopularItems from "pages-sections/giftshop/GiftShopPopularItems";
-import GiftShopSection1 from "pages-sections/giftshop/GiftShopSection1";
-import GiftShopSection3 from "pages-sections/giftshop/GiftShopSection3";
-import GiftShopServices from "pages-sections/giftshop/GiftShopServices";
-import GiftShopTopSales from "pages-sections/giftshop/GiftShopTopSales";
-import TopCategorySection from "pages-sections/giftshop/TopCategorySection";
-import { FC, useEffect, useRef, useState } from "react";
-import api from "utils/api/gift-shop";
 import { layoutConstant } from "utils/constants";
+import SEO from "components/SEO";
+import Setting from "components/Setting";
+import Newsletter from "components/Newsletter";
+import ShopLayout1 from "components/layouts/ShopLayout1";
+import SideNavbar from "components/page-sidenav/SideNavbar";
+import { MobileNavigationBar2 } from "components/mobile-navigation";
+import Section1 from "pages-sections/giftshop/Section1";
+import Section2 from "pages-sections/giftshop/Section2";
+import Section3 from "pages-sections/giftshop/Section3";
+import Section4 from "pages-sections/giftshop/Section4";
+import Section5 from "pages-sections/giftshop/Section5";
+import Section6 from "pages-sections/giftshop/Section6";
+import Section7 from "pages-sections/giftshop/Section7";
+import Product from "models/Product.model";
+import Service from "models/Service.model";
+import Category from "models/Category.model";
+import { GiftCarouselItem } from "models/Carousel.model";
+import CategoryNavList from "models/CategoryNavList.model";
+import api from "utils/__api__/gift-shop";
 
+// styled component
 const StyledContainer = styled(Container)(({ theme }) => ({
   display: "flex",
   ".sidenav": {
@@ -41,88 +49,102 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 }));
 
 // ========================================================
-type Props = {
-  giftShopNavList: any[];
-  popularProducts: any[];
-  giftShopProducts: any[];
-  topSailedProducts: any[];
-  giftShopServicesList: any[];
-  giftShopTopCategories: any[];
+type GiftShopProps = {
+  allProducts: Product[];
+  serviceList: Service[];
+  topCategories: Category[];
+  popularProducts: Product[];
+  topSailedProducts: Product[];
+  carouselData: GiftCarouselItem[];
+  categoryNavigation: CategoryNavList[];
 };
 // ========================================================
 
-const HealthAndBeauty: FC<Props> = (props) => {
-  const {
-    giftShopNavList,
-    popularProducts,
-    giftShopProducts,
-    topSailedProducts,
-    giftShopServicesList,
-    giftShopTopCategories,
-  } = props;
-
+const GiftShop: NextPage<GiftShopProps> = (props) => {
   const pageContentRef = useRef<HTMLElement>();
   const [sidebarHeight, setSidebarHeight] = useState(0);
 
   useEffect(() => setSidebarHeight(pageContentRef.current.offsetHeight), []);
 
   return (
-    <ShopLayout2 showNavbar={false}>
-      <GiftShopSection1 />
+    <ShopLayout1 showTopbar={false}>
+      <SEO title="Gift shop template" />
+
+      {/* TOP HERO AREA */}
+      <Section1 carouselData={props.carouselData} />
 
       <StyledContainer sx={{ mb: 6 }}>
+        {/* SIDE NAV BAR */}
         <Box className="sidenav">
           <SideNavbar
             lineStyle="dash"
             sidebarStyle="style2"
-            navList={giftShopNavList}
+            navList={props.categoryNavigation}
             sidebarHeight={sidebarHeight || "85vh"}
           />
         </Box>
 
         <Box className="pageContent" ref={pageContentRef}>
-          <GiftShopServices serviceData={giftShopServicesList} />
-          <GiftShopSection3 />
+          {/* SERVICE LIST AREA */}
+          <Section2 serviceList={props.serviceList} />
 
+          {/* OFFER BANNER AREA */}
+          <Section3 />
+
+          {/* TOP CATEGORY AREA */}
           <Box my={6} className="categories">
-            <TopCategorySection categoryList={giftShopTopCategories} />
+            <Section4 categoryList={props.topCategories} />
           </Box>
         </Box>
       </StyledContainer>
 
-      <GiftShopPopularItems productsData={popularProducts} />
-      <GiftShopTopSales productsData={topSailedProducts} />
-      <GiftShopAllProducts productsData={giftShopProducts} />
+      {/* POPULAR PRODUCT AREA */}
+      <Section5 products={props.popularProducts} />
 
-      <PageFooter id="footer" sx={{ borderRadius: "none", backgroundColor: "primary.main" }} />
+      {/* TOP SALES PRODUCTS AREA */}
+      <Section6 products={props.topSailedProducts} />
 
+      {/* ALL PRODUCTS AREA */}
+      <Section7 products={props.allProducts} />
+
+      {/* SETTINGS IS USED ONLY FOR DEMO, YOU CAN REMOVE THIS */}
       <Setting />
 
+      {/* POPUP NEWSLETTER FORM */}
+      <Newsletter image="/assets/images/newsletter/bg-5.png" />
+
+      {/* MOBILE NAVIGATION WITH SIDE NAVABAR */}
       <MobileNavigationBar2>
-        <SideNavbar navList={giftShopNavList} lineStyle="dash" sidebarStyle="style2" />
+        <SideNavbar
+          navList={props.categoryNavigation}
+          lineStyle="dash"
+          sidebarStyle="style2"
+        />
       </MobileNavigationBar2>
-    </ShopLayout2>
+    </ShopLayout1>
   );
 };
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
+  const allProducts = await api.getAllProducts();
+  const serviceList = await api.getServiceList();
+  const topCategories = await api.getTopCategories();
+  const carouselData = await api.getMainCarouselData();
   const popularProducts = await api.getPopularProducts();
-  const giftShopProducts = await api.getGiftShopProducts();
-  const giftShopNavList = await api.getGiftShopNavigation();
   const topSailedProducts = await api.getTopSailedProducts();
-  const giftShopServicesList = await api.getGiftShopServiceList();
-  const giftShopTopCategories = await api.getGiftShopTopCategories();
+  const categoryNavigation = await api.getCategoryNavigation();
 
   return {
     props: {
-      giftShopNavList,
+      allProducts,
+      serviceList,
+      carouselData,
+      topCategories,
       popularProducts,
-      giftShopProducts,
       topSailedProducts,
-      giftShopServicesList,
-      giftShopTopCategories,
+      categoryNavigation,
     },
   };
-}
+};
 
-export default HealthAndBeauty;
+export default GiftShop;

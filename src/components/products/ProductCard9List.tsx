@@ -1,19 +1,28 @@
+import { FC } from "react";
 import { Pagination } from "@mui/material";
 import { FlexBetween } from "components/flex-box";
 import ProductCard9 from "components/product-cards/ProductCard9";
-import productDatabase from "data/product-database";
-import React from "react";
 import { Span } from "../Typography";
+import Product from "models/Product.model";
 
 // ==========================================================
-type ProductCard9ListProps = {};
+type ProductCard9ListProps = { products: Product[] };
 // ==========================================================
 
-const ProductCard9List: React.FC<ProductCard9ListProps> = () => {
+const ProductCard9List: FC<ProductCard9ListProps> = ({ products }) => {
   return (
     <div>
-      {productDatabase.slice(95, 104).map((item, ind) => (
-        <ProductCard9 key={ind} {...item} />
+      {products.map((item) => (
+        <ProductCard9
+          id={item.id}
+          key={item.id}
+          slug={item.slug}
+          title={item.title}
+          price={item.price}
+          off={item.discount}
+          rating={item.rating}
+          imgUrl={item.thumbnail}
+        />
       ))}
 
       <FlexBetween flexWrap="wrap" mt={4}>

@@ -1,17 +1,19 @@
+import { FC } from "react";
+import NextImage, { ImageProps } from "next/image";
 import {
+  styled,
   bgcolor,
-  borderRadius,
-  BordersProps,
   compose,
   spacing,
+  borderRadius,
   SpacingProps,
-  styled,
+  BordersProps,
 } from "@mui/system";
-import NextImage, { ImageProps } from "next/image";
-import React from "react";
 
-const LazyImage = styled<React.FC<ImageProps & BordersProps & SpacingProps>>(
-  ({ borderRadius, ...rest }) => <NextImage {...rest} />
-)(compose(spacing, borderRadius, bgcolor));
+type Props = ImageProps & BordersProps & SpacingProps;
+
+const LazyImage = styled<FC<Props>>(({ borderRadius, ...rest }) => (
+  <NextImage {...rest} />
+))(compose(spacing, borderRadius, bgcolor));
 
 export default LazyImage;

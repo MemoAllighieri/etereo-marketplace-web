@@ -1,3 +1,4 @@
+import { FC } from "react";
 import Facebook from "@mui/icons-material/Facebook";
 import Favorite from "@mui/icons-material/Favorite";
 import Instagram from "@mui/icons-material/Instagram";
@@ -5,7 +6,6 @@ import Twitter from "@mui/icons-material/Twitter";
 import Youtube from "@mui/icons-material/YouTube";
 import { Container } from "@mui/material";
 import { FlexBox } from "components/flex-box";
-import React, { FC } from "react";
 
 const Footer: FC = () => {
   return (
@@ -32,8 +32,8 @@ const Footer: FC = () => {
               <item.icon
                 color="inherit"
                 sx={{
-                  fontSize: "1.25rem",
                   mx: "0.5rem",
+                  fontSize: "1.25rem",
                   transition: "0.2s ease-in-out",
                   "&:hover": { color: "primary.main" },
                 }}

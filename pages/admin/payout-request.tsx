@@ -1,3 +1,5 @@
+import { ReactElement } from "react";
+import { GetStaticProps } from "next";
 import { RemoveRedEye } from "@mui/icons-material";
 import { Box, Card, Stack, Table, TableContainer } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
@@ -6,17 +8,16 @@ import TablePagination from "components/data-table/TablePagination";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import Scrollbar from "components/Scrollbar";
 import { H3 } from "components/Typography";
-import currency from "currency.js";
 import useMuiTable from "hooks/useMuiTable";
-import { GetStaticProps } from "next";
 import {
   StatusWrapper,
-  StyledIconButton,
-  StyledTableCell,
   StyledTableRow,
+  StyledTableCell,
+  StyledIconButton,
 } from "pages-sections/admin";
-import React, { ReactElement } from "react";
-import api from "utils/api/dashboard";
+
+import api from "utils/__api__/dashboard";
+import { currency } from "lib";
 
 // table column list
 const tableHeading = [
@@ -79,17 +80,12 @@ export default function PayoutRequests({ requests }: PayoutRequestsProps) {
                     <StyledTableCell align="left">
                       {request.shopName}
                     </StyledTableCell>
-
                     <StyledTableCell align="left">
-                      {currency(request.totalAmount, {
-                        separator: ",",
-                      }).format()}
+                      {currency(request.totalAmount)}
                     </StyledTableCell>
 
                     <StyledTableCell align="left">
-                      {currency(request.requestAmount, {
-                        separator: ",",
-                      }).format()}
+                      {currency(request.requestAmount)}
                     </StyledTableCell>
 
                     <StyledTableCell align="left">

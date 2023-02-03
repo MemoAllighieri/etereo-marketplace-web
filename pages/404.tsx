@@ -1,50 +1,40 @@
-import { Button } from "@mui/material";
-import BazarImage from "components/BazarImage";
-import { FlexBox } from "components/flex-box";
 import Link from "next/link";
+import { NextPage } from "next";
+import { Button } from "@mui/material";
 import { useRouter } from "next/router";
-import React from "react";
+import SEO from "components/SEO";
+import BazaarImage from "components/BazaarImage";
+import { FlexBox, FlexRowCenter } from "components/flex-box";
 
-const Error404 = () => {
+const Error404: NextPage = () => {
   const router = useRouter();
-
-  const handleGoBack = async () => {
-    router.back();
-  };
+  const handleGoBack = () => router.back();
 
   return (
-    <FlexBox
-      flexDirection="column"
-      minHeight="100vh"
-      justifyContent="center"
-      alignItems="center"
-      px={2}
-    >
-      <BazarImage
+    <FlexRowCenter px={2} minHeight="100vh" flexDirection="column">
+      <SEO title="Nothing found" />
+      <BazaarImage
         src="/assets/images/illustrations/404.svg"
-        sx={{
-          display: "block",
-          maxWidth: "320px",
-          width: "100%",
-          mb: "1.5rem",
-        }}
+        sx={{ display: "block", maxWidth: 320, width: "100%", mb: 3 }}
       />
+
       <FlexBox flexWrap="wrap">
         <Button
           variant="outlined"
           color="primary"
-          sx={{ m: "0.5rem" }}
+          sx={{ m: 1 }}
           onClick={handleGoBack}
         >
           Go Back
         </Button>
-        <Link href="/" passHref>
-          <Button variant="contained" color="primary" sx={{ m: "0.5rem" }}>
+
+        <Link href="/" passHref legacyBehavior>
+          <Button variant="contained" color="primary" sx={{ m: 1 }}>
             Go to Home
           </Button>
         </Link>
       </FlexBox>
-    </FlexBox>
+    </FlexRowCenter>
   );
 };
 

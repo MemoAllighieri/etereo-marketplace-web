@@ -1,54 +1,80 @@
+import Link from "next/link";
+import { useState } from "react";
+import { GetStaticProps, NextPage } from "next";
 import { Delete, Edit, Place } from "@mui/icons-material";
 import { Button, IconButton, Pagination, Typography } from "@mui/material";
+import TableRow from "components/TableRow";
 import { FlexBox } from "components/flex-box";
 import UserDashboardHeader from "components/header/UserDashboardHeader";
 import CustomerDashboardLayout from "components/layouts/customer-dashboard";
 import CustomerDashboardNavigation from "components/layouts/customer-dashboard/Navigations";
-import TableRow from "components/TableRow";
-import Link from "next/link";
+import Address from "models/Address.model";
+import api from "utils/__api__/address";
 
-const AddressList = () => {
+// =======================================================
+type AddressListProps = { addressList: Address[] };
+// =======================================================
+
+const AddressList: NextPage<AddressListProps> = ({ addressList }) => {
+  const [allAddress, setAllAddress] = useState(addressList);
+
+  // SECTION TITLE HEADER BUTTON
+  const HEADER_BUTTON = (
+    <Button color="primary" sx={{ bgcolor: "primary.light", px: 4 }}>
+      Add New Address
+    </Button>
+  );
+
+  // HANDLE ADDRESS DELETE
+  const handleAddressDelete = (id: string) => {
+    setAllAddress(allAddress.filter((item) => item.id !== id));
+  };
+
   return (
     <CustomerDashboardLayout>
+      {/* TITLE HEADER AREA */}
       <UserDashboardHeader
         icon={Place}
         title="My Addresses"
+        button={HEADER_BUTTON}
         navigation={<CustomerDashboardNavigation />}
-        button={
-          <Button color="primary" sx={{ bgcolor: "primary.light", px: 4 }}>
-            Add New Address
-          </Button>
-        }
       />
 
-      {orderList.map((_, ind) => (
-        <TableRow sx={{ my: 2, padding: "6px 18px" }} key={ind}>
+      {/* ALL ADDRESS LIST AREA */}
+      {allAddress.map((address) => (
+        <TableRow sx={{ my: 2, padding: "6px 18px" }} key={address.id}>
           <Typography whiteSpace="pre" m={0.75} textAlign="left">
-            Ralf Edward
+            {address.title}
           </Typography>
 
           <Typography flex="1 1 260px !important" m={0.75} textAlign="left">
-            777 Brockton Avenue, Abington MA 2351
+            {`${address.street}, ${address.city}`}
           </Typography>
 
           <Typography whiteSpace="pre" m={0.75} textAlign="left">
-            +1927987987498
+            {address.phone}
           </Typography>
 
           <Typography whiteSpace="pre" textAlign="center" color="grey.600">
-            <Link href="/address/xkssThds6h37sd" passHref>
+            <Link href={`/address/${address.id}`} passHref>
               <IconButton>
                 <Edit fontSize="small" color="inherit" />
               </IconButton>
             </Link>
 
-            <IconButton onClick={(e) => e.stopPropagation()}>
+            <IconButton
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAddressDelete(address.id);
+              }}
+            >
               <Delete fontSize="small" color="inherit" />
             </IconButton>
           </Typography>
         </TableRow>
       ))}
 
+      {/* PAGINATION AREA */}
       <FlexBox justifyContent="center" mt={5}>
         <Pagination count={5} onChange={(data) => console.log(data)} />
       </FlexBox>
@@ -56,37 +82,9 @@ const AddressList = () => {
   );
 };
 
-const orderList = [
-  {
-    orderNo: "1050017AS",
-    status: "Pending",
-    purchaseDate: new Date(),
-    price: 350,
-  },
-  {
-    orderNo: "1050017AS",
-    status: "Processing",
-    purchaseDate: new Date(),
-    price: 500,
-  },
-  {
-    orderNo: "1050017AS",
-    status: "Delivered",
-    purchaseDate: "2020/12/23",
-    price: 700,
-  },
-  {
-    orderNo: "1050017AS",
-    status: "Delivered",
-    purchaseDate: "2020/12/23",
-    price: 700,
-  },
-  {
-    orderNo: "1050017AS",
-    status: "Cancelled",
-    purchaseDate: "2020/12/15",
-    price: 300,
-  },
-];
+export const getStaticProps: GetStaticProps = async () => {
+  const addressList = await api.getAddressList();
+  return { props: { addressList } };
+};
 
 export default AddressList;

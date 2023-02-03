@@ -1,9 +1,9 @@
-import { Button, Card, Grid, styled } from "@mui/material";
-import Image from "components/BazarImage";
-import { H1, Paragraph } from "components/Typography";
+import { FC } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { FC } from "react";
+import { Button, Card, Grid, styled } from "@mui/material";
+import Image from "components/BazaarImage";
+import { H1, Paragraph } from "components/Typography";
 
 const Container = styled(Card)(({ theme }) => ({
   padding: "50px",
@@ -22,6 +22,7 @@ const Container = styled(Card)(({ theme }) => ({
 
 const DiscountSection: FC = () => {
   const router = useRouter();
+
   return (
     <Container>
       <Link href="/sale-page-1">
@@ -44,8 +45,8 @@ const DiscountSection: FC = () => {
             <Grid item sm={5}>
               <Image
                 width="100%"
-                src="/assets/images/Groceries Shop/vagitable.png"
                 alt="discount"
+                src="/assets/images/Groceries Shop/vagitable.png"
               />
             </Grid>
           </Grid>

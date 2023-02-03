@@ -1,62 +1,39 @@
+import { FC } from "react";
 import { Delete, KeyboardArrowDown } from "@mui/icons-material";
 import {
-  Avatar,
   Box,
-  Button,
   Card,
-  Divider,
   Grid,
-  IconButton,
+  Button,
+  Avatar,
+  Divider,
   MenuItem,
   TextField,
+  IconButton,
 } from "@mui/material";
+import { format } from "date-fns";
 import { FlexBetween, FlexBox } from "components/flex-box";
 import { H5, H6, Paragraph, Span } from "components/Typography";
-import React from "react";
+import { currency } from "lib";
+import Order from "models/Order.model";
 
-// list data
-const products = [
-  {
-    price: "$250",
-    published: true,
-    id: "#6ed34Edf65d",
-    category: "Gadgets",
-    name: "Samsung Galaxy-M1",
-    brand: "/assets/images/brands/samsung.png",
-    image: "/assets/images/products/samsung.png",
-  },
-  {
-    price: "$10",
-    published: true,
-    id: "#6ed34Edf65d",
-    category: "Grocery",
-    name: "Tomatto",
-    brand: "/assets/images/brands/brokshire.png",
-    image: "/assets/images/products/tomato.png",
-  },
-  {
-    price: "$24",
-    published: false,
-    id: "#6ed34Edf65d",
-    category: "Beauty",
-    name: "Boston Round Cream Pack",
-    brand: "/assets/images/brands/levis.png",
-    image: "/assets/images/products/beauty-cream.png",
-  },
-];
+// ===================================================================
+type OrderDetailsProps = { order: Order };
+// ===================================================================
 
-const OrderDetails = () => {
+const OrderDetails: FC<OrderDetailsProps> = ({ order }) => {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
         <Card sx={{ p: 3 }}>
           <FlexBox alignItems="center" gap={4}>
             <Paragraph>
-              <Span color="grey.600">Order ID:</Span> 9001997718074513
+              <Span color="grey.600">Order ID:</Span> {order.id}
             </Paragraph>
 
             <Paragraph>
-              <Span color="grey.600">Placed on:</Span> 01 Jan, 2021
+              <Span color="grey.600">Placed on:</Span>{" "}
+              {format(new Date(order.createdAt), "dd MMM, yyyy")}
             </Paragraph>
           </FlexBox>
 
@@ -75,6 +52,7 @@ const OrderDetails = () => {
               fullWidth
               color="info"
               size="medium"
+              defaultValue={order.status}
               label="Order Status"
               inputProps={{
                 IconComponent: () => (
@@ -85,10 +63,11 @@ const OrderDetails = () => {
               <MenuItem value="Processing">Processing</MenuItem>
               <MenuItem value="Pending">Pending</MenuItem>
               <MenuItem value="Delivered">Delivered</MenuItem>
+              <MenuItem value="Cancelled">Cancelled</MenuItem>
             </TextField>
           </FlexBox>
 
-          {products.map((item, index) => (
+          {order.items.map((item, index) => (
             <Box
               my={2}
               gap={2}
@@ -100,20 +79,24 @@ const OrderDetails = () => {
             >
               <FlexBox flexShrink={0} gap={1.5} alignItems="center">
                 <Avatar
-                  src={item.image}
+                  src={item.product_img}
                   sx={{ height: 64, width: 64, borderRadius: "8px" }}
                 />
 
                 <Box>
-                  <H6 mb={1}>{item.name}</H6>
+                  <H6 mb={1}>{item.product_name}</H6>
 
                   <FlexBox alignItems="center" gap={1}>
                     <Paragraph fontSize={14} color="grey.600">
-                      {item.price} x
+                      {currency(item.product_price)} x
                     </Paragraph>
 
                     <Box maxWidth={60}>
-                      <TextField defaultValue={3} type="number" fullWidth />
+                      <TextField
+                        defaultValue={item.product_quantity}
+                        type="number"
+                        fullWidth
+                      />
                     </Box>
                   </FlexBox>
                 </Box>
@@ -142,7 +125,7 @@ const OrderDetails = () => {
             color="info"
             variant="outlined"
             label="Shipping Address"
-            defaultValue="Kelly Williams 777 Brockton Avenue, Abington MA 2351"
+            defaultValue={order.shippingAddress}
             sx={{ mb: 4 }}
           />
 
@@ -166,7 +149,7 @@ const OrderDetails = () => {
 
           <FlexBetween mb={1.5}>
             <Paragraph color="grey.600">Subtotal:</Paragraph>
-            <H6>$335</H6>
+            <H6>{currency(order.totalPrice)}</H6>
           </FlexBetween>
 
           <FlexBetween mb={1.5}>
@@ -184,13 +167,13 @@ const OrderDetails = () => {
           </FlexBetween>
 
           <FlexBetween mb={1.5}>
-            <Paragraph color="grey.600">Discount:</Paragraph>
+            <Paragraph color="grey.600">Discount(%):</Paragraph>
 
             <FlexBox alignItems="center" gap={1} maxWidth={100}>
               <Paragraph>$</Paragraph>
               <TextField
                 color="info"
-                defaultValue={20}
+                defaultValue={order.discount}
                 type="number"
                 fullWidth
               />
@@ -201,7 +184,7 @@ const OrderDetails = () => {
 
           <FlexBetween mb={2}>
             <H6>Total</H6>
-            <H6>$315</H6>
+            <H6>{currency(order.totalPrice)}</H6>
           </FlexBetween>
 
           <Paragraph>Paid by Credit/Debit Card</Paragraph>

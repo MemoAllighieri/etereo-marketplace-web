@@ -1,14 +1,16 @@
-import Footer from "components/footer/Footer";
+import { FC, Fragment, ReactNode, useCallback, useState } from "react";
+import Sticky from "components/Sticky";
+import Topbar from "components/Topbar";
+import { Footer1 } from "components/footer";
 import Header from "components/header/Header";
-import MobileNavigationBar from "components/mobile-navigation/MobileNavigationBar";
-import Sticky from "components/sticky/Sticky";
-import Topbar from "components/topbar/Topbar";
-import Head from "next/head";
-import React, { FC, Fragment, useCallback, useState } from "react";
+import Navbar from "components/navbar/Navbar";
+import { MobileNavigationBar } from "components/mobile-navigation";
+import SearchInputWithCategory from "components/search-box/SearchInputWithCategory";
 
 /**
- *  Used:
- *  1. fashion-shop, gadget-shop, superstore-shop page
+ *  Used in:
+ *  1. market-1, matket-2, gadget-shop,
+ *     fashion-shop, fashion-shop-2, fashion-shop-3, furniture-shop, grocery3, gift-shop
  *  2. product details page
  *  3. order-confirmation page
  *  4. product-search page
@@ -18,38 +20,45 @@ import React, { FC, Fragment, useCallback, useState } from "react";
 
 // ===================================================
 type ShopLayout1Props = {
-  title?: string;
-  navbar?: React.ReactChild;
+  children: ReactNode;
+  showTopbar?: boolean;
+  showNavbar?: boolean;
+  topbarBgColor?: string;
 };
 // ===================================================
 
 const ShopLayout1: FC<ShopLayout1Props> = ({
-  navbar,
   children,
-  title = "React Next.js Ecommerce Template",
+  topbarBgColor,
+  showTopbar = true,
+  showNavbar = true,
 }) => {
   const [isFixed, setIsFixed] = useState(false);
-  const toggleIsFixed = useCallback((fixed) => setIsFixed(fixed), []);
+  const toggleIsFixed = useCallback((fixed: boolean) => setIsFixed(fixed), []);
 
   return (
     <Fragment>
-      <Head>
-        <title>{title}</title>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
+      {/* TOPBAR */}
+      {showTopbar && <Topbar bgColor={topbarBgColor} />}
 
-      <Topbar />
-
-      <Sticky fixedOn={0} onSticky={toggleIsFixed}>
-        <Header isFixed={isFixed} />
+      {/* HEADER */}
+      <Sticky fixedOn={0} onSticky={toggleIsFixed} scrollDistance={300}>
+        <Header isFixed={isFixed} searchInput={<SearchInputWithCategory />} />
       </Sticky>
 
-      {navbar && <div className="section-after-sticky">{navbar}</div>}
-      {!navbar ? <div className="section-after-sticky">{children}</div> : children}
+      <div className="section-after-sticky">
+        {/* NAVIGATION BAR */}
+        {showNavbar && <Navbar elevation={0} border={1} />}
 
+        {/* BODY CONTENT */}
+        {children}
+      </div>
+
+      {/* SMALL DEVICE BOTTOM NAVIGATION */}
       <MobileNavigationBar />
-      <Footer />
+
+      {/* FOOTER */}
+      <Footer1 />
     </Fragment>
   );
 };

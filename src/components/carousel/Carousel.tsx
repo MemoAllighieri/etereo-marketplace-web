@@ -1,22 +1,22 @@
-import ArrowBack from "@mui/icons-material/ArrowBack";
-import ArrowForward from "@mui/icons-material/ArrowForward";
+import { CSSProperties, FC, Fragment, ReactNode, Children } from "react";
 import { SxProps } from "@mui/material";
+import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import clsx from "clsx";
 import useSettings from "hooks/useSettings";
 import { Slide } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
-import React, { CSSProperties, FC, Fragment } from "react";
 import {
+  StyledDot,
+  StyledSlider,
+  StyledDotGroup,
   StyledArrowBackButton,
   StyledArrowNextButton,
   StyledCarouselProvider,
-  StyledDot,
-  StyledDotGroup,
-  StyledSlider,
-} from "./CarouselStyled";
+} from "./styles";
 
 // ===================================================================
 export interface CarouselProps {
+  children?: ReactNode;
   sx?: SxProps;
   step?: number;
   interval?: number;
@@ -91,7 +91,7 @@ const Carousel: FC<CarouselProps> = ({
       naturalSlideHeight={naturalSlideHeight || 125}
     >
       <StyledSlider spacing={spacing}>
-        {React.Children.map(children, (child, ind) => (
+        {Children.map(children, (child, ind) => (
           <Slide index={ind}>{child}</Slide>
         ))}
       </StyledSlider>
@@ -149,15 +149,18 @@ const renderDots = ({
   const total = totalSlides - visibleSlides + 1;
   // handle dot button
   const handleClick = (currentSlide: any, autoplay: boolean) => {
-    carouselStore.setStoreState({ autoPlay: autoplay, currentSlide: currentSlide });
+    carouselStore.setStoreState({
+      autoPlay: autoplay,
+      currentSlide: currentSlide,
+    });
   };
 
   for (let i = 0; i < total; i += step) {
     dots.push(
       <StyledDot
         dot_color={dotColor}
-        dot_active={currentSlide === i ? i + 1 : 0}
         onClick={() => handleClick(i, false)}
+        dot_active={currentSlide === i ? i + 1 : 0}
         key={(Math.random() * i + Date.now()).toString()}
       />
     );

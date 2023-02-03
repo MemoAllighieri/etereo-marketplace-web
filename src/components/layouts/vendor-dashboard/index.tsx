@@ -1,3 +1,4 @@
+import { FC, ReactNode } from "react";
 import { Box, styled } from "@mui/material";
 import { Fragment, useState } from "react";
 import DashboardNavbar from "./DashboardNavbar";
@@ -16,15 +17,20 @@ const InnerWrapper = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down(1550)]: { paddingLeft: "2rem", paddingRight: "2rem" },
 }));
 
-const VendorDashboardLayout = ({ children }) => {
-  const [sidebarCompact, setSidebarCompact] = useState(false);
-  const [showMobileSideBar, setShowMobileSideBar] = useState(false);
+// ======================================================
+type Props = { children: ReactNode };
+// ======================================================
+
+const VendorDashboardLayout: FC<Props> = ({ children }) => {
+  const [sidebarCompact, setSidebarCompact] = useState(0);
+  const [showMobileSideBar, setShowMobileSideBar] = useState(0);
 
   // handle sidebar toggle for desktop device
-  const handleCompactToggle = () => setSidebarCompact((state) => !state);
+  const handleCompactToggle = () =>
+    setSidebarCompact((state) => (state ? 0 : 1));
   // handle sidebar toggle in mobile device
   const handleMobileDrawerToggle = () =>
-    setShowMobileSideBar((state) => !state);
+    setShowMobileSideBar((state) => (state ? 0 : 1));
 
   return (
     <Fragment>

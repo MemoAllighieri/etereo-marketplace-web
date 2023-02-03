@@ -1,10 +1,11 @@
-import { Container, Grid } from "@mui/material";
-import BlogCard1 from "components/blog-cards/BlogCard1";
-import CategorySectionHeader from "components/CategorySectionHeader";
 import { FC } from "react";
+import { Container, Grid } from "@mui/material";
+import { BlogCard1 } from "components/blog-cards";
+import CategorySectionHeader from "components/CategorySectionHeader";
+import Blog from "models/Blog.model";
 
 // ================================================
-type Props = { blogLists: any[] };
+type Props = { blogLists: Blog[] };
 // ================================================
 
 const Section7: FC<Props> = ({ blogLists }) => {

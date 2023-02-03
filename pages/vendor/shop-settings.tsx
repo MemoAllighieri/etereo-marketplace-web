@@ -1,3 +1,4 @@
+import { ReactElement, useState } from "react";
 import { Delete } from "@mui/icons-material";
 import {
   Box,
@@ -9,22 +10,20 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
+import * as Yup from "yup";
+import { Formik } from "formik";
 import DropZone from "components/DropZone";
 import { FlexBox } from "components/flex-box";
-import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import { H3, Paragraph } from "components/Typography";
-import { Formik } from "formik";
-import React, { ReactElement, useState } from "react";
-import * as Yup from "yup";
+import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 
-const initialValues = {
+const INITIAL_VALUES = {
+  order: 10,
+  category: "fashion",
   shopName: "The Icon Style",
   shopPhone: "+123 4567 8910",
   shopAddress: "4990 Hide A Way Road Santa Clara, CA 95050.",
-  order: 10,
-  category: "fashion",
-  description:
-    "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.",
+  description: `There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.`,
 };
 
 const validationSchema = Yup.object().shape({
@@ -48,10 +47,12 @@ export default function ShopSettings() {
   ]);
 
   const handleAddLink = () => {
-    setLinks((state) => [
-      ...state,
-      { id: Date.now(), name: "Links", value: "https://www.google.com" },
-    ]);
+    const newLink = {
+      id: Date.now(),
+      name: "Links",
+      value: "https://www.google.com",
+    };
+    setLinks((state) => [...state, newLink]);
   };
 
   const handleDeleteLink = (id: number) => () => {
@@ -71,7 +72,7 @@ export default function ShopSettings() {
 
         <Formik
           onSubmit={handleFormSubmit}
-          initialValues={initialValues}
+          initialValues={INITIAL_VALUES}
           validationSchema={validationSchema}
         >
           {({
@@ -92,8 +93,8 @@ export default function ShopSettings() {
                   onBlur={handleBlur}
                   value={values.shopName}
                   onChange={handleChange}
-                  helperText={touched.shopName && errors.shopName}
                   error={Boolean(errors.shopName && touched.shopName)}
+                  helperText={(touched.shopName && errors.shopName) as string}
                 />
 
                 <TextField
@@ -104,8 +105,8 @@ export default function ShopSettings() {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.shopPhone}
-                  helperText={touched.shopPhone && errors.shopPhone}
                   error={Boolean(errors.shopPhone && touched.shopPhone)}
+                  helperText={(touched.shopPhone && errors.shopPhone) as string}
                 />
 
                 <TextField
@@ -119,8 +120,8 @@ export default function ShopSettings() {
                   label="Select Category"
                   onChange={handleChange}
                   value={values.category}
-                  helperText={touched.category && errors.category}
                   error={Boolean(errors.category && touched.category)}
+                  helperText={(touched.category && errors.category) as string}
                 >
                   <MenuItem value="electronics">Electronics</MenuItem>
                   <MenuItem value="fashion">Fashion</MenuItem>
@@ -137,8 +138,10 @@ export default function ShopSettings() {
                   onChange={handleChange}
                   value={values.description}
                   label="Description (optional)"
-                  helperText={touched.description && errors.description}
                   error={Boolean(errors.description && touched.description)}
+                  helperText={
+                    (touched.description && errors.description) as string
+                  }
                 />
 
                 <TextField
@@ -149,8 +152,10 @@ export default function ShopSettings() {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.shopAddress}
-                  helperText={touched.shopAddress && errors.shopAddress}
                   error={Boolean(errors.shopAddress && touched.shopAddress)}
+                  helperText={
+                    (touched.shopAddress && errors.shopAddress) as string
+                  }
                 />
 
                 <TextField
@@ -162,8 +167,8 @@ export default function ShopSettings() {
                   value={values.order}
                   label="Minimum Order *"
                   onChange={handleChange}
-                  helperText={touched.order && errors.order}
                   error={Boolean(errors.order && touched.order)}
+                  helperText={(touched.order && errors.order) as string}
                 />
               </Stack>
 

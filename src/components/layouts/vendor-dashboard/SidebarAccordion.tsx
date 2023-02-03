@@ -1,17 +1,17 @@
-import { Box, styled } from "@mui/material";
+import { FC, ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { Box, styled } from "@mui/material";
 import {
   BadgeValue,
   BulletIcon,
-  ChevronRightIcon,
-  ListIconWrapper,
-  NavItemButton,
   StyledText,
+  NavItemButton,
+  ListIconWrapper,
+  ChevronRightIcon,
 } from "./LayoutStyledComponents";
 
 // styled component
-const NavExpandRoot = styled(Box)(() => ({
+const NavExpandRoot = styled(Box)({
   "& .subMenu": { padding: 0 },
   "& .navItem": { background: "transparent" },
   "& .expansion-panel": {
@@ -19,12 +19,13 @@ const NavExpandRoot = styled(Box)(() => ({
     overflow: "hidden",
     transition: "max-height 0.3s cubic-bezier(0, 0, 0.2, 1)",
   },
-}));
+});
 
 // ================================================================
 type SidebarAccordionProps = {
   item: any;
   sidebarCompact: any;
+  children: ReactNode;
 };
 // ================================================================
 

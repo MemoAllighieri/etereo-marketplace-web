@@ -1,14 +1,13 @@
-import { Box, styled } from "@mui/material";
+import { FC } from "react";
+import { Box, styled, SxProps } from "@mui/material";
 import LazyImage from "components/LazyImage";
 import { H6, Paragraph } from "components/Typography";
-import React, { FC } from "react";
 
+// styled components
 const StyledCard = styled(Box)(({ theme }) => ({
   textAlign: "center",
   transition: "all 0.3s",
-  "&:hover": {
-    "& h6": { color: theme.palette.primary.main },
-  },
+  "&:hover": { "& h6": { color: theme.palette.primary.main } },
 }));
 
 const ImgBox = styled(Box)(({ theme }) => ({
@@ -18,10 +17,10 @@ const ImgBox = styled(Box)(({ theme }) => ({
 
 // ===================================================
 type Props = {
+  sx?: SxProps;
   title: string;
   imgUrl: string;
   available: string;
-  sx?: { [key: string]: any };
 };
 // ===================================================
 
@@ -32,11 +31,12 @@ const ProductCard15: FC<Props> = (props) => {
     <StyledCard sx={sx}>
       <ImgBox>
         <LazyImage
-          src={imgUrl}
+          alt={title}
           width={100}
           height={100}
-          layout="responsive"
+          src={imgUrl}
           objectFit="contain"
+          layout="responsive"
         />
       </ImgBox>
 

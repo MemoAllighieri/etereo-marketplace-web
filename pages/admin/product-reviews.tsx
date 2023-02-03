@@ -1,3 +1,5 @@
+import { ReactElement } from "react";
+import { GetStaticProps } from "next";
 import { Box, Card, Stack, Table, TableContainer } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import TableHeader from "components/data-table/TableHeader";
@@ -6,13 +8,13 @@ import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import Scrollbar from "components/Scrollbar";
 import { H3 } from "components/Typography";
 import useMuiTable from "hooks/useMuiTable";
-import { GetStaticProps } from "next";
 import { ReviewRow } from "pages-sections/admin";
-import React, { ReactElement } from "react";
-import api from "utils/api/dashboard";
+import api from "utils/__api__/dashboard";
+import Review from "models/Review.model";
 
+// TABLE HEADING DATA LIST
 const tableHeading = [
-  { id: "name", label: "Name", align: "left" },
+  { id: "product", label: "Product", align: "left" },
   { id: "customer", label: "Customer", align: "left" },
   { id: "comment", label: "Comment", align: "left" },
   { id: "published", label: "Published", align: "left" },
@@ -24,12 +26,21 @@ ProductReviews.getLayout = function getLayout(page: ReactElement) {
   return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
 };
 // =============================================================================
-
-type ProductReviewsProps = { reviews: any[] };
-
+type ProductReviewsProps = { reviews: Review[] };
 // =============================================================================
 
 export default function ProductReviews({ reviews }: ProductReviewsProps) {
+  // RESHAPE THE REVIEW LIST BASED TABLE HEAD CELL ID
+  const filteredrReviews = reviews.map((item) => ({
+    id: item.id,
+    published: true,
+    comment: item.comment,
+    productId: item.product.id,
+    product: item.product.title,
+    productImage: item.product.thumbnail,
+    customer: `${item.customer.name.firstName} ${item.customer.name.lastName}`,
+  }));
+
   const {
     order,
     orderBy,
@@ -38,7 +49,7 @@ export default function ProductReviews({ reviews }: ProductReviewsProps) {
     filteredList,
     handleChangePage,
     handleRequestSort,
-  } = useMuiTable({ listData: reviews });
+  } = useMuiTable({ listData: filteredrReviews, defaultSort: "product" });
 
   return (
     <Box py={4}>
@@ -53,14 +64,14 @@ export default function ProductReviews({ reviews }: ProductReviewsProps) {
                 hideSelectBtn
                 orderBy={orderBy}
                 heading={tableHeading}
-                rowCount={reviews.length}
                 numSelected={selected.length}
+                rowCount={filteredList.length}
                 onRequestSort={handleRequestSort}
               />
 
               <TableBody>
-                {filteredList.map((review, index) => (
-                  <ReviewRow review={review} key={index} />
+                {filteredList.map((review) => (
+                  <ReviewRow review={review} key={review.id} />
                 ))}
               </TableBody>
             </Table>
@@ -70,7 +81,7 @@ export default function ProductReviews({ reviews }: ProductReviewsProps) {
         <Stack alignItems="center" my={4}>
           <TablePagination
             onChange={handleChangePage}
-            count={Math.ceil(reviews.length / rowsPerPage)}
+            count={Math.ceil(filteredList.length / rowsPerPage)}
           />
         </Stack>
       </Card>

@@ -1,31 +1,29 @@
-import { Favorite, FavoriteBorder } from "@mui/icons-material";
-import { Box } from "@mui/material";
-import BazarButton from "components/BazarButton";
-import BazarRating from "components/BazarRating";
-import { FlexBetween, FlexBox } from "components/flex-box";
-import HoverBox from "components/HoverBox";
-import LazyImage from "components/LazyImage";
-import { H4 } from "components/Typography";
 import Link from "next/link";
-import React, { CSSProperties, useState } from "react";
+import { FC, useState } from "react";
+import { Box, Button } from "@mui/material";
+import { Favorite, FavoriteBorder } from "@mui/icons-material";
+import HoverBox from "components/HoverBox";
+import { H4 } from "components/Typography";
+import LazyImage from "components/LazyImage";
+import BazaarRating from "components/BazaarRating";
+import { FlexBetween, FlexBox } from "components/flex-box";
+import { calculateDiscount, currency } from "lib";
 
 // ========================================================
-type ProductCard3Props = {
-  id: number;
+type ProductCardProps = {
   off?: number;
+  slug: string;
   title: string;
   price: number;
   imgUrl: string;
   rating: number;
-  className?: string;
   hideReview?: boolean;
-  style?: CSSProperties;
   hideFavoriteIcon?: boolean;
 };
 // ========================================================
 
-const ProductCard3: React.FC<ProductCard3Props> = ({
-  id,
+const ProductCard3: FC<ProductCardProps> = ({
+  slug,
   title,
   price,
   imgUrl,
@@ -38,9 +36,9 @@ const ProductCard3: React.FC<ProductCard3Props> = ({
 
   return (
     <Box>
-      <Link href={`/product/${id}`}>
+      <Link href={`/product/${slug}`}>
         <a>
-          <HoverBox>
+          <HoverBox sx={{ borderRadius: "8px", overflow: "hidden" }}>
             <LazyImage
               width={0}
               mx="auto"
@@ -59,23 +57,23 @@ const ProductCard3: React.FC<ProductCard3Props> = ({
             {title}
           </H4>
 
-          {!hideReview && <BazarRating value={rating} color="warn" readOnly />}
+          {!hideReview && <BazaarRating value={rating} color="warn" readOnly />}
 
           <FlexBox gap={1} alignItems="center">
             <Box fontWeight="600" color="primary.main">
-              ${(price - (price * off) / 100).toFixed(2)}
+              {calculateDiscount(price, off)}
             </Box>
 
             {!!off && (
               <Box color="grey.600" fontWeight="600">
-                <del>{price?.toFixed(2)}</del>
+                <del>{currency(price)}</del>
               </Box>
             )}
           </FlexBox>
         </Box>
 
         {!hideFavoriteIcon && (
-          <BazarButton
+          <Button
             disableRipple
             disableElevation
             onClick={() => setFavorite((state) => !state)}
@@ -90,7 +88,7 @@ const ProductCard3: React.FC<ProductCard3Props> = ({
             ) : (
               <FavoriteBorder fontSize="small" sx={{ opacity: 0.5 }} />
             )}
-          </BazarButton>
+          </Button>
         )}
       </FlexBetween>
     </Box>

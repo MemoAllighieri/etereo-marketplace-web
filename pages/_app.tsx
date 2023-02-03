@@ -1,21 +1,20 @@
-import AOS from "aos";
-import "aos/dist/aos.css";
+import { Fragment, ReactElement, ReactNode } from "react";
+import Head from "next/head";
+import { NextPage } from "next";
+import Router from "next/router";
+import { AppProps } from "next/app";
+import nProgress from "nprogress";
+import { appWithTranslation } from "next-i18next";
 import RTL from "components/RTL";
+import MuiTheme from "theme/MuiTheme";
+import OpenGraphTags from "utils/OpenGraphTags";
 import { AppProvider } from "contexts/AppContext";
 import SettingsProvider from "contexts/SettingContext";
-import { NextPage } from "next";
-import { AppProps } from "next/app";
-import Head from "next/head";
-import Router from "next/router";
-import nProgress from "nprogress";
+import SnackbarProvider from "components/SnackbarProvider";
+import nextI18NextConfig from "../next-i18next.config";
 import "nprogress/nprogress.css";
-import { Fragment, ReactElement, ReactNode, useEffect } from "react";
-import "react-quill/dist/quill.snow.css";
 import "simplebar/dist/simplebar.min.css";
-import MuiTheme from "theme/MuiTheme";
-import GoogleAnalytics from "utils/GoogleAnalytics";
-import OpenGraphTags from "utils/OpenGraphTags";
-import "../src/fake-db";
+import "../src/__server__";
 
 type MyAppProps = AppProps & {
   Component: NextPage & {
@@ -31,32 +30,29 @@ Router.events.on("routeChangeError", () => nProgress.done());
 nProgress.configure({ showSpinner: false });
 
 const App = ({ Component, pageProps }: MyAppProps) => {
-  const getLayout = Component.getLayout ?? ((page) => page);
-
-  useEffect(() => {
-    AOS.init();
-    AOS.refresh();
-
-    // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector("#jss-server-side");
-    if (jssStyles) {
-      jssStyles.parentElement!.removeChild(jssStyles);
-    }
-  }, []);
+  const AnyComponent = Component as any;
+  const getLayout = AnyComponent.getLayout ?? ((page) => page);
 
   return (
     <Fragment>
       <Head>
+        <meta charSet="utf-8" />
+        <meta
+          name="description"
+          content="React Next.js ecommerce template. Build SEO friendly Online store, delivery app and Multivendor store"
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-        <GoogleAnalytics />
         <OpenGraphTags />
+        <title>Bazaar - Next.js Ecommerce Template</title>
       </Head>
 
       <SettingsProvider>
         <AppProvider>
           <MuiTheme>
-            <RTL>{getLayout(<Component {...pageProps} />)}</RTL>
+            <SnackbarProvider>
+              <RTL>{getLayout(<AnyComponent {...pageProps} />)}</RTL>
+            </SnackbarProvider>
           </MuiTheme>
         </AppProvider>
       </SettingsProvider>
@@ -76,4 +72,4 @@ const App = ({ Component, pageProps }: MyAppProps) => {
 //   return { ...appProps };
 // };
 
-export default App;
+export default appWithTranslation(App, nextI18NextConfig);

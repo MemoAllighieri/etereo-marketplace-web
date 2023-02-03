@@ -1,15 +1,16 @@
-import { Rating } from "@mui/lab";
-import { Box, Button, TextField } from "@mui/material";
-import { FlexBox } from "components/flex-box";
-import { H2, H5 } from "components/Typography";
-import { useFormik } from "formik";
-import React from "react";
+import { FC } from "react";
+import { Box, Button, TextField, Rating } from "@mui/material";
 import * as yup from "yup";
+import { useFormik } from "formik";
+import { FlexBox } from "components/flex-box";
 import ProductComment from "./ProductComment";
+import { H2, H5 } from "components/Typography";
 
-export interface ProductReviewProps {}
+// ===================================================
+type ProductReviewProps = {};
+// ===================================================
 
-const ProductReview: React.FC<ProductReviewProps> = () => {
+const ProductReview: FC<ProductReviewProps> = () => {
   const handleFormSubmit = async (values: any, { resetForm }: any) => {
     resetForm();
   };
@@ -72,11 +73,16 @@ const ProductReview: React.FC<ProductReviewProps> = () => {
             onChange={handleChange}
             placeholder="Write a review here..."
             error={!!touched.comment && !!errors.comment}
-            helperText={touched.comment && errors.comment}
+            helperText={(touched.comment && errors.comment) as string}
           />
         </Box>
 
-        <Button variant="contained" color="primary" type="submit" disabled={!(dirty && isValid)}>
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          disabled={!(dirty && isValid)}
+        >
           Submit
         </Button>
       </form>

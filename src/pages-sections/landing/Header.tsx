@@ -1,16 +1,22 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+import { Fragment, useEffect, useState } from "react";
+import { Link as Scroll } from "react-scroll";
+import {
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import Menu from "@mui/icons-material/Menu";
-import { Box, Button, Container, IconButton, Typography, useMediaQuery } from "@mui/material";
 import { styled, Theme } from "@mui/material/styles";
 import { keyframes } from "@mui/styled-engine";
 import clsx from "clsx";
-import Image from "components/BazarImage";
-import { FlexBetween, FlexBox } from "components/flex-box";
-import Sidenav from "components/sidenav/Sidenav";
+import Image from "components/BazaarImage";
+import { FlexBox } from "components/flex-box";
+import Sidenav from "components/Sidenav";
 import debounce from "lodash/debounce";
 import Link from "next/link";
-import { Fragment, useCallback, useEffect, useState } from "react";
-import { Link as Scroll } from "react-scroll";
 
 const headerHeight = 72;
 
@@ -19,9 +25,11 @@ from { top: -${headerHeight}px; }
 to { top: 0; }`;
 
 const HeaderWrapper = styled(Box)(({ theme }) => ({
+  borderBottom: `1px solid ${theme.palette.grey[200]}`,
   "& .link": {
     cursor: "pointer",
     transition: "color 250ms ease-in-out",
+    fontWeight: 500,
     "&:hover": { color: theme.palette.primary.main },
   },
 
@@ -51,62 +59,83 @@ const Header = () => {
 
   const toggleSidenav = () => setOpen((open) => !open);
 
-  const scrollListener = useCallback(
-    debounce(() => {
-      if (window?.pageYOffset >= headerHeight) setFixed(true);
-      else setFixed(false);
-    }, 50),
-    []
-  );
+  const scrollListener = debounce(() => {
+    if (window?.pageYOffset >= headerHeight) setFixed(true);
+    else setFixed(false);
+  }, 50);
 
   useEffect(() => {
     if (!window) return null;
 
     window.addEventListener("scroll", scrollListener);
     return () => window.removeEventListener("scroll", scrollListener);
-  }, []);
+  }, [scrollListener]);
 
   return (
     <Fragment>
       <HeaderWrapper>
         <Box className={clsx({ fixedHeader: isFixed })}>
           <Container>
-            <FlexBetween height={headerHeight}>
+            <FlexBox height={headerHeight} alignItems="center">
               <Scroll to="top" duration={400} smooth={true} isDynamic>
                 <Box sx={{ cursor: "pointer" }}>
-                  <Image width="96px" height="44px" src="/assets/images/logo2.svg" alt="logo" />
+                  <Image
+                    width="96px"
+                    height="44px"
+                    src="/assets/images/logo2.svg"
+                    alt="logo"
+                  />
                 </Box>
               </Scroll>
 
+              <Box sx={{ mx: "auto" }}></Box>
+
               <FlexBox className="right-links" alignItems="center">
-                <Scroll to="features" duration={400} offset={-headerHeight - 16} smooth={true}>
-                  <Typography className="link" color="grey.600" p="0.25rem 1.25rem">
+                <Scroll
+                  to="features"
+                  duration={400}
+                  offset={-headerHeight - 16}
+                  smooth={true}
+                >
+                  <Typography
+                    className="link"
+                    color="grey.600"
+                    p="0.25rem 1.25rem"
+                  >
                     Features
                   </Typography>
                 </Scroll>
 
-                <Scroll to="demos" duration={400} offset={-headerHeight - 16} smooth={true}>
-                  <Typography className="link" color="grey.600" p="0.25rem 1.25rem">
+                <Scroll
+                  to="demos"
+                  duration={400}
+                  offset={-headerHeight - 16}
+                  smooth={true}
+                >
+                  <Typography
+                    className="link"
+                    color="grey.600"
+                    p="0.25rem 1.25rem"
+                  >
                     Demos
                   </Typography>
                 </Scroll>
 
-                <Scroll to="technologies" duration={400} offset={-headerHeight - 16} smooth={true}>
-                  <Typography className="link" color="grey.600" p="0.25rem 1.25rem">
-                    Technologies
+                <a href="https://bazaar-doc.netlify.app/" target="__blank">
+                  <Typography
+                    className="link"
+                    color="grey.600"
+                    p="0.25rem 1.25rem"
+                  >
+                    Documentation
                   </Typography>
-                </Scroll>
+                </a>
               </FlexBox>
 
               {!downSM && (
-                <Link
-                  passHref={true}
-                  href="https://material-ui.com/store/items/bazar-pro-react-ecommerce-template/"
-                >
-                  <Button variant="outlined" color="primary">
-                    Purchase Now
-                  </Button>
-                </Link>
+                <a target="__blank" href="https://tinyurl.com/get-bazaar">
+                  <Button variant="outlined">Purchase Now</Button>
+                </a>
               )}
 
               {/* mobile menu */}
@@ -132,14 +161,32 @@ const Header = () => {
                       },
                     }}
                   >
-                    <Scroll to="features" duration={400} offset={-headerHeight - 16} smooth={true}>
-                      <Typography className="link" py={1} onClick={toggleSidenav}>
+                    <Scroll
+                      to="features"
+                      duration={400}
+                      offset={-headerHeight - 16}
+                      smooth={true}
+                    >
+                      <Typography
+                        className="link"
+                        py={1}
+                        onClick={toggleSidenav}
+                      >
                         Features
                       </Typography>
                     </Scroll>
 
-                    <Scroll to="demos" duration={400} offset={-headerHeight - 16} smooth={true}>
-                      <Typography className="link" py={1} onClick={toggleSidenav}>
+                    <Scroll
+                      to="demos"
+                      duration={400}
+                      offset={-headerHeight - 16}
+                      smooth={true}
+                    >
+                      <Typography
+                        className="link"
+                        py={1}
+                        onClick={toggleSidenav}
+                      >
                         Demos
                       </Typography>
                     </Scroll>
@@ -150,14 +197,20 @@ const Header = () => {
                       to="technologies"
                       offset={-headerHeight - 16}
                     >
-                      <Typography className="link" py={1} mb={2} onClick={toggleSidenav}>
+                      <Typography
+                        className="link"
+                        py={1}
+                        mb={2}
+                        onClick={toggleSidenav}
+                      >
                         Technologies
                       </Typography>
                     </Scroll>
 
                     <Link
-                      href="https://material-ui.com/store/items/bazar-pro-react-ecommerce-template/"
-                      passHref={true}
+                      href="https://material-ui.com/store/items/bazaar-pro-react-ecommerce-template/"
+                      passHref
+                      legacyBehavior
                     >
                       <Button variant="outlined" color="primary">
                         Purchase Now
@@ -166,7 +219,7 @@ const Header = () => {
                   </Box>
                 </Sidenav>
               )}
-            </FlexBetween>
+            </FlexBox>
           </Container>
         </Box>
       </HeaderWrapper>

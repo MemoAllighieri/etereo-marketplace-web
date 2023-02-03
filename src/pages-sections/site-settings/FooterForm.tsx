@@ -1,12 +1,10 @@
+import { FC, Fragment } from "react";
 import { Delete } from "@mui/icons-material";
+import { FieldArray, Formik } from "formik";
 import { Button, Divider, Grid, IconButton, TextField } from "@mui/material";
 import DropZone from "components/DropZone";
 import { FlexBetween } from "components/flex-box";
-import ReactQuill from "components/ReactQuill";
-// import ReactQuill from "components/ReactQuill";
 import { H4 } from "components/Typography";
-import { FieldArray, Formik } from "formik";
-import React, { FC, Fragment } from "react";
 
 const FooterForm: FC = () => {
   const initialValues = {
@@ -231,13 +229,17 @@ const FooterForm: FC = () => {
                 value={values.column_four_heading}
                 sx={{ mb: 3 }}
               />
-
-              <ReactQuill
-                box_height={200}
+              <TextField
+                rows={4}
+                multiline
+                fullWidth
+                color="info"
+                size="medium"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                name="column_four_description"
+                label="Column Content"
                 value={values.column_four_description}
-                onChange={(value) =>
-                  setFieldValue("column_four_description", value)
-                }
               />
             </Grid>
           </Grid>

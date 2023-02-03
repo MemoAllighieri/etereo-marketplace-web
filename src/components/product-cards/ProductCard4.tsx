@@ -1,26 +1,27 @@
+import { FC } from "react";
 import { Box } from "@mui/material";
-import BazarRating from "components/BazarRating";
-import { FlexRowCenter } from "components/flex-box";
 import HoverBox from "components/HoverBox";
 import LazyImage from "components/LazyImage";
 import { H4, Small } from "components/Typography";
-import React, { CSSProperties } from "react";
+import BazaarRating from "components/BazaarRating";
+import { FlexRowCenter } from "components/flex-box";
+import { currency } from "lib";
 
-export interface ProductCard4Props {
-  className?: string;
-  style?: CSSProperties;
+// ======================================================
+interface ProductCardProps {
+  price: number;
+  title: string;
   imgUrl: string;
   rating: number;
-  title: string;
-  price: number;
-  reviewCount: number;
+  reviewCount?: number;
 }
+// ======================================================
 
-const ProductCard4: React.FC<ProductCard4Props> = ({
-  imgUrl,
-  rating,
+const ProductCard4: FC<ProductCardProps> = ({
   title,
   price,
+  imgUrl,
+  rating = 5,
   reviewCount = 0,
 }) => {
   return (
@@ -37,7 +38,7 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
       </HoverBox>
 
       <FlexRowCenter mb={0.5}>
-        <BazarRating value={rating} color="warn" readOnly />
+        <BazaarRating value={rating} color="warn" readOnly />
         <Small fontWeight={600} pl={0.5}>
           ({reviewCount})
         </Small>
@@ -46,8 +47,9 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
       <H4 fontSize={14} textAlign="center" mb={0.5} title={title} ellipsis>
         {title}
       </H4>
+
       <H4 fontSize={14} textAlign="center" color="primary.main">
-        ${Math.ceil(price).toLocaleString()}
+        {currency(price)}
       </H4>
     </Box>
   );

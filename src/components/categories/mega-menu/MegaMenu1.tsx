@@ -1,10 +1,10 @@
-import { Box, Card, Grid } from "@mui/material";
-import { FlexBox } from "components/flex-box";
-import LazyImage from "components/LazyImage";
-import NavLink from "components/nav-link/NavLink";
-import Link from "next/link";
 import { FC } from "react";
+import Link from "next/link";
+import { Box, Card, Grid } from "@mui/material";
 import StyledMegaMenu from "./StyledMegaMenu";
+import LazyImage from "components/LazyImage";
+import { FlexBox } from "components/flex-box";
+import { NavLink } from "components/nav-link";
 
 // =========================================================
 
@@ -67,6 +67,7 @@ const MegaMenu1: FC<MegaMenuProps> = ({
                     objectFit="contain"
                     width={137}
                     height={318}
+                    alt="banner"
                   />
                 </a>
               </Link>
@@ -82,6 +83,7 @@ const MegaMenu1: FC<MegaMenuProps> = ({
                   src={bottomImage.imgUrl}
                   layout="fill"
                   objectFit="cover"
+                  alt="banner"
                 />
               </Box>
             </a>

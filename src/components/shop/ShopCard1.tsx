@@ -1,45 +1,51 @@
+import { FC } from "react";
+import Link from "next/link";
 import { Call, East, Place } from "@mui/icons-material";
-import { alpha, Avatar, Box, Card, IconButton, Rating, styled } from "@mui/material";
+import {
+  alpha,
+  Avatar,
+  Box,
+  Card,
+  IconButton,
+  Rating,
+  styled,
+} from "@mui/material";
 import { FlexBetween, FlexBox } from "components/flex-box";
 import { H3, Span } from "components/Typography";
-import Link from "next/link";
-import React from "react";
-
-// ================================================================
-type ShopCard1Props = {
-  name: string;
-  phone: string;
-  rating: number;
-  imgUrl: string;
-  address: string;
-  shopUrl: string;
-  coverImgUrl: string;
-};
-// ================================================================
+import Shop from "models/Shop.model";
 
 // styled components
-const ContentWrapper = styled(Box)<{ imgUrl: string }>(({ theme, imgUrl }) => ({
+const ContentWrapper = styled(Box)<{ img: string }>(({ theme, img }) => ({
   color: "white",
   backgroundSize: "cover",
   padding: "17px 30px 56px",
   backgroundPosition: "center",
   backgroundImage: `linear-gradient(to bottom,
-    ${alpha(theme.palette.grey[900], 0.8)}, ${alpha(theme.palette.grey[900], 0.8)}), 
-    url(${imgUrl || "/assets/images/banners/cycle.png"})`,
+    ${alpha(theme.palette.grey[900], 0.8)}, ${alpha(
+    theme.palette.grey[900],
+    0.8
+  )}), 
+    url(${img || "/assets/images/banners/cycle.png"})`,
 }));
 
-const ShopCard1: React.FC<ShopCard1Props> = (props) => {
-  // props list
-  const { name, rating, address, phone, coverImgUrl, imgUrl, shopUrl } = props;
+const ShopCard1: FC<Partial<Shop>> = (props) => {
+  const { name, rating, address, phone, coverPicture, profilePicture, slug } =
+    props;
 
   return (
     <Card>
-      <ContentWrapper imgUrl={coverImgUrl}>
+      <ContentWrapper img={coverPicture}>
         <H3 fontWeight="600" mb={1}>
           {name}
         </H3>
 
-        <Rating value={rating || 0} color="warn" size="small" readOnly sx={{ mb: "0.75rem" }} />
+        <Rating
+          value={rating || 0}
+          color="warn"
+          size="small"
+          readOnly
+          sx={{ mb: "0.75rem" }}
+        />
 
         <FlexBox mb={1} gap={1}>
           <Place fontSize="small" sx={{ fontSize: 17, mt: "3px" }} />
@@ -54,7 +60,7 @@ const ShopCard1: React.FC<ShopCard1Props> = (props) => {
 
       <FlexBetween pl={3} pr={1}>
         <Avatar
-          src={imgUrl}
+          src={profilePicture}
           sx={{
             width: 64,
             height: 64,
@@ -63,7 +69,7 @@ const ShopCard1: React.FC<ShopCard1Props> = (props) => {
             borderColor: "grey.100",
           }}
         />
-        <Link href={shopUrl}>
+        <Link href={`/shops/${slug}`}>
           <a>
             <IconButton sx={{ my: 0.5 }}>
               <East

@@ -1,73 +1,98 @@
+import { GetStaticProps, NextPage } from "next";
 import { Box, Stack } from "@mui/material";
-import { FC } from "react";
-
-import ShopLayout2 from "components/layouts/ShopLayout2";
-import MobileNavigationBar2 from "components/mobile-navigation/MobileNavigationBar2";
-import PageFooter from "components/page-footer/PageFooter";
-import HealthBeautySidenav from "components/page-sidenav/HealthBeautySideNav";
+import SEO from "components/SEO";
 import Setting from "components/Setting";
-import SidenavContainer from "components/sidenav-container/SidenavContainer";
-import HealthBeautySection1 from "pages-sections/health-beauty/HealthBeautySection1";
-import HealthBeautySection2 from "pages-sections/health-beauty/HealthBeautySection2";
-import HealthBeautySection3 from "pages-sections/health-beauty/HealthBeautySection3";
-import HealthBeautySection4 from "pages-sections/health-beauty/HealthBeautySection4";
-import HealthBeautyServices from "pages-sections/health-beauty/HealthBeautyServices";
-import api from "utils/api/healthbeauty-shop";
+import { Footer3 } from "components/footer";
+import Newsletter from "components/Newsletter";
+import ShopLayout2 from "components/layouts/ShopLayout2";
+import SidenavContainer from "components/SidenavContainer";
+import { MobileNavigationBar2 } from "components/mobile-navigation";
+import HealthBeautySidenav from "components/page-sidenav/HealthBeautySideNav";
+import Section1 from "pages-sections/health-beauty/Section1";
+import Section2 from "pages-sections/health-beauty/Section2";
+import Section3 from "pages-sections/health-beauty/Section3";
+import Section4 from "pages-sections/health-beauty/Section4";
+import Section5 from "pages-sections/health-beauty/Section5";
+import api from "utils/__api__/healthbeauty-shop";
+import Product from "models/Product.model";
+import Service from "models/Service.model";
+import { CategoryItem } from "models/CategoryNavList.model";
+import { HealthCarouselItem } from "models/Carousel.model";
 
 // ===============================================
-type Props = {
-  topNewProducts: any[];
-  healthBeautyServices: any[];
-  healthBeautyNavList: any[];
-  healthBeautyProducts: any[];
+type HealthAndBeautyProps = {
+  serviceList: Service[];
+  allProducts: Product[];
+  topNewProducts: Product[];
+  navigationList: CategoryItem[];
+  mainCarouselData: HealthCarouselItem[];
 };
 // ===============================================
 
-const HealthAndBeauty: FC<Props> = (props) => {
-  const { healthBeautyServices, healthBeautyNavList, topNewProducts, healthBeautyProducts } = props;
-
+const HealthAndBeauty: NextPage<HealthAndBeautyProps> = (props) => {
   return (
     <ShopLayout2>
+      <SEO title="Health & beauty shop template" />
+      {/* TOP HERO CAROUSEL AREA */}
       <Box id="healthBeautySection1">
-        <HealthBeautySection1 />
+        <Section1 carouselData={props.mainCarouselData} />
       </Box>
 
       <SidenavContainer
-        navFixedComponentID={"healthBeautySection1"}
-        SideNav={() => <HealthBeautySidenav navList={healthBeautyNavList} />}
+        navFixedComponentID="healthBeautySection1"
+        SideNav={() => <HealthBeautySidenav navList={props.navigationList} />}
       >
         <Stack spacing={6}>
-          <HealthBeautySection2 />
-          <HealthBeautySection3 productsData={topNewProducts} />
-          <HealthBeautySection4 productsData={healthBeautyProducts} />
-          <HealthBeautyServices serviceData={healthBeautyServices} />
-          <PageFooter id="footer" sx={{ borderRadius: "8px", backgroundColor: "primary.800" }} />
+          {/* BANNER AREA */}
+          <Section2 />
+
+          {/* TOP NEW PRODUCTS AREA */}
+          <Section3 products={props.topNewProducts} />
+
+          {/* ALL PRODUCTS AREA */}
+          <Section4 products={props.allProducts} />
+
+          {/* SERVICE LIST AREA */}
+          <Section5 services={props.serviceList} />
+
+          {/* FOOTER AREA */}
+          <Footer3
+            id="footer"
+            sx={{ borderRadius: "8px", backgroundColor: "primary.800" }}
+          />
         </Stack>
       </SidenavContainer>
 
+      {/* SETTINGS IS USED ONLY FOR DEMO, YOU CAN REMOVE THIS */}
       <Setting />
 
+      {/* POPUP NEWSLETTER FORM */}
+      <Newsletter image="/assets/images/newsletter/bg-4.png" />
+
+      {/* SMALL DEVICE BOTTOM NAVIGATION */}
       <MobileNavigationBar2>
-        <HealthBeautySidenav navList={healthBeautyNavList} />
+        <HealthBeautySidenav navList={props.navigationList} />
       </MobileNavigationBar2>
     </ShopLayout2>
   );
 };
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
+  const serviceList = await api.getServices();
+  const allProducts = await api.getProducts();
+  const navigationList = await api.getNavigation();
   const topNewProducts = await api.getTopNewProducts();
-  const healthBeautyServices = await api.getHealthBeautyServices();
-  const healthBeautyProducts = await api.getHealthBeautyProducts();
-  const healthBeautyNavList = await api.getHealthBeautyNavigation();
+  const mainCarouselData = await api.getMainCarousel();
 
   return {
     props: {
+      serviceList,
+      allProducts,
       topNewProducts,
-      healthBeautyNavList,
-      healthBeautyServices,
-      healthBeautyProducts,
+      navigationList,
+      mainCarouselData,
     },
   };
-}
+};
 
 export default HealthAndBeauty;

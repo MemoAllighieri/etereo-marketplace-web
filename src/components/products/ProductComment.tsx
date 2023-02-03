@@ -1,10 +1,9 @@
-import { Box } from "@mui/material";
-import BazarAvatar from "components/BazarAvatar";
-import BazarRating from "components/BazarRating";
-import { FlexBox } from "components/flex-box";
-import { H5, H6, Paragraph, Span } from "components/Typography";
 import { FC } from "react";
-import { getDateDifference } from "utils/utils";
+import { Avatar, Box } from "@mui/material";
+import { FlexBox } from "components/flex-box";
+import BazaarRating from "components/BazaarRating";
+import { H5, H6, Paragraph, Span } from "components/Typography";
+import { getDateDifference } from "lib";
 
 // ===========================================================
 type ProductCommentProps = {
@@ -22,11 +21,11 @@ const ProductComment: FC<ProductCommentProps> = (props) => {
   return (
     <Box mb={4} maxWidth="600px">
       <FlexBox alignItems="center" mb={2}>
-        <BazarAvatar src={imgUrl} height={48} width={48} />
+        <Avatar src={imgUrl} sx={{ width: 48, height: 48 }} />
         <Box ml={2}>
           <H5 mb={0.5}>{name}</H5>
           <FlexBox alignItems="center">
-            <BazarRating value={rating} color="warn" readOnly />
+            <BazaarRating value={rating} color="warn" readOnly />
             <H6 mx={1.25}>{rating}</H6>
             <Span>{getDateDifference(date)}</Span>
           </FlexBox>

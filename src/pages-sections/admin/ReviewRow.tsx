@@ -1,9 +1,9 @@
-import { Delete } from "@mui/icons-material";
+import { FC, useState } from "react";
 import { Avatar } from "@mui/material";
-import BazarSwitch from "components/BazarSwitch";
+import { Delete } from "@mui/icons-material";
+import BazaarSwitch from "components/BazaarSwitch";
 import { FlexBox } from "components/flex-box";
 import { Paragraph, Small } from "components/Typography";
-import React, { FC, useState } from "react";
 import {
   StyledIconButton,
   StyledTableCell,
@@ -15,16 +15,16 @@ type ReviewRowProps = { review: any };
 // ========================================================================
 
 const ReviewRow: FC<ReviewRowProps> = ({ review }) => {
-  const { customer, name, image, comment, published } = review;
-  // state
+  const { customer, product, comment, published, productImage } = review;
+
   const [productPulish, setProductPublish] = useState(published);
 
   return (
     <StyledTableRow tabIndex={-1} role="checkbox">
       <StyledTableCell align="left">
         <FlexBox alignItems="center" gap={1.5}>
-          <Avatar src={image} sx={{ borderRadius: "8px" }} />
-          <Paragraph>{name}</Paragraph>
+          <Avatar src={productImage} sx={{ borderRadius: "8px" }} />
+          <Paragraph>{product}</Paragraph>
         </FlexBox>
       </StyledTableCell>
 
@@ -35,10 +35,10 @@ const ReviewRow: FC<ReviewRowProps> = ({ review }) => {
       </StyledTableCell>
 
       <StyledTableCell align="left">
-        <BazarSwitch
+        <BazaarSwitch
           color="info"
           checked={productPulish}
-          onChange={() => setProductPublish((state) => !state)}
+          onChange={() => setProductPublish((state: boolean) => !state)}
         />
       </StyledTableCell>
 

@@ -1,13 +1,14 @@
-import { Delete, RemoveRedEye } from "@mui/icons-material";
-import currency from "currency.js";
+import { FC } from "react";
 import { useRouter } from "next/router";
-import React, { FC } from "react";
+import { Delete, RemoveRedEye } from "@mui/icons-material";
+import { currency } from "lib";
 import {
   StatusWrapper,
   StyledIconButton,
   StyledTableCell,
   StyledTableRow,
 } from "../StyledComponents";
+import { format } from "date-fns";
 
 // ========================================================================
 type OrderRowProps = { order: any };
@@ -20,20 +21,18 @@ const OrderRow: FC<OrderRowProps> = ({ order }) => {
 
   return (
     <StyledTableRow tabIndex={-1} role="checkbox">
-      <StyledTableCell align="left">{id}</StyledTableCell>
+      <StyledTableCell align="left">#{id.split("-")[0]}</StyledTableCell>
       <StyledTableCell align="left">{qty}</StyledTableCell>
 
       <StyledTableCell align="left" sx={{ fontWeight: 400 }}>
-        {purchaseDate}
+        {format(new Date(purchaseDate), "dd MMM yyyy")}
       </StyledTableCell>
 
       <StyledTableCell align="left" sx={{ fontWeight: 400 }}>
         {billingAddress}
       </StyledTableCell>
 
-      <StyledTableCell align="left">
-        {currency(amount, { separator: ",", precision: 0 }).format()}
-      </StyledTableCell>
+      <StyledTableCell align="left">{currency(amount)}</StyledTableCell>
 
       <StyledTableCell align="left">
         <StatusWrapper status={status}>{status}</StatusWrapper>

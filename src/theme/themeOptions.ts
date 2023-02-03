@@ -73,10 +73,12 @@ const themeOptions = (publicRuntimeConfig: any, pathname: string) => {
 
   switch (pathname) {
     case "/":
-    case "/grocery1" || "/grocery2" || "/grocery3":
+    case "/grocery1":
+    case "/grocery2":
+    case "/grocery3":
     case "/gadget-shop":
-    case "/fashion-shop":
-    case "/superstore-shop":
+    case "/fashion-shop-1":
+    case "/market-1":
       updateTheme(THEMES.DEFAULT);
       break;
 

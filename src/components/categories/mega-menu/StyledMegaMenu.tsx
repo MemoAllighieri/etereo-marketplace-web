@@ -1,5 +1,5 @@
+import { FC, ReactNode } from "react";
 import { Box, styled } from "@mui/material";
-import React, { FC } from "react";
 
 // styled component
 const Wrapper = styled(Box)(({ theme }) => ({
@@ -28,7 +28,11 @@ const Wrapper = styled(Box)(({ theme }) => ({
   },
 }));
 
-const StyledMegaMenu: FC = ({ children }) => {
+// =================================================
+type Props = { children?: ReactNode };
+// =================================================
+
+const StyledMegaMenu: FC<Props> = ({ children }) => {
   return <Wrapper className="mega-menu">{children}</Wrapper>;
 };
 

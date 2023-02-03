@@ -1,12 +1,14 @@
+import { NextPage } from "next";
 import { Grid } from "@mui/material";
-import CheckoutNavLayout from "components/layouts/CheckoutNavLayout";
+import SEO from "components/SEO";
 import CheckoutForm from "pages-sections/checkout/CheckoutForm";
+import CheckoutNavLayout from "components/layouts/CheckoutNavLayout";
 import CheckoutSummary from "pages-sections/checkout/CheckoutSummary";
-import React from "react";
 
-const Checkout = () => {
+const Checkout: NextPage = () => {
   return (
     <CheckoutNavLayout>
+      <SEO title="Checkout" />
       <Grid container flexWrap="wrap-reverse" spacing={3}>
         <Grid item lg={8} md={8} xs={12}>
           <CheckoutForm />

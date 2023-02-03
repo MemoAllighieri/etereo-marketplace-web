@@ -1,18 +1,23 @@
+import { GetStaticProps, NextPage } from "next";
+import { useEffect, useRef, useState } from "react";
 import { Box, Container, Stack, styled } from "@mui/material";
-import ShopLayout2 from "components/layouts/ShopLayout2";
-import MobileNavigationBar2 from "components/mobile-navigation/MobileNavigationBar2";
-import PageFooter from "components/page-footer/PageFooter";
-import SideNavbar from "components/page-sidenav/SideNavbar";
+import SEO from "components/SEO";
 import Setting from "components/Setting";
-import FurnitureShopAllProducts from "pages-sections/furnitureshop/FurnitureShopAllProducts";
-import FurnitureShopSection1 from "pages-sections/furnitureshop/FurnitureShopSection1";
-import FurnitureShopSection2 from "pages-sections/furnitureshop/FurnitureShopSection2";
-import TopProductsSection from "pages-sections/furnitureshop/TopProductsSection";
-import TopSellingProducts from "pages-sections/furnitureshop/TopSellingProducts";
-import { FC, useEffect, useRef, useState } from "react";
-import api from "utils/api/furniture-shop";
+import Newsletter from "components/Newsletter";
 import { layoutConstant } from "utils/constants";
+import ShopLayout1 from "components/layouts/ShopLayout1";
+import SideNavbar from "components/page-sidenav/SideNavbar";
+import { MobileNavigationBar2 } from "components/mobile-navigation";
+import Section1 from "pages-sections/furnitureshop/Section1";
+import Section2 from "pages-sections/furnitureshop/Section2";
+import Section3 from "pages-sections/furnitureshop/Section3";
+import Section4 from "pages-sections/furnitureshop/Section4";
+import Product from "models/Product.model";
+import CategoryNavList from "models/CategoryNavList.model";
+import { FurnitureCarouselItem } from "models/Carousel.model";
+import api from "utils/__api__/furniture-shop";
 
+// styled component
 const StyledContainer = styled(Container)(({ theme }) => ({
   gap: "1.75rem",
   display: "flex",
@@ -37,74 +42,100 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 }));
 
 // ======================================================================
-type Props = {
-  topNewProducts: any[];
-  furnitureProducts: any[];
-  topSellingProducts: any[];
-  furnitureShopNavList: any[];
+type FurnitureShopProps = {
+  topNewProducts: Product[];
+  furnitureProducts: Product[];
+  topSellingProducts: Product[];
+  sidebarNavList: CategoryNavList[];
+  mainCarouselData: FurnitureCarouselItem[];
 };
 // ======================================================================
 
-const FurnitureShop: FC<Props> = (props) => {
-  const { furnitureShopNavList, topNewProducts, topSellingProducts, furnitureProducts } = props;
-
+const FurnitureShop: NextPage<FurnitureShopProps> = (props) => {
   const pageContentRef = useRef<HTMLElement>();
   const [sidebarHeight, setSidebarHeight] = useState(0);
 
   useEffect(() => setSidebarHeight(pageContentRef.current.offsetHeight), []);
 
   return (
-    <ShopLayout2 showNavbar={false}>
-      <FurnitureShopSection1 />
+    <ShopLayout1 showTopbar={false}>
+      <SEO title="Furniture shop template" />
+
+      {/* HERO SECTION */}
+      <Section1 mainCarouselData={props.mainCarouselData} />
 
       <Container>
         <StyledContainer>
+          {/* LEFT SIDEBAR */}
           <Box className="sidenav">
             <SideNavbar
               lineStyle="dash"
               sidebarStyle="style2"
-              navList={furnitureShopNavList}
+              navList={props.sidebarNavList}
               sidebarHeight={sidebarHeight || "85vh"}
             />
           </Box>
 
+          {/* OFFER BANNERS */}
           <Box className="pageContent" ref={pageContentRef}>
-            <FurnitureShopSection2 />
+            <Section2 />
           </Box>
         </StyledContainer>
 
         <Stack spacing={6} my={6}>
-          <TopProductsSection productsData={topNewProducts} />
-          <TopSellingProducts productsData={topSellingProducts} />
-          <FurnitureShopAllProducts productsData={furnitureProducts} />
+          {/* TOP NEW PRODUCTS AREA */}
+          <Section3
+            heading="Top New Product"
+            products={props.topNewProducts}
+            description="Tall blind but were, been folks not the expand"
+          />
+
+          {/* TOP SELLING PRODUCT AREA */}
+          <Section3
+            heading="Top Selling Product"
+            products={props.topSellingProducts}
+            description="Tall blind but were, been folks not the expand"
+          />
+
+          {/* ALL PRODUCTS AREA */}
+          <Section4 products={props.furnitureProducts} />
         </Stack>
       </Container>
 
-      <PageFooter id="footer" sx={{ backgroundColor: "primary.main" }} />
+      {/* POPUP NEWSLETTER FORM */}
+      <Newsletter image="/assets/images/newsletter/bg-3.png" />
 
+      {/* SETTINGS IS USED ONLY FOR DEMO, YOU CAN REMOVE THIS */}
       <Setting />
 
+      {/* MOBILE NAVIGATION WITH SIDE NAVABAR */}
       <MobileNavigationBar2>
-        <SideNavbar navList={furnitureShopNavList} lineStyle="dash" sidebarStyle="style2" />
+        <SideNavbar
+          navList={props.sidebarNavList}
+          lineStyle="dash"
+          sidebarStyle="style2"
+        />
       </MobileNavigationBar2>
-    </ShopLayout2>
+    </ShopLayout1>
   );
 };
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const topNewProducts = await api.getTopNewProducts();
+  const mainCarouselData = await api.getMainCarouselData();
   const furnitureProducts = await api.getFurnitureProducts();
+  const sidebarNavList = await api.getFurnitureShopNavList();
   const topSellingProducts = await api.getTopSellingProducts();
-  const furnitureShopNavList = await api.getFurnitureShopNavList();
 
   return {
     props: {
+      sidebarNavList,
       topNewProducts,
+      mainCarouselData,
       furnitureProducts,
       topSellingProducts,
-      furnitureShopNavList,
     },
   };
-}
+};
 
 export default FurnitureShop;

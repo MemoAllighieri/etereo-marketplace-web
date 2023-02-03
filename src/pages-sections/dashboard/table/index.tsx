@@ -1,3 +1,4 @@
+import { FC } from "react";
 import { Done } from "@mui/icons-material";
 import { styled, Table, TableContainer } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -8,8 +9,8 @@ import { FlexBox } from "components/flex-box";
 import Reload from "components/icons/Reload";
 import Scrollbar from "components/Scrollbar";
 import useMuiTable from "hooks/useMuiTable";
-import React, { FC } from "react";
 import TableHeader from "./TableHeader";
+import { currency } from "lib";
 
 // styled components
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -34,9 +35,9 @@ const StatusWrapper = styled(FlexBox)<{ payment: any }>(
   })
 );
 
-const StyledTableRow = styled(TableRow)(() => ({
+const StyledTableRow = styled(TableRow)({
   ":last-child .MuiTableCell-root": { border: 0 },
-}));
+});
 
 // =============================================================================
 
@@ -95,7 +96,9 @@ const DataListTable: FC<ListTableProps> = ({
                       </StatusWrapper>
                     </StyledTableCell>
 
-                    <StyledTableCell align="center">{amount}</StyledTableCell>
+                    <StyledTableCell align="center">
+                      {currency(amount)}
+                    </StyledTableCell>
                   </StyledTableRow>
                 );
               })}
@@ -118,7 +121,9 @@ const DataListTable: FC<ListTableProps> = ({
                       {stock}
                     </StyledTableCell>
 
-                    <StyledTableCell align="center">{amount}</StyledTableCell>
+                    <StyledTableCell align="center">
+                      {currency(amount)}
+                    </StyledTableCell>
                   </StyledTableRow>
                 );
               })}

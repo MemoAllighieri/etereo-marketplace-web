@@ -1,24 +1,21 @@
-import { Box, Divider } from "@mui/material";
-import BazarButton from "components/BazarButton";
-import Image from "components/BazarImage";
-import { FlexBox, FlexRowCenter } from "components/flex-box";
-import { H6 } from "components/Typography";
 import Link from "next/link";
-import React, { FC, Fragment } from "react";
+import { FC, Fragment } from "react";
+import { Box, Button, Divider } from "@mui/material";
+import Image from "components/BazaarImage";
+import { H6 } from "components/Typography";
+import { FlexBox, FlexRowCenter } from "components/flex-box";
 
+// =======================================
 type SocialButtonsProps = {
-  redirect?: string;
-  redirectText?: string;
   handleGoogle?: () => void;
   handleFacebook?: () => void;
 };
+// =======================================
 
 const SocialButtons: FC<SocialButtonsProps> = (props) => {
-  const { redirect = "/login", redirectText = "Login" } = props;
-
   return (
     <Fragment>
-      <Box mb={2} mt={3.3}>
+      <Box mb={3} mt={3.8}>
         <Box width="200px" mx="auto">
           <Divider />
         </Box>
@@ -30,7 +27,7 @@ const SocialButtons: FC<SocialButtonsProps> = (props) => {
         </FlexBox>
       </Box>
 
-      <BazarButton
+      <Button
         className="facebookButton"
         size="medium"
         fullWidth
@@ -43,9 +40,9 @@ const SocialButtons: FC<SocialButtonsProps> = (props) => {
         <Box fontSize="12px" ml={1}>
           Continue with Facebook
         </Box>
-      </BazarButton>
+      </Button>
 
-      <BazarButton
+      <Button
         className="googleButton"
         size="medium"
         fullWidth
@@ -55,34 +52,7 @@ const SocialButtons: FC<SocialButtonsProps> = (props) => {
         <Box fontSize="12px" ml={1}>
           Continue with Google
         </Box>
-      </BazarButton>
-
-      <FlexRowCenter my="1.25rem">
-        <Box>Don&apos;t have account?</Box>
-        <Link href={redirect}>
-          <a>
-            <H6 ml={1} borderBottom="1px solid" borderColor="grey.900">
-              {redirectText}
-            </H6>
-          </a>
-        </Link>
-      </FlexRowCenter>
-
-      <FlexBox
-        justifyContent="center"
-        bgcolor="grey.200"
-        borderRadius="4px"
-        py={2.5}
-      >
-        Forgot your password?
-        <Link href="/">
-          <a>
-            <H6 ml={1} borderBottom="1px solid" borderColor="grey.900">
-              Reset It
-            </H6>
-          </a>
-        </Link>
-      </FlexBox>
+      </Button>
     </Fragment>
   );
 };

@@ -1,12 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+import { FC } from "react";
+import Link from "next/link";
 import { Add, Close, Remove } from "@mui/icons-material";
 import { Button, Card, IconButton, styled } from "@mui/material";
-import Image from "components/BazarImage";
-import { FlexBox } from "components/flex-box";
+import Image from "components/BazaarImage";
 import { Span } from "components/Typography";
+import { FlexBox } from "components/flex-box";
 import { useAppContext } from "contexts/AppContext";
-import Link from "next/link";
-import React, { useCallback } from "react";
+import { currency } from "lib";
 
 // styled components
 const Wrapper = styled(Card)(({ theme }) => ({
@@ -26,27 +26,32 @@ const Wrapper = styled(Card)(({ theme }) => ({
 }));
 
 // =========================================================
-type ProductCard7Props = {
+type ProductCardProps = {
   qty: number;
   name: string;
+  slug: string;
   price: number;
   imgUrl?: string;
   id: string | number;
 };
 // =========================================================
 
-const ProductCard7: React.FC<ProductCard7Props> = ({ id, name, qty, price, imgUrl }) => {
+const ProductCard7: FC<ProductCardProps> = ({
+  id,
+  name,
+  qty,
+  price,
+  imgUrl,
+  slug,
+}) => {
   const { dispatch } = useAppContext();
   // handle change cart
-  const handleCartAmountChange = useCallback(
-    (amount) => () => {
-      dispatch({
-        type: "CHANGE_CART_AMOUNT",
-        payload: { id, name, price, imgUrl, qty: amount },
-      });
-    },
-    []
-  );
+  const handleCartAmountChange = (amount: number) => () => {
+    dispatch({
+      type: "CHANGE_CART_AMOUNT",
+      payload: { id, name, price, imgUrl, qty: amount, slug },
+    });
+  };
 
   return (
     <Wrapper>
@@ -67,7 +72,7 @@ const ProductCard7: React.FC<ProductCard7Props> = ({ id, name, qty, price, imgUr
       </IconButton>
 
       <FlexBox p={2} rowGap={2} width="100%" flexDirection="column">
-        <Link href={`/product/${id}`}>
+        <Link href={`/product/${slug}`}>
           <a>
             <Span ellipsis fontWeight="600" fontSize={18}>
               {name}
@@ -77,11 +82,11 @@ const ProductCard7: React.FC<ProductCard7Props> = ({ id, name, qty, price, imgUr
 
         <FlexBox gap={1} flexWrap="wrap" alignItems="center">
           <Span color="grey.600">
-            ${price.toFixed(2)} x {qty}
+            {currency(price)} x {qty}
           </Span>
 
           <Span fontWeight={600} color="primary.main">
-            ${(price * qty).toFixed(2)}
+            {currency(price * qty)}
           </Span>
         </FlexBox>
 

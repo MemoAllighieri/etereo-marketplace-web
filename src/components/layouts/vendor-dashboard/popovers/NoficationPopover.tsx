@@ -1,24 +1,24 @@
+import { FC, SyntheticEvent, useState } from "react";
 import { Notifications } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import {
-  Badge,
+  Tab,
   Box,
-  ClickAwayListener,
   Fade,
-  IconButton,
+  Badge,
   Paper,
   Popper,
   styled,
   SvgIconProps,
-  Tab,
 } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import { formatDistance } from "date-fns";
 import { FlexBox } from "components/flex-box";
-import CartCheck from "components/icons/CartCheck";
 import CartX from "components/icons/CartX";
+import CartCheck from "components/icons/CartCheck";
 import TruckFast from "components/icons/TruckFast";
 import { H6, Paragraph } from "components/Typography";
-import { formatDistance } from "date-fns";
-import { FC, SyntheticEvent, useState } from "react";
 
 // dummy  data
 const orders = [
@@ -76,16 +76,17 @@ const StyledTabList = styled(TabList)(({ theme }) => ({
   "& .MuiTabs-indicator": { backgroundColor: theme.palette.info.main },
 }));
 
-const StyledTab = styled(Tab)(() => ({
+const StyledTab = styled(Tab)({
   width: "50%",
   marginLeft: 0,
   marginRight: 0,
-}));
+});
 
 const ListItemWrapper = styled(FlexBox)(({ theme }) => ({
   cursor: "pointer",
   borderBottom: `1px solid ${theme.palette.info[100]}`,
   ":hover": { backgroundColor: theme.palette.info[100] },
+  ":last-of-type": { borderBottom: 0 },
 }));
 
 const NotificationsPopover: FC = () => {
@@ -126,8 +127,24 @@ const NotificationsPopover: FC = () => {
             maxWidth: 300,
             minWidth: 300,
             width: "100%",
-            overflow: "hidden",
+            // overflow: "hidden",
             top: "10px !important",
+            boxShadow: 2,
+            "&:before": {
+              top: 0,
+              right: 14,
+              zIndex: 0,
+              width: 10,
+              height: 10,
+              content: '""',
+              display: "block",
+              position: "absolute",
+              borderTop: "1px solid",
+              borderLeft: "1px solid",
+              borderColor: "grey.200",
+              bgcolor: "background.paper",
+              transform: "translateY(-50%) rotate(45deg)",
+            },
           }}
         >
           {({ TransitionProps }) => (

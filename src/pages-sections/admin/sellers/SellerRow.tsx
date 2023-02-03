@@ -1,15 +1,15 @@
+import { FC, useState } from "react";
 import { Delete, Edit, RemoveRedEye } from "@mui/icons-material";
 import { Avatar, Box } from "@mui/material";
-import BazarSwitch from "components/BazarSwitch";
 import { FlexBox } from "components/flex-box";
+import BazaarSwitch from "components/BazaarSwitch";
 import { Paragraph, Small } from "components/Typography";
-import currency from "currency.js";
-import React, { FC, useState } from "react";
 import {
   StyledIconButton,
   StyledTableCell,
   StyledTableRow,
 } from "../StyledComponents";
+import { currency } from "lib";
 
 // ========================================================================
 type SellerRowProps = { seller: any };
@@ -47,11 +47,11 @@ const SellerRow: FC<SellerRowProps> = ({ seller }) => {
       </StyledTableCell>
 
       <StyledTableCell align="left" sx={{ fontWeight: 400 }}>
-        {currency(balance, { separator: "," }).format()}
+        {currency(balance)}
       </StyledTableCell>
 
       <StyledTableCell align="left">
-        <BazarSwitch
+        <BazaarSwitch
           color="info"
           checked={shopPulish}
           onChange={() => setShopPublish((state) => !state)}

@@ -1,57 +1,40 @@
+import { FC, Fragment, ReactElement } from "react";
 import { Visibility } from "@mui/icons-material";
 import { Box, Card, IconButton, styled } from "@mui/material";
-import { FlexBox } from "components/flex-box";
 import LazyImage from "components/LazyImage";
+import { FlexBox } from "components/flex-box";
 import { H3, Span } from "components/Typography";
 import Link from "next/link";
-import React, { FC, Fragment } from "react";
 
 // styled components
 const Wrapper = styled(Box)(({ theme }) => ({
   cursor: "pointer",
   position: "relative",
   borderRadius: "0.5rem",
+  marginTop: "1rem",
   backgroundColor: theme.palette.grey[200],
   border: `1px solid ${theme.palette.grey[300]}`,
   "& .overlay": { transition: "0.3s ease-in-out" },
   "&:hover": { ".overlay": { opacity: 1 } },
 }));
 
-const StatusChipBox = styled(Box)(({ theme }) => ({
-  width: 42,
-  height: 45,
-  top: "0px",
-  zIndex: 11,
-  right: "30px",
-  fontSize: "12px",
+const StatusChip = styled(Box)(({ theme }) => ({
   position: "absolute",
-  background: theme.palette.primary.main,
-  "& .triangle-left": {
-    width: 0,
-    height: 0,
-    borderTop: "0px solid transparent",
-    borderBottom: "10px solid transparent",
-    borderLeft: `21px solid ${theme.palette.primary.main}`,
-  },
-  "& .triangle-right": {
-    width: 0,
-    height: 0,
-    borderTop: "0px solid transparent",
-    borderBottom: "10px solid transparent",
-    borderRight: `21px solid ${theme.palette.primary.main}`,
-  },
-}));
-
-const StatusChip = styled(Span)(() => ({
-  height: "100%",
-  display: "flex",
+  top: "10px",
+  zIndex: 11,
+  right: "8px",
+  width: 44,
+  height: 44,
   color: "#fff",
   fontSize: "13px",
-  alignItems: "center",
-  justifyContent: "center",
+  fontWeight: 700,
+  background: theme.palette.dark.main,
+  padding: "11px 7px",
+  borderRadius: 36,
+  boxShadow: theme.shadows[2],
 }));
 
-const StyledFlex = styled(FlexBox)(() => ({
+const StyledFlex = styled(FlexBox)({
   top: 0,
   left: 0,
   right: 0,
@@ -61,15 +44,17 @@ const StyledFlex = styled(FlexBox)(() => ({
   alignItems: "center",
   justifyContent: "center",
   backgroundColor: "rgba(0,0,0, 0.54)",
-}));
+});
 
-export interface PageCardProps {
-  title: string;
+// =========================================================
+type PageCardProps = {
   imgUrl: string;
   status?: string;
   previewUrl: string;
   disabled?: boolean;
-}
+  title: ReactElement | string;
+};
+// =========================================================
 
 const PageCard: FC<PageCardProps> = (props) => {
   const { title, imgUrl, previewUrl, disabled, status } = props;
@@ -87,6 +72,7 @@ const PageCard: FC<PageCardProps> = (props) => {
           }}
         >
           <LazyImage
+            alt="cover"
             width={470}
             height={397}
             src={imgUrl}
@@ -96,18 +82,10 @@ const PageCard: FC<PageCardProps> = (props) => {
           />
         </Card>
 
-        {status && (
-          <StatusChipBox>
-            <StatusChip>{status}</StatusChip>
-            <Box width="100%" display="flex">
-              <Box className="triangle-left" />
-              <Box className="triangle-right" />
-            </Box>
-          </StatusChipBox>
-        )}
+        {status && <StatusChip>{status}</StatusChip>}
 
         {!disabled && (
-          <Link href={previewUrl}>
+          <Link href={previewUrl} passHref legacyBehavior>
             <a target="_blank" rel="noopener noreferrer">
               <StyledFlex className="overlay">
                 <IconButton

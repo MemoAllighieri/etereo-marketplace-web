@@ -1,6 +1,13 @@
-import { Checkbox, styled, TableCell, TableHead, TableRow, TableSortLabel } from "@mui/material";
-import UpDown from "components/icons/UpDown";
 import { ChangeEvent, FC } from "react";
+import {
+  Checkbox,
+  styled,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+} from "@mui/material";
+import UpDown from "components/icons/UpDown";
 
 // styled components
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -60,7 +67,9 @@ const TableHeader: FC<TableHeaderProps> = (props) => {
               onClick={() => onRequestSort(headCell.id)}
               direction={orderBy === headCell.id ? order : "asc"}
               sx={{ "& .MuiTableSortLabel-icon": { opacity: 1 } }}
-              IconComponent={() => <UpDown sx={{ fontSize: 14, ml: 1, color: "grey.600" }} />}
+              IconComponent={() => (
+                <UpDown sx={{ fontSize: 14, ml: 1, color: "grey.600" }} />
+              )}
             >
               {headCell.label}
             </TableSortLabel>

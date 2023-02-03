@@ -1,4 +1,12 @@
-import { Box, IconButton, styled, TableCell, TableRow } from "@mui/material";
+import { Clear } from "@mui/icons-material";
+import {
+  alpha,
+  Box,
+  IconButton,
+  styled,
+  TableCell,
+  TableRow,
+} from "@mui/material";
 
 // styled components
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -19,13 +27,13 @@ const CategoryWrapper = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.grey[200],
 }));
 
-const StyledTableRow = styled(TableRow)(() => ({
+const StyledTableRow = styled(TableRow)({
   ":last-child .MuiTableCell-root": { border: 0 },
   "&.Mui-selected": {
     backgroundColor: "transparent",
     ":hover": { backgroundColor: "transparent" },
   },
-}));
+});
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   color: theme.palette.grey[600],
@@ -41,7 +49,8 @@ type StatusType = {
     | "Pending"
     | "Delivered"
     | "Normal"
-    | "Urgent";
+    | "Urgent"
+    | "Cancelled";
 };
 
 const StatusWrapper = styled(Box)<StatusType>(({ theme, status }) => {
@@ -53,7 +62,7 @@ const StatusWrapper = styled(Box)<StatusType>(({ theme, status }) => {
     backgroundColor = theme.palette.success[100];
   }
 
-  if (status === "Rejected" || status === "Pending" || status === "Urgent") {
+  if (status === "Rejected" || status === "Urgent" || status === "Cancelled") {
     color = theme.palette.error.main;
     backgroundColor = theme.palette.error[100];
   }
@@ -61,6 +70,11 @@ const StatusWrapper = styled(Box)<StatusType>(({ theme, status }) => {
   if (status === "Processing") {
     color = theme.palette.warning.main;
     backgroundColor = theme.palette.warning[100];
+  }
+
+  if (status === "Pending") {
+    color = theme.palette.info.main;
+    backgroundColor = theme.palette.info[100];
   }
 
   return {
@@ -74,11 +88,32 @@ const StatusWrapper = styled(Box)<StatusType>(({ theme, status }) => {
   };
 });
 
-// eslint-disable-next-line import/no-anonymous-default-export
+const UploadImageBox = styled(Box)(({ theme }) => ({
+  width: 70,
+  height: 70,
+  display: "flex",
+  overflow: "hidden",
+  borderRadius: "8px",
+  position: "relative",
+  alignItems: "center",
+  justifyContent: "center",
+  backgroundColor: alpha(theme.palette.info.light, 0.1),
+}));
+
+const StyledClear = styled(Clear)({
+  top: 5,
+  right: 5,
+  fontSize: 14,
+  cursor: "pointer",
+  position: "absolute",
+});
+
 export {
   CategoryWrapper,
   StyledIconButton,
   StyledTableRow,
   StyledTableCell,
   StatusWrapper,
+  UploadImageBox,
+  StyledClear,
 };

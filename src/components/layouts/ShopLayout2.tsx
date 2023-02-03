@@ -1,56 +1,48 @@
+import { FC, Fragment, ReactNode, useCallback, useState } from "react";
 import { Box } from "@mui/material";
+import Sticky from "components/Sticky";
+import Topbar from "components/Topbar";
 import Header from "components/header/Header";
 import Navbar from "components/navbar/Navbar";
-import Sticky from "components/sticky/Sticky";
-import Topbar from "components/topbar/Topbar";
-import Head from "next/head";
-import React, { FC, Fragment, useCallback, useState } from "react";
+import SearchInput from "components/search-box/SearchInput";
 
 /**
- *  Used:
- *  1. gift-shop, grocery1, grocery2, grocery3, healthbeauty-shop, furniture-shop page
- *  2. checkout-alternative page
+ *  Used in:
+ *  1. grocery1, grocery2, healthbeauty-shop
+ *  2. checkout-alternative
  */
 
 // =======================================================
 type ShopLayout2Props = {
-  title?: string;
+  children: ReactNode;
   showNavbar?: boolean;
-  navbar?: React.ReactChild;
+  showTopbar?: boolean;
 };
 // =======================================================
 
-const ShopLayout2: FC<ShopLayout2Props> = (props) => {
-  // props
-  const { children, showNavbar = true, title = "React Next.js Ecommerce Template" } = props;
-  // app states
+const ShopLayout2: FC<ShopLayout2Props> = ({
+  children,
+  showTopbar = true,
+  showNavbar = true,
+}) => {
   const [isFixed, setIsFixed] = useState(false);
-  const toggleIsFixed = useCallback((fixed) => setIsFixed(fixed), []);
+  const toggleIsFixed = useCallback((fixed: boolean) => setIsFixed(fixed), []);
 
   return (
     <Fragment>
-      <Head>
-        <title>{title}</title>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
+      {/* TOPBAR */}
+      {showTopbar && <Topbar />}
 
-      <Topbar />
-
-      <Sticky fixedOn={0} onSticky={toggleIsFixed}>
-        <Header isFixed={isFixed} searchBoxType="type2" />
+      {/* HEADER */}
+      <Sticky fixedOn={0} onSticky={toggleIsFixed} scrollDistance={70}>
+        <Header isFixed={isFixed} searchInput={<SearchInput />} />
       </Sticky>
 
-      <Box
-        zIndex={1}
-        position="relative"
-        className="section-after-sticky"
-        sx={{ display: showNavbar ? "block" : "none" }}
-      >
-        <Navbar />
-      </Box>
+      <Box zIndex={4} position="relative" className="section-after-sticky">
+        {/* NAVIGATION BAR */}
+        {showNavbar && <Navbar elevation={0} />}
 
-      <Box position="relative" sx={{ background: "#fff" }}>
+        {/* BODY CONTENT */}
         {children}
       </Box>
     </Fragment>

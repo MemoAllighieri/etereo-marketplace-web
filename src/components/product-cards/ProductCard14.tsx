@@ -1,19 +1,22 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { Add, Remove } from "@mui/icons-material";
-import ShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import FavoriteIcon from "@mui/icons-material/FavoriteBorder";
-import PreviewIcon from "@mui/icons-material/RemoveRedEye";
-import { Box, Button, Chip, Divider, styled, useTheme } from "@mui/material";
-import BazarCard from "components/BazarCard";
-import BazarRating from "components/BazarRating";
-import { FlexBetween, FlexBox } from "components/flex-box";
-import LazyImage from "components/LazyImage";
-import { H3, Span } from "components/Typography";
-import { CartItem, useAppContext } from "contexts/AppContext";
 import Link from "next/link";
-import React, { Fragment, useCallback } from "react";
+import { FC, Fragment, useCallback, useState } from "react";
+import { Add, Favorite, FavoriteBorder, Remove } from "@mui/icons-material";
+import PreviewIcon from "@mui/icons-material/RemoveRedEye";
+import FavoriteIcon from "@mui/icons-material/FavoriteBorder";
+import ShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { Box, Button, Chip, Divider, styled, useTheme } from "@mui/material";
+import { useSnackbar } from "notistack";
+import LazyImage from "components/LazyImage";
+import BazaarCard from "components/BazaarCard";
+import { H3, Span } from "components/Typography";
+import BazaarRating from "components/BazaarRating";
+import { FlexBetween, FlexBox } from "components/flex-box";
+import ProductViewDialog from "components/products/ProductViewDialog";
+import { CartItem, useAppContext } from "contexts/AppContext";
+import { calculateDiscount, currency } from "lib";
 
-const StyledBazarCard = styled(BazarCard)(({ theme }) => ({
+// styled components
+const StyledBazaarCard = styled(BazaarCard)(({ theme }) => ({
   margin: "auto",
   height: "100%",
   display: "flex",
@@ -88,14 +91,14 @@ const StyledChip = styled(Chip)(({ theme }) => ({
   background: theme.palette.primary.main,
 }));
 
-const ContentWrapper = styled(Box)(() => ({
+const ContentWrapper = styled(Box)({
   padding: "1rem",
   "& .title, & .categories": {
     overflow: "hidden",
     whiteSpace: "nowrap",
     textOverflow: "ellipsis",
   },
-}));
+});
 
 const ButtonBox = styled(FlexBox)(({ theme }) => ({
   gap: 10,
@@ -109,8 +112,9 @@ const ButtonBox = styled(FlexBox)(({ theme }) => ({
 }));
 
 // =============================================================
-type ProductCard14Props = {
+type ProductCardProps = {
   off: number;
+  slug: string;
   title: string;
   price: number;
   imgUrl: string;
@@ -121,31 +125,55 @@ type ProductCard14Props = {
 };
 // =============================================================
 
-const ProductCard14: React.FC<ProductCard14Props> = (props) => {
-  const { off, id, title, price, imgUrl, rating, hideRating, hoverEffect } = props;
+const ProductCard14: FC<ProductCardProps> = (props) => {
+  const {
+    off,
+    id,
+    title,
+    price,
+    imgUrl,
+    rating,
+    hideRating,
+    hoverEffect,
+    slug,
+  } = props;
 
   const { palette } = useTheme();
+  const { enqueueSnackbar } = useSnackbar();
   const { state, dispatch } = useAppContext();
+  const [openModal, setOpenModal] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
-  const cartItem: CartItem | undefined = state.cart.find((item) => item.id === id);
+  const toggleIsFavorite = () => setIsFavorite((fav) => !fav);
+  const toggleDialog = useCallback(() => setOpenModal((open) => !open), []);
 
-  const handleCartAmountChange = useCallback(
-    (amount) => () => {
-      dispatch({
-        type: "CHANGE_CART_AMOUNT",
-        payload: { price, imgUrl, id, name: title, qty: amount },
-      });
-    },
-    []
+  const cartItem: CartItem | undefined = state.cart.find(
+    (item) => item.slug === slug
   );
 
+  const handleCartAmountChange = (amount: number, type?: "remove") => () => {
+    dispatch({
+      type: "CHANGE_CART_AMOUNT",
+      payload: { price, imgUrl, id, name: title, qty: amount, slug },
+    });
+
+    // SHOW ALERT PRODUCT ADDED OR REMOVE
+    if (type === "remove") {
+      enqueueSnackbar("Remove from Cart", { variant: "error" });
+    } else {
+      enqueueSnackbar("Added to Cart", { variant: "success" });
+    }
+  };
+
   return (
-    <StyledBazarCard hoverEffect={hoverEffect}>
+    <StyledBazaarCard hoverEffect={hoverEffect}>
       <ImageWrapper>
-        {off !== 0 && <StyledChip color="primary" size="small" label={`${off}% off`} />}
+        {off !== 0 && (
+          <StyledChip color="primary" size="small" label={`${off}% off`} />
+        )}
 
         <ImageBox>
-          <Link href={`/product/${id}`}>
+          <Link href={`/product/${slug}`}>
             <a>
               <LazyImage
                 alt={title}
@@ -159,30 +187,38 @@ const ProductCard14: React.FC<ProductCard14Props> = (props) => {
           </Link>
 
           <HoverWrapper className="controller">
-            <Link href={`/product/${id}`}>
-              <a>
-                <Span>
-                  <PreviewIcon />
-                </Span>
-              </a>
-            </Link>
-
-            <Divider orientation="horizontal" flexItem />
-            <Span>
-              <FavoriteIcon />
+            <Span onClick={toggleDialog}>
+              <PreviewIcon />
             </Span>
+
             <Divider orientation="horizontal" flexItem />
 
-            <Span onClick={handleCartAmountChange((cartItem?.qty || 0) + 1)}>
+            <Span onClick={toggleIsFavorite}>
+              {isFavorite ? (
+                <Favorite color="primary" fontSize="small" />
+              ) : (
+                <FavoriteBorder fontSize="small" color="primary" />
+              )}
+            </Span>
+
+            <Divider orientation="horizontal" flexItem />
+
+            <Span onClick={handleCartAmountChange(1)}>
               <ShoppingCartIcon />
             </Span>
           </HoverWrapper>
         </ImageBox>
       </ImageWrapper>
 
+      <ProductViewDialog
+        openDialog={openModal}
+        handleCloseDialog={toggleDialog}
+        product={{ title, price, id, slug, imgGroup: [imgUrl, imgUrl] }}
+      />
+
       <ContentWrapper>
         <Box flex="1 1 0" minWidth="0px" mr={1}>
-          <Link href={`/product/${id}`}>
+          <Link href={`/product/${slug}`}>
             <a>
               <H3
                 mb={1}
@@ -200,47 +236,49 @@ const ProductCard14: React.FC<ProductCard14Props> = (props) => {
 
           {!hideRating && (
             <Box display="flex" alignItems="center">
-              <BazarRating value={rating || 0} color="warn" readOnly />{" "}
+              <BazaarRating value={rating || 0} color="warn" readOnly />{" "}
               <Span sx={{ color: palette.grey[600] }}>{`(${rating}.0)`}</Span>
             </Box>
           )}
 
           <FlexBox gap={1} alignItems="center" mt={0.5}>
             <Box fontWeight="600" color="primary.main">
-              ${(price - (price * off) / 100).toFixed(2)}
+              {calculateDiscount(price, off)}
             </Box>
 
             {off !== 0 && (
               <Box color="grey.600" fontWeight="600">
-                <del>{price?.toFixed(2)}</del>
+                <del>{currency(price)}</del>
               </Box>
             )}
           </FlexBox>
         </Box>
 
         <ButtonBox>
-          <Button
-            variant="contained"
-            sx={{ py: "3px", width: "100%", fontSize: "13px" }}
-            onClick={handleCartAmountChange(cartItem?.qty ? cartItem.qty - 1 : 1)}
-          >
-            {cartItem?.qty ? (
-              <Fragment>
-                <Remove /> Remove from Cart
-              </Fragment>
-            ) : (
-              <Fragment>
-                <Add /> Add to Cart
-              </Fragment>
-            )}
-          </Button>
+          {cartItem?.qty ? (
+            <Button
+              variant="contained"
+              sx={{ py: "3px", width: "100%", fontSize: "13px" }}
+              onClick={handleCartAmountChange(cartItem.qty - 1, "remove")}
+            >
+              <Remove /> Remove from Cart
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              sx={{ py: "3px", width: "100%", fontSize: "13px" }}
+              onClick={handleCartAmountChange(1)}
+            >
+              <Add /> Add to Cart
+            </Button>
+          )}
 
           <Button variant="contained" sx={{ p: "3px 8px" }}>
             <FavoriteIcon sx={{ fontSize: "16px" }} />
           </Button>
         </ButtonBox>
       </ContentWrapper>
-    </StyledBazarCard>
+    </StyledBazaarCard>
   );
 };
 

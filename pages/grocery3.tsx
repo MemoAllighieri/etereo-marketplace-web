@@ -1,51 +1,66 @@
+import { GetStaticProps, NextPage } from "next";
 import { Container } from "@mui/material";
-import ShopLayout2 from "components/layouts/ShopLayout2";
-import MobileNavigationBar from "components/mobile-navigation/MobileNavigationBar";
-import PageFooter from "components/page-footer/PageFooter";
+import SEO from "components/SEO";
 import Setting from "components/Setting";
-import AllProducts from "pages-sections/grocery3/AllProducts";
-import DiscountProducts from "pages-sections/grocery3/DiscountProducts";
-import GroceryShopSection1 from "pages-sections/grocery3/Grocery3ShopSection1";
-import TopSailedProducts from "pages-sections/grocery3/TopSailedProducts";
-import { FC } from "react";
-import api from "utils/api/grocery3-shop";
+import Newsletter from "components/Newsletter";
+import ShopLayout1 from "components/layouts/ShopLayout1";
+import { MobileNavigationBar } from "components/mobile-navigation";
+import Section1 from "pages-sections/grocery3/Section1";
+import Section2 from "pages-sections/grocery3/Section2";
+import Section3 from "pages-sections/grocery3/Section3";
+import Section4 from "pages-sections/grocery3/Section4";
+import api from "utils/__api__/grocery3-shop";
+import Product from "models/Product.model";
+import { MainCarouselItem, OfferCard } from "models/Grocery-3.model";
 
 // ======================================================
-type Props = {
-  allProducts: any[];
-  offerProducts: any[];
-  topSailedProducts: any[];
+type Grocery3Props = {
+  allProducts: Product[];
+  offerCards: OfferCard[];
+  topSailedProducts: Product[];
+  mainCarouselData: MainCarouselItem[];
 };
 // ======================================================
 
-const Grocery3: FC<Props> = (props) => {
-  const { offerProducts, allProducts, topSailedProducts } = props;
-
+const Grocery3: NextPage<Grocery3Props> = (props) => {
   return (
-    <ShopLayout2 showNavbar={false}>
-      <GroceryShopSection1 />
+    <ShopLayout1 showNavbar={false}>
+      <SEO title="Grocery store template v3" />
+      {/* TOP HERO CAROUSEL AREA */}
+      <Section1 mainCarouselData={props.mainCarouselData} />
 
       <Container sx={{ mb: 6 }}>
-        <DiscountProducts offerProducts={offerProducts} />
-        <TopSailedProducts productsData={topSailedProducts} />
-        <AllProducts productsData={allProducts} />
+        {/* DISCOUNT OFFERS AREA */}
+        <Section2 offers={props.offerCards} />
+
+        {/* TOP SALES PRODUCTS AREA */}
+        <Section3 products={props.topSailedProducts} />
+
+        {/* OUR ALL PRODUCTS AREA */}
+        <Section4 products={props.allProducts} />
       </Container>
 
-      <PageFooter />
+      {/* POPUP NEWSLETTER FORM */}
+      <Newsletter image="/assets/images/newsletter/bg-2.png" />
 
+      {/* SETTINGS IS USED ONLY FOR DEMO, YOU CAN REMOVE THIS */}
       <Setting />
 
+      {/* SMALL DEVICE BOTTOM NAVIGATION */}
       <MobileNavigationBar />
-    </ShopLayout2>
+    </ShopLayout1>
   );
 };
 
-export async function getStaticProps() {
-  const allProducts = await api.getGrocery3Products();
-  const offerProducts = await api.getGrocery3offerProducts();
+export const getStaticProps: GetStaticProps = async () => {
+  const offerCards = await api.getOfferCards();
+  const allProducts = await api.getAllProducts();
+  const mainCarouselData = await api.getMainCarousel();
   const topSailedProducts = await api.getTopSailedProducts();
 
-  return { props: { allProducts, offerProducts, topSailedProducts } };
-}
+  return {
+    props: { allProducts, offerCards, topSailedProducts, mainCarouselData },
+  };
+};
 
 export default Grocery3;

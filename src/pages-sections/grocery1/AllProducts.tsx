@@ -1,9 +1,10 @@
+import { FC } from "react";
 import { Button, Grid, styled } from "@mui/material";
-import CategorySectionCreator from "components/CategorySectionCreator";
+import { Paragraph } from "components/Typography";
 import { FlexRowCenter } from "components/flex-box";
 import ProductCard13 from "components/product-cards/ProductCard13";
-import { Paragraph } from "components/Typography";
-import React, { FC } from "react";
+import CategorySectionCreator from "components/CategorySectionCreator";
+import Product from "models/Product.model";
 
 const SubTitle = styled(Paragraph)(({ theme }) => ({
   fontSize: 12,
@@ -13,26 +14,28 @@ const SubTitle = styled(Paragraph)(({ theme }) => ({
 }));
 
 // ========================================================
-type AllProductsProps = {
-  productsData: any[];
-};
+type AllProductsProps = { products: Product[]; title?: string };
 // ========================================================
 
-const AllProducts: FC<AllProductsProps> = ({ productsData }) => {
+const AllProducts: FC<AllProductsProps> = ({
+  products,
+  title = "All Products",
+}) => {
   return (
-    <CategorySectionCreator title="All Products" seeMoreLink="#">
+    <CategorySectionCreator title={title} seeMoreLink="#">
       <SubTitle>Best collection in 2021 for you!</SubTitle>
 
       <Grid container spacing={3}>
-        {productsData.map((item, ind) => (
-          <Grid key={ind} item md={4} sm={6} xs={12}>
+        {products.map((item) => (
+          <Grid key={item.id} item md={4} sm={6} xs={12}>
             <ProductCard13
               id={item.id}
+              slug={item.slug}
               title={item.title}
               price={item.price}
               off={item.discount}
               rating={item.rating}
-              imgUrl={item.imgUrl}
+              imgUrl={item.thumbnail}
             />
           </Grid>
         ))}

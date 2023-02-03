@@ -1,10 +1,10 @@
+import { FC } from "react";
 import { KeyboardArrowDown } from "@mui/icons-material";
 import { Box, Grid, List, ListItem, styled } from "@mui/material";
-import BazarCard from "components/BazarCard";
-import { FlexRowCenter } from "components/flex-box";
-import NavLink from "components/nav-link/NavLink";
 import { H6 } from "components/Typography";
-import { FC } from "react";
+import { NavLink } from "components/nav-link";
+import BazaarCard from "components/BazaarCard";
+import { FlexRowCenter } from "components/flex-box";
 
 // style components
 const Wrapper = styled(Box)(({ theme }) => ({
@@ -27,21 +27,20 @@ const MenusContainer = styled(ListItem)(({ theme }) => ({
   [theme.breakpoints.down(1070)]: { minWidth: 800 },
 }));
 
-const MenuListItem = styled(ListItem)(() => ({ padding: ".5rem 0" }));
-
-const StyledNavLink = styled(NavLink)(() => ({
-  transition: "all 0.3s",
-  ":hover": { paddingLeft: 5 },
+const MenuListItem = styled(ListItem)(({ theme }) => ({
+  padding: ".5rem 2rem",
+  ":hover": { backgroundColor: theme.palette.action.hover },
 }));
+
+const StyledNavLink = styled(NavLink)({
+  transition: "all 0.3s",
+});
 
 // ===============================================================
 type Nav = { title: string; url: string };
 type Navs = { title: string; child: Nav[] };
 
-type MegaMenuProps = {
-  menuList: Array<Navs[]>;
-  title: string;
-};
+type MegaMenuProps = { menuList: Array<Navs[]>; title: string };
 // ===============================================================
 
 const gridSize = (length: number) => {
@@ -59,11 +58,12 @@ const MegaMenu: FC<MegaMenuProps> = ({ title, menuList }) => {
   return (
     <Wrapper>
       <FlexRowCenter alignItems="flex-end" gap={0.3}>
-        {title} <KeyboardArrowDown sx={{color: 'grey.500', fontSize: '1.1rem'}} />
+        {title}{" "}
+        <KeyboardArrowDown sx={{ color: "grey.500", fontSize: "1.1rem" }} />
       </FlexRowCenter>
 
       <MenusContainer className="menu-list">
-        <BazarCard elevation={3} sx={{ mt: 1.5, overflow: "hidden" }}>
+        <BazaarCard elevation={3} sx={{ mt: 1.5, overflow: "hidden" }}>
           <Grid container>
             {menuList.slice(0, 4).map((category, key) => (
               <Grid
@@ -71,7 +71,6 @@ const MegaMenu: FC<MegaMenuProps> = ({ title, menuList }) => {
                 md={grid}
                 key={key}
                 sx={{
-                  px: 4,
                   py: 2,
                   ":nth-of-type(odd)": { backgroundColor: "grey.100" },
                 }}
@@ -79,13 +78,15 @@ const MegaMenu: FC<MegaMenuProps> = ({ title, menuList }) => {
                 {category.map((item) => {
                   return (
                     <List key={item.title}>
-                      <H6 mb={0.5}>{item.title}</H6>
+                      <H6 mb={0.5} pl={4}>
+                        {item.title}
+                      </H6>
 
                       {item.child.map((sub) => {
                         return (
-                          <MenuListItem key={sub.title}>
-                            <StyledNavLink href={sub.url}>{sub.title}</StyledNavLink>
-                          </MenuListItem>
+                          <StyledNavLink href={sub.url} key={sub.title}>
+                            <MenuListItem>{sub.title}</MenuListItem>
+                          </StyledNavLink>
                         );
                       })}
                     </List>
@@ -94,7 +95,7 @@ const MegaMenu: FC<MegaMenuProps> = ({ title, menuList }) => {
               </Grid>
             ))}
           </Grid>
-        </BazarCard>
+        </BazaarCard>
       </MenusContainer>
     </Wrapper>
   );

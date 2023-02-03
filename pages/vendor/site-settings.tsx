@@ -1,19 +1,20 @@
+import { ReactElement, useState } from "react";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Box, Card, styled, Tab } from "@mui/material";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
-import BannerSlider from "pages-sections/site-settings/BannerSlider";
+import TopbarForm from "pages-sections/site-settings/TopbarForm";
 import FooterForm from "pages-sections/site-settings/FooterForm";
 import GeneralForm from "pages-sections/site-settings/GeneralForm";
+import BannerSlider from "pages-sections/site-settings/BannerSlider";
 import ShippingVatForm from "pages-sections/site-settings/ShippingVatForm";
 import SocialLinksForm from "pages-sections/site-settings/SocialLinksForm";
-import TopbarForm from "pages-sections/site-settings/TopbarForm";
-import React, { ReactElement, useState } from "react";
 
-const StyledTabPanel = styled(TabPanel)(() => ({
+// styled components
+const StyledTabPanel = styled(TabPanel)({
   paddingLeft: 0,
   paddingRight: 0,
   paddingBottom: 0,
-}));
+});
 
 const StyledTabList = styled(TabList)(({ theme }) => ({
   "& .MuiTab-root.Mui-selected": { color: theme.palette.info.main },

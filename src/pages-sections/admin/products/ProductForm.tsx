@@ -1,9 +1,12 @@
+import { FC, useState } from "react";
 import { Button, Card, Grid, MenuItem, TextField } from "@mui/material";
-import DropZone from "components/DropZone";
-import { Formik } from "formik";
-import React, { FC } from "react";
 import * as yup from "yup";
+import { Formik } from "formik";
 import { Assign, ObjectShape } from "yup/lib/object";
+import DropZone from "components/DropZone";
+import { FlexBox } from "components/flex-box";
+import BazaarImage from "components/BazaarImage";
+import { UploadImageBox, StyledClear } from "../StyledComponents";
 
 // ================================================================
 type ProductFormProps = {
@@ -11,10 +14,26 @@ type ProductFormProps = {
   handleFormSubmit: (values: any) => void;
   validationSchema: yup.ObjectSchema<Assign<ObjectShape, any>>;
 };
+
 // ================================================================
 
 const ProductForm: FC<ProductFormProps> = (props) => {
   const { initialValues, validationSchema, handleFormSubmit } = props;
+
+  const [files, setFiles] = useState([]);
+
+  // HANDLE UPDATE NEW IMAGE VIA DROP ZONE
+  const handleChangeDropZone = (files: File[]) => {
+    files.forEach((file) =>
+      Object.assign(file, { preview: URL.createObjectURL(file) })
+    );
+    setFiles(files);
+  };
+
+  // HANDLE DELETE UPLOAD IMAGE
+  const handleFileDelete = (file: File) => () => {
+    setFiles((files) => files.filter((item) => item.name !== file.name));
+  };
 
   return (
     <Card sx={{ p: 6 }}>
@@ -45,7 +64,7 @@ const ProductForm: FC<ProductFormProps> = (props) => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={!!touched.name && !!errors.name}
-                  helperText={touched.name && errors.name}
+                  helperText={(touched.name && errors.name) as string}
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
@@ -60,8 +79,9 @@ const ProductForm: FC<ProductFormProps> = (props) => {
                   onChange={handleChange}
                   value={values.category}
                   label="Select Category"
+                  SelectProps={{ multiple: true }}
                   error={!!touched.category && !!errors.category}
-                  helperText={touched.category && errors.category}
+                  helperText={(touched.category && errors.category) as string}
                 >
                   <MenuItem value="electronics">Electronics</MenuItem>
                   <MenuItem value="fashion">Fashion</MenuItem>
@@ -69,7 +89,18 @@ const ProductForm: FC<ProductFormProps> = (props) => {
               </Grid>
 
               <Grid item xs={12}>
-                <DropZone onChange={(files) => console.log(files)} />
+                <DropZone onChange={(files) => handleChangeDropZone(files)} />
+
+                <FlexBox flexDirection="row" mt={2} flexWrap="wrap" gap={1}>
+                  {files.map((file, index) => {
+                    return (
+                      <UploadImageBox key={index}>
+                        <BazaarImage src={file.preview} width="100%" />
+                        <StyledClear onClick={handleFileDelete(file)} />
+                      </UploadImageBox>
+                    );
+                  })}
+                </FlexBox>
               </Grid>
 
               <Grid item xs={12}>
@@ -86,7 +117,9 @@ const ProductForm: FC<ProductFormProps> = (props) => {
                   placeholder="Description"
                   value={values.description}
                   error={!!touched.description && !!errors.description}
-                  helperText={touched.description && errors.description}
+                  helperText={
+                    (touched.description && errors.description) as string
+                  }
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
@@ -101,7 +134,7 @@ const ProductForm: FC<ProductFormProps> = (props) => {
                   value={values.stock}
                   onChange={handleChange}
                   error={!!touched.stock && !!errors.stock}
-                  helperText={touched.stock && errors.stock}
+                  helperText={(touched.stock && errors.stock) as string}
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
@@ -116,7 +149,7 @@ const ProductForm: FC<ProductFormProps> = (props) => {
                   value={values.tags}
                   onChange={handleChange}
                   error={!!touched.tags && !!errors.tags}
-                  helperText={touched.tags && errors.tags}
+                  helperText={(touched.tags && errors.tags) as string}
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
@@ -132,7 +165,7 @@ const ProductForm: FC<ProductFormProps> = (props) => {
                   onChange={handleChange}
                   placeholder="Regular Price"
                   error={!!touched.price && !!errors.price}
-                  helperText={touched.price && errors.price}
+                  helperText={(touched.price && errors.price) as string}
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
@@ -148,7 +181,9 @@ const ProductForm: FC<ProductFormProps> = (props) => {
                   placeholder="Sale Price"
                   value={values.sale_price}
                   error={!!touched.sale_price && !!errors.sale_price}
-                  helperText={touched.sale_price && errors.sale_price}
+                  helperText={
+                    (touched.sale_price && errors.sale_price) as string
+                  }
                 />
               </Grid>
 

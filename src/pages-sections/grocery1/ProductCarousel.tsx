@@ -1,10 +1,11 @@
-import { Box, styled, useTheme } from "@mui/material";
-import Carousel from "components/carousel/Carousel";
-import CategorySectionCreator from "components/CategorySectionCreator";
-import ProductCard13 from "components/product-cards/ProductCard13";
-import { Paragraph } from "components/Typography";
-import useWindowSize from "hooks/useWindowSize";
 import { FC, useEffect, useState } from "react";
+import { Box, styled, useTheme } from "@mui/material";
+import useWindowSize from "hooks/useWindowSize";
+import { Paragraph } from "components/Typography";
+import Carousel from "components/carousel/Carousel";
+import ProductCard13 from "components/product-cards/ProductCard13";
+import CategorySectionCreator from "components/CategorySectionCreator";
+import Product from "models/Product.model";
 
 const SubTitle = styled(Paragraph)(({ theme }) => ({
   fontSize: 12,
@@ -14,10 +15,7 @@ const SubTitle = styled(Paragraph)(({ theme }) => ({
 }));
 
 // =================================================================
-type ProductCarouselProps = {
-  title: string;
-  products: any[];
-};
+type ProductCarouselProps = { title: string; products: Product[] };
 // =================================================================
 
 const ProductCarousel: FC<ProductCarouselProps> = ({ products, title }) => {
@@ -50,15 +48,16 @@ const ProductCarousel: FC<ProductCarouselProps> = ({ products, title }) => {
           },
         }}
       >
-        {products.map((item, ind) => (
-          <Box pb={2} key={ind}>
+        {products.map((item) => (
+          <Box pb={2} key={item.id}>
             <ProductCard13
               id={item.id}
+              slug={item.slug}
               title={item.title}
               price={item.price}
               off={item.discount}
               rating={item.rating}
-              imgUrl={item.imgUrl}
+              imgUrl={item.thumbnail}
             />
           </Box>
         ))}

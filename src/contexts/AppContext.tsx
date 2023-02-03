@@ -1,64 +1,71 @@
-import React, { createContext, useContext, useMemo, useReducer } from "react";
+import {
+  createContext,
+  FC,
+  ReactNode,
+  useContext,
+  useMemo,
+  useReducer,
+} from "react";
 
 // =================================================================================
-type initialState = {
-  isHeaderFixed: boolean;
-  cart: CartItem[];
-};
+type InitialState = { cart: CartItem[] };
 
 export type CartItem = {
   qty: number;
   name: string;
+  slug: string;
   price: number;
   imgUrl?: string;
   id: string | number;
 };
 
-type layoutActionType = { type: "TOGGLE_HEADER"; payload: boolean };
-type cartActionType = { type: "CHANGE_CART_AMOUNT"; payload: CartItem };
-type ActionType = layoutActionType | cartActionType;
+type CartActionType = { type: "CHANGE_CART_AMOUNT"; payload: CartItem };
+type ActionType = CartActionType;
 
 // =================================================================================
 
-const initialState = {
-  isHeaderFixed: false,
-  cart: [
-    {
-      price: 250,
-      name: "Ford 2019",
-      imgUrl: "/assets/images/products/Automotive/1.Ford2019.png",
-      id: "7222243834583537",
-      qty: 1,
-    },
-    {
-      price: 250,
-      name: "Porsche 2020",
-      imgUrl: "/assets/images/products/Automotive/28.Porsche2020.png",
-      id: "38553442244076086",
-      qty: 1,
-    },
-    {
-      price: 250,
-      name: "Heavy 20kt Gold Necklace",
-      imgUrl:
-        "/assets/images/products/Fashion/Jewellery/9.Heavy20ktGoldNecklace.png",
-      id: "9573201630529315",
-      qty: 1,
-    },
-  ],
-};
+const INITIAL_CART = [
+  {
+    qty: 1,
+    price: 210,
+    slug: "silver-high-neck-sweater",
+    name: "Silver High Neck Sweater",
+    id: "6e8f151b-277b-4465-97b6-547f6a72e5c9",
+    imgUrl:
+      "/assets/images/products/Fashion/Clothes/1.SilverHighNeckSweater.png",
+  },
+  {
+    qty: 1,
+    price: 110,
+    slug: "yellow-casual-sweater",
+    name: "Yellow Casual Sweater",
+    id: "76d14d65-21d0-4b41-8ee1-eef4c2232793",
+    imgUrl:
+      "/assets/images/products/Fashion/Clothes/21.YellowCasualSweater.png",
+  },
+  {
+    qty: 1,
+    price: 140,
+    slug: "denim-blue-jeans",
+    name: "Denim Blue Jeans",
+    id: "0fffb188-98d8-47f7-8189-254f06cad488",
+    imgUrl: "/assets/images/products/Fashion/Clothes/4.DenimBlueJeans.png",
+  },
+];
+
+const INITIAL_STATE = { cart: INITIAL_CART };
 
 interface ContextProps {
-  state: initialState;
+  state: InitialState;
   dispatch: (args: ActionType) => void;
 }
 
 const AppContext = createContext<ContextProps>({
-  state: initialState,
+  state: INITIAL_STATE,
   dispatch: () => {},
 });
 
-const reducer = (state: initialState, action: ActionType) => {
+const reducer = (state: InitialState, action: ActionType) => {
   switch (action.type) {
     case "CHANGE_CART_AMOUNT":
       let cartList = state.cart;
@@ -70,6 +77,7 @@ const reducer = (state: initialState, action: ActionType) => {
         return { ...state, cart: filteredCart };
       }
 
+      // IF PRODUCT ALREADY EXITS IN CART
       if (exist) {
         const newCart = cartList.map((item) =>
           item.id === cartItem.id ? { ...item, qty: cartItem.qty } : item
@@ -80,17 +88,18 @@ const reducer = (state: initialState, action: ActionType) => {
 
       return { ...state, cart: [...cartList, cartItem] };
 
-    case "TOGGLE_HEADER":
-      return { ...state, isHeaderFixed: action.payload };
-
     default: {
       return state;
     }
   }
 };
 
-export const AppProvider: React.FC = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+// =======================================================
+type AppProviderProps = { children: ReactNode };
+// =======================================================
+
+export const AppProvider: FC<AppProviderProps> = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
   const contextValue = useMemo(() => ({ state, dispatch }), [state, dispatch]);
 

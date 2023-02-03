@@ -1,16 +1,17 @@
+import { FC } from "react";
 import { Divider } from "@mui/material";
 import Card1 from "components/Card1";
 import { FlexBetween } from "components/flex-box";
 import { Paragraph } from "components/Typography";
-import React from "react";
+import { currency } from "lib";
 
-const PaymentSummary = () => {
+const PaymentSummary: FC = () => {
   return (
     <Card1>
       <FlexBetween mb={1}>
         <Paragraph color="grey.600">Subtotal:</Paragraph>
         <Paragraph fontSize={18} fontWeight={600} lineHeight={1}>
-          $2610
+          {currency(2610)}
         </Paragraph>
       </FlexBetween>
 
@@ -24,7 +25,7 @@ const PaymentSummary = () => {
       <FlexBetween mb={1}>
         <Paragraph color="grey.600">Tax:</Paragraph>
         <Paragraph fontSize={18} fontWeight={600} lineHeight={1}>
-          $40
+          {currency(40)}
         </Paragraph>
       </FlexBetween>
 
@@ -43,7 +44,7 @@ const PaymentSummary = () => {
         lineHeight={1}
         textAlign="right"
       >
-        $2610.00
+        {currency(2650)}
       </Paragraph>
     </Card1>
   );

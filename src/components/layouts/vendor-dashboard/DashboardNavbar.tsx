@@ -1,15 +1,15 @@
+import { FC } from "react";
+import { useRouter } from "next/router";
 import { Search } from "@mui/icons-material";
 import { Box, Button, styled, Theme, useMediaQuery } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
 import InputBase from "@mui/material/InputBase";
-import Toolbar from "@mui/material/Toolbar";
-import { FlexBox, FlexRowCenter } from "components/flex-box";
 import Globe from "components/icons/Globe";
 import Toggle from "components/icons/Toggle";
-import { useRouter } from "next/router";
-import { FC } from "react";
 import AccountPopover from "./popovers/AccountPopover";
+import { FlexBox, FlexRowCenter } from "components/flex-box";
 import NotificationsPopover from "./popovers/NoficationPopover";
 
 // custom styled components
@@ -22,13 +22,13 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   color: theme.palette.text.primary,
 }));
 
-const StyledToolBar = styled(Toolbar)(() => ({
+const StyledToolBar = styled(Toolbar)({
   "@media (min-width: 0px)": {
     paddingLeft: 0,
     paddingRight: 0,
     minHeight: "auto",
   },
-}));
+});
 
 const ToggleWrapper = styled(FlexRowCenter)(({ theme }) => ({
   width: 40,

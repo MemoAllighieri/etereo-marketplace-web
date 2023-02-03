@@ -1,3 +1,4 @@
+import React, { FC, Fragment, useState } from "react";
 import {
   Button,
   Dialog,
@@ -7,7 +8,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
-import React, { FC, Fragment, useState } from "react";
 import * as yup from "yup";
 
 const checkoutSchema = yup.object({
@@ -23,7 +23,7 @@ const checkoutSchema = yup.object({
 
 const initialValues: { [k: string]: any } = {
   name: "UI Lib",
-  street1: "321, Subid Bazar",
+  street1: "321, Subid Bazaar",
   street2: "",
   phone: "01789123456",
   city: "Sylhet",
@@ -83,7 +83,7 @@ const NewAddressForm: FC<NewAddressFormProps> = ({ setNewAddress }) => {
                   value={values.name}
                   label="Enter Your Name"
                   onChange={handleChange}
-                  helperText={touched.name && errors.name}
+                  helperText={(touched.name && errors.name) as string}
                   error={touched.name && Boolean(errors.name)}
                 />
               </Grid>
@@ -95,7 +95,7 @@ const NewAddressForm: FC<NewAddressFormProps> = ({ setNewAddress }) => {
                   label="Street line 1"
                   value={values.street1}
                   onChange={handleChange}
-                  helperText={touched.street1 && errors.street1}
+                  helperText={(touched.street1 && errors.street1) as string}
                   error={touched.street1 && Boolean(errors.street1)}
                 />
               </Grid>
@@ -108,7 +108,7 @@ const NewAddressForm: FC<NewAddressFormProps> = ({ setNewAddress }) => {
                   label="Address line 2"
                   value={values.street2}
                   onChange={handleChange}
-                  helperText={touched.street2 && errors.street2}
+                  helperText={(touched.street2 && errors.street2) as string}
                   error={touched.street2 && Boolean(errors.street2)}
                 />
               </Grid>
@@ -122,7 +122,7 @@ const NewAddressForm: FC<NewAddressFormProps> = ({ setNewAddress }) => {
                   onChange={handleChange}
                   label="Enter Your Phone"
                   error={touched.phone && Boolean(errors.phone)}
-                  helperText={touched.phone && errors.phone}
+                  helperText={(touched.phone && errors.phone) as string}
                 />
               </Grid>
 
@@ -133,7 +133,7 @@ const NewAddressForm: FC<NewAddressFormProps> = ({ setNewAddress }) => {
                   label="City"
                   value={values.city}
                   onChange={handleChange}
-                  helperText={touched.city && errors.city}
+                  helperText={(touched.city && errors.city) as string}
                   error={touched.city && Boolean(errors.city)}
                 />
               </Grid>
@@ -145,7 +145,7 @@ const NewAddressForm: FC<NewAddressFormProps> = ({ setNewAddress }) => {
                   label="State"
                   value={values.state}
                   onChange={handleChange}
-                  helperText={touched.state && errors.state}
+                  helperText={(touched.state && errors.state) as string}
                   error={touched.state && Boolean(errors.state)}
                 />
               </Grid>
@@ -158,7 +158,7 @@ const NewAddressForm: FC<NewAddressFormProps> = ({ setNewAddress }) => {
                   type="number"
                   value={values.zip}
                   onChange={handleChange}
-                  helperText={touched.zip && errors.zip}
+                  helperText={(touched.zip && errors.zip) as string}
                   error={touched.zip && Boolean(errors.zip)}
                 />
               </Grid>
@@ -170,7 +170,7 @@ const NewAddressForm: FC<NewAddressFormProps> = ({ setNewAddress }) => {
                   label="Country"
                   value={values.country}
                   onChange={handleChange}
-                  helperText={touched.country && errors.country}
+                  helperText={(touched.country && errors.country) as string}
                   error={touched.country && Boolean(errors.country)}
                 />
               </Grid>

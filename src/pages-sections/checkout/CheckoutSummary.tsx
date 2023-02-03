@@ -1,48 +1,38 @@
+import { FC } from "react";
 import { Button, Divider, TextField, Typography } from "@mui/material";
 import Card1 from "components/Card1";
-import { FlexBetween, FlexBox } from "components/flex-box";
-import React, { FC } from "react";
+import { FlexBetween } from "components/flex-box";
+import { currency } from "lib";
 
 const CheckoutSummary: FC = () => {
   return (
     <Card1>
       <FlexBetween mb={1}>
         <Typography color="grey.600">Subtotal:</Typography>
-        <FlexBox alignItems="flex-end">
-          <Typography fontSize="18px" fontWeight="600" lineHeight="1">
-            $2610.
-          </Typography>
-          <Typography fontWeight="600" fontSize="14px" lineHeight="1">
-            00
-          </Typography>
-        </FlexBox>
+        <Typography fontSize="18px" fontWeight="600" lineHeight="1">
+          {currency(2610)}
+        </Typography>
       </FlexBetween>
+
       <FlexBetween mb={1}>
         <Typography color="grey.600">Shipping:</Typography>
-        <FlexBox alignItems="flex-end">
-          <Typography fontSize="18px" fontWeight="600" lineHeight="1">
-            -
-          </Typography>
-        </FlexBox>
+        <Typography fontSize="18px" fontWeight="600" lineHeight="1">
+          {currency(0)}
+        </Typography>
       </FlexBetween>
+
       <FlexBetween mb={1}>
         <Typography color="grey.600">Tax:</Typography>
-        <FlexBox alignItems="flex-end">
-          <Typography fontSize="18px" fontWeight="600" lineHeight="1">
-            $40.
-          </Typography>
-          <Typography fontWeight="600" fontSize="14px" lineHeight="1">
-            00
-          </Typography>
-        </FlexBox>
+        <Typography fontSize="18px" fontWeight="600" lineHeight="1">
+          {currency(40)}
+        </Typography>
       </FlexBetween>
+
       <FlexBetween mb={2}>
         <Typography color="grey.600">Discount:</Typography>
-        <FlexBox alignItems="flex-end">
-          <Typography fontSize="18px" fontWeight="600" lineHeight="1">
-            -
-          </Typography>
-        </FlexBox>
+        <Typography fontSize="18px" fontWeight="600" lineHeight="1">
+          {currency(0)}
+        </Typography>
       </FlexBetween>
 
       <Divider sx={{ mb: "1rem" }} />
@@ -54,7 +44,7 @@ const CheckoutSummary: FC = () => {
         textAlign="right"
         mb={3}
       >
-        $2610.00
+        {currency(2610)}
       </Typography>
 
       <TextField

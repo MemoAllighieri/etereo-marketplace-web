@@ -1,40 +1,37 @@
-import HoverBox from "components/HoverBox";
-import LazyImage from "components/LazyImage";
-import { H4 } from "components/Typography";
+import { FC } from "react";
 import Link from "next/link";
-import React from "react";
+import HoverBox from "components/HoverBox";
+import { H4 } from "components/Typography";
+import LazyImage from "components/LazyImage";
+import Product from "models/Product.model";
+import { currency } from "lib";
 
 // ==========================================================
-type ProductCard2Props = {
-  id: number;
-  price: number;
-  title: string;
-  imgUrl: string;
-  rating: number;
-  discount: number;
-};
+type ProductCardProps = Partial<Product>;
 // ==========================================================
 
-const ProductCard2: React.FC<ProductCard2Props> = (props) => {
-  const { imgUrl, title, price, id } = props;
+const ProductCard2: FC<ProductCardProps> = (props) => {
+  const { thumbnail, title, price, slug } = props;
 
   return (
-    <Link href={`/product/${id}`}>
+    <Link href={`/product/${slug}`}>
       <a>
         <HoverBox borderRadius="8px" mb={1}>
           <LazyImage
-            src={imgUrl}
             width={0}
             height={0}
-            layout="responsive"
             alt={title}
+            src={thumbnail}
+            layout="responsive"
           />
         </HoverBox>
+
         <H4 fontSize={14} mb={0.5}>
           {title}
         </H4>
+
         <H4 fontSize={14} color="primary.main">
-          ${Math.ceil(price).toLocaleString()}
+          {currency(price)}
         </H4>
       </a>
     </Link>

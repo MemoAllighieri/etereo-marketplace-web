@@ -1,20 +1,32 @@
-/* eslint-disable react/display-name */
+import React from "react";
 import { CacheProvider } from "@emotion/react";
 import createEmotionServer from "@emotion/server/create-instance";
-import Document, { Head, Html, Main, NextScript } from "next/document";
-import React from "react";
+import Document, {
+  DocumentProps,
+  Head,
+  Html,
+  Main,
+  NextScript,
+} from "next/document";
 import createEmotionCache from "../src/createEmotionCache";
+import i18nextConfig from "../next-i18next.config";
 
-export default class Bazar extends Document {
+export default class Bazaar extends Document<DocumentProps> {
   render() {
+    const currentLocale =
+      this.props.__NEXT_DATA__.locale ?? i18nextConfig.i18n.defaultLocale;
+
     return (
-      <Html lang="en">
+      <Html lang={currentLocale}>
         <Head>
           <link
-            href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;900&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;900&display=swap"
             rel="stylesheet"
           />
-          <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          />
         </Head>
 
         <body>
@@ -28,7 +40,7 @@ export default class Bazar extends Document {
 
 // `getInitialProps` belongs to `_document` (instead of `_app`),
 // it's compatible with static-site generation (SSG).
-Bazar.getInitialProps = async (ctx) => {
+Bazaar.getInitialProps = async (ctx) => {
   // Resolution order
   //
   // On the server:
@@ -59,7 +71,7 @@ Bazar.getInitialProps = async (ctx) => {
 
   ctx.renderPage = () =>
     originalRenderPage({
-      enhanceApp: (App) => (props) =>
+      enhanceApp: (App: any) => (props) =>
         (
           <CacheProvider value={cache}>
             <App {...props} />
@@ -83,6 +95,9 @@ Bazar.getInitialProps = async (ctx) => {
   return {
     ...initialProps,
     // Styles fragment is rendered after the app and page rendering finish.
-    styles: [...React.Children.toArray(initialProps.styles), ...emotionStyleTags],
+    styles: [
+      ...React.Children.toArray(initialProps.styles),
+      ...emotionStyleTags,
+    ],
   };
 };

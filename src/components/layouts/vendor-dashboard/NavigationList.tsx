@@ -2,11 +2,7 @@ import duotone from "components/icons/duotone";
 
 export const navigations = [
   { type: "label", label: "Admin" },
-  {
-    name: "Dashboard",
-    icon: duotone.Dashboard,
-    path: "/vendor/dashboard",
-  },
+  { name: "Dashboard", icon: duotone.Dashboard, path: "/vendor/dashboard" },
 
   {
     name: "Products",
@@ -14,9 +10,25 @@ export const navigations = [
     children: [
       { name: "Product List", path: "/admin/products" },
       { name: "Create Product", path: "/admin/products/create" },
-      { name: "Category", path: "/admin/categories" },
-      { name: "Brand", path: "/admin/brands" },
       { name: "Review", path: "/admin/product-reviews" },
+    ],
+  },
+
+  {
+    name: "Categories",
+    icon: duotone.Accounts,
+    children: [
+      { name: "Category List", path: "/admin/categories" },
+      { name: "Create Category", path: "/admin/categories/create" },
+    ],
+  },
+
+  {
+    name: "Brands",
+    icon: duotone.Apps,
+    children: [
+      { name: "Brand List", path: "/admin/brands" },
+      { name: "Create Brand", path: "/admin/brands/create" },
     ],
   },
 
@@ -25,15 +37,14 @@ export const navigations = [
     icon: duotone.Order,
     children: [
       { name: "Order List", path: "/admin/orders" },
-      { name: "Order Details", path: "/admin/orders/1" },
+      {
+        name: "Order Details",
+        path: "/admin/orders/f0ba538b-c8f3-45ce-b6c1-209cf07ba5f8",
+      },
     ],
   },
 
-  {
-    name: "Customers",
-    icon: duotone.Customers,
-    path: "/admin/customers",
-  },
+  { name: "Customers", icon: duotone.Customers, path: "/admin/customers" },
 
   {
     name: "Refunds",
@@ -74,40 +85,26 @@ export const navigations = [
     icon: duotone.Refund,
     path: "/vendor/refund-request",
   },
-
-  {
-    name: "Reviews",
-    icon: duotone.Review,
-    path: "/vendor/reviews",
-  },
-
+  { name: "Reviews", icon: duotone.Review, path: "/vendor/reviews" },
   {
     name: "Shop Setting",
     icon: duotone.SiteSetting,
     path: "/vendor/shop-settings",
   },
-
   {
     name: "Support Tickets",
     icon: duotone.ElementHub,
     path: "/vendor/support-tickets",
   },
-
   {
     name: "Account Setting",
     icon: duotone.AccountSetting,
     path: "/vendor/account-setting",
   },
-
   {
     name: "Site Setting",
     icon: duotone.SiteSetting,
     path: "/vendor/site-settings",
   },
-
-  {
-    name: "Logout",
-    icon: duotone.Session,
-    path: "/vendor/dashboard-version-2",
-  },
+  { name: "Logout", icon: duotone.Session, path: "/" },
 ];

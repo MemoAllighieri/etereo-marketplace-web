@@ -1,7 +1,7 @@
+import { FC } from "react";
 import { Button, Card } from "@mui/material";
-import { FlexBetween } from "components/flex-box";
 import { H5 } from "components/Typography";
-import React, { FC } from "react";
+import { FlexBetween } from "components/flex-box";
 import DataListTable from "./table";
 
 // table column list

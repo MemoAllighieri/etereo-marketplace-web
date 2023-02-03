@@ -1,27 +1,27 @@
+import { FC } from "react";
 import { Delete, Edit } from "@mui/icons-material";
 import { Avatar } from "@mui/material";
 import { FlexBox } from "components/flex-box";
 import { Paragraph } from "components/Typography";
-import currency from "currency.js";
-import React, { FC } from "react";
 import {
   StyledIconButton,
   StyledTableCell,
   StyledTableRow,
 } from "./StyledComponents";
+import { currency } from "lib";
 
 // ========================================================================
 type CustomerRowProps = { customer: any };
 // ========================================================================
 
 const CustomerRow: FC<CustomerRowProps> = ({ customer }) => {
-  const { email, name, phone, image, balance, orders } = customer;
+  const { email, name, phone, avatar, balance, orders } = customer;
 
   return (
     <StyledTableRow tabIndex={-1} role="checkbox">
       <StyledTableCell align="left">
         <FlexBox alignItems="center" gap={1.5}>
-          <Avatar src={image} sx={{}} />
+          <Avatar src={avatar} />
           <Paragraph>{name}</Paragraph>
         </FlexBox>
       </StyledTableCell>
@@ -35,7 +35,7 @@ const CustomerRow: FC<CustomerRowProps> = ({ customer }) => {
       </StyledTableCell>
 
       <StyledTableCell align="left" sx={{ fontWeight: 400 }}>
-        {currency(balance, { separator: "," }).format()}
+        {currency(balance)}
       </StyledTableCell>
 
       <StyledTableCell align="left" sx={{ fontWeight: 400 }}>

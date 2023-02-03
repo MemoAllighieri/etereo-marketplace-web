@@ -1,77 +1,138 @@
+import { GetStaticProps, NextPage } from "next";
+import { Fragment, useCallback, useEffect, useState } from "react";
+import axios from "axios";
 import { Stack } from "@mui/material";
-import ShopLayout2 from "components/layouts/ShopLayout2";
-import MobileNavigationBar2 from "components/mobile-navigation/MobileNavigationBar2";
-import SideNavbar from "components/page-sidenav/SideNavbar";
+import SEO from "components/SEO";
 import Setting from "components/Setting";
-import SidenavContainer from "components/sidenav-container/SidenavContainer";
+import { Footer2 } from "components/footer";
+import Newsletter from "components/Newsletter";
+import ShopLayout2 from "components/layouts/ShopLayout2";
+import SidenavContainer from "components/SidenavContainer";
+import SideNavbar from "components/page-sidenav/SideNavbar";
+import Section1 from "pages-sections/grocery1/Section1";
+import Section2 from "pages-sections/grocery1/Section2";
 import AllProducts from "pages-sections/grocery1/AllProducts";
 import DiscountSection from "pages-sections/grocery1/DiscountSection";
-import GrocerySection1 from "pages-sections/grocery1/GrocerySection1";
 import ProductCarousel from "pages-sections/grocery1/ProductCarousel";
-import ServiceSection2 from "pages-sections/grocery1/ServiceSection2";
-import GroceryFooter from "pages-sections/grocery2/GroceryFooter";
-import { FC } from "react";
-import api from "utils/api/grocery1-shop";
+import { MobileNavigationBar2 } from "components/mobile-navigation";
+import Product from "models/Product.model";
+import Service from "models/Service.model";
+import CategoryNavList from "models/CategoryNavList.model";
+import api from "utils/__api__/grocery1-shop";
 
-interface Props {
-  grocery1NavList: any[];
-  popularProducts: any[];
-  grocery1Services: any[];
-  trendingProducts: any[];
-  grocery1ProductsList: any[];
-}
-const Grocery1: FC<Props> = (props) => {
-  const {
-    grocery1NavList,
-    popularProducts,
-    trendingProducts,
-    grocery1Services,
-    grocery1ProductsList,
-  } = props;
+// =====================================================
+type Grocery1Props = {
+  products: Product[];
+  serviceList: Service[];
+  popularProducts: Product[];
+  trendingProducts: Product[];
+  grocery1NavList: CategoryNavList[];
+};
+// =====================================================
+
+const Grocery1: NextPage<Grocery1Props> = (props) => {
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [filterProducts, setFilterProducts] = useState<Product[]>([]);
+
+  // FETCH PRODUCTS BASED ON THE SELECTED CATEGORY
+  useEffect(() => {
+    axios
+      .get("/api/grocery-1/category-based-products", {
+        params: { category: selectedCategory },
+      })
+      .then(({ data }) => setFilterProducts(data));
+  }, [selectedCategory]);
+
+  // HANDLE CHANGE CATEGORY
+  const handleSelectCategory = (category: string) =>
+    setSelectedCategory(category);
+
+  // SIDE NAVBAR COMPONENT
+  const SideNav = useCallback(
+    () => (
+      <SideNavbar
+        navList={props.grocery1NavList}
+        handleSelect={handleSelectCategory}
+      />
+    ),
+    [props.grocery1NavList]
+  );
 
   return (
-    <ShopLayout2 showNavbar={false}>
-      <GrocerySection1 />
-      <ServiceSection2 id="grocery1Services" services={grocery1Services} />
+    <ShopLayout2 showNavbar={false} showTopbar={false}>
+      <SEO title="Grocery store template v1" />
+      {/* TOP HERO AREA */}
+      <Section1 />
 
+      {/* SERVICE AREA */}
+      <Section2 id="grocery1Services" services={props.serviceList} />
+
+      {/* SIDEBAR WITH OTHER CONTENTS */}
       <SidenavContainer
         navFixedComponentID="grocery1Services"
-        SideNav={() => <SideNavbar navList={grocery1NavList} />}
+        SideNav={SideNav}
       >
         <Stack spacing={6} mt={2}>
-          <ProductCarousel products={popularProducts} title="Popular Products" />
-          <ProductCarousel products={trendingProducts} title="Trending Products" />
-          <AllProducts productsData={grocery1ProductsList} />
+          {selectedCategory ? (
+            // FILTERED PRODUCT LIST
+            <AllProducts products={filterProducts} title={selectedCategory} />
+          ) : (
+            <Fragment>
+              {/* POPULAR PRODUCTS AREA */}
+              <ProductCarousel
+                title="Popular Products"
+                products={props.popularProducts}
+              />
+
+              {/* TRENDING PRODUCTS AREA */}
+              <ProductCarousel
+                title="Trending Products"
+                products={props.trendingProducts}
+              />
+
+              {/* ALL PRODUCTS AREA */}
+              <AllProducts products={props.products} />
+            </Fragment>
+          )}
+
+          {/* DISCOUNT BANNER AREA */}
           <DiscountSection />
-          <GroceryFooter />
+
+          {/* FOOTER AREA */}
+          <Footer2 />
         </Stack>
       </SidenavContainer>
 
+      {/* POPUP NEWSLETTER FORM */}
+      <Newsletter image="/assets/images/newsletter/bg-2.png" />
+
+      {/* SETTINGS IS USED ONLY FOR DEMO, YOU CAN REMOVE THIS */}
       <Setting />
 
+      {/* MOBILE NAVIGATION WITH SIDE NAVABAR */}
       <MobileNavigationBar2>
-        <SideNavbar navList={grocery1NavList} />
+        <SideNavbar navList={props.grocery1NavList} />
       </MobileNavigationBar2>
     </ShopLayout2>
   );
 };
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
+  const products = await api.getProducts();
+  const serviceList = await api.getServices();
   const popularProducts = await api.getPopularProducts();
-  const grocery1Services = await api.getGrocery1Services();
   const trendingProducts = await api.getTrendingProducts();
   const grocery1NavList = await api.getGrocery1Navigation();
-  const grocery1ProductsList = await api.getGrocery1Products();
 
   return {
     props: {
+      products,
+      serviceList,
       grocery1NavList,
       popularProducts,
-      grocery1Services,
       trendingProducts,
-      grocery1ProductsList,
     },
   };
-}
+};
 
 export default Grocery1;

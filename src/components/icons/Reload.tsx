@@ -1,5 +1,4 @@
 import { SvgIcon, SvgIconProps } from "@mui/material";
-import React from "react";
 
 const Reload = (props: SvgIconProps) => {
   return (

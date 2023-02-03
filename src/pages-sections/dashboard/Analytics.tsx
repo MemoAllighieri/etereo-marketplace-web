@@ -1,13 +1,22 @@
-import { KeyboardArrowDown } from "@mui/icons-material";
-import { Card, MenuItem, Select, SelectChangeEvent, styled, useTheme } from "@mui/material";
-import { FlexBetween } from "components/flex-box";
-import { H5 } from "components/Typography";
+import { FC, useState } from "react";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { KeyboardArrowDown } from "@mui/icons-material";
+import {
+  Card,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  styled,
+  useTheme,
+} from "@mui/material";
+import { H5 } from "components/Typography";
+import { FlexBetween } from "components/flex-box";
 import { analyticsChartOptions } from "./chartsOptions";
 
 // apext chart instance
-const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 
 const categories = [
   "Jan",
@@ -33,18 +42,24 @@ const StyledSelect = styled(Select)(({ theme }) => ({
   "& .MuiSelect-select": { padding: 0, paddingRight: "8px !important" },
 }));
 
-const Analytics = () => {
+const Analytics: FC = () => {
   const theme = useTheme();
   const [selectType, setSelectType] = useState("yearly");
 
   const series = [
     {
       name: "Sales",
-      data: [15000, 45000, 12000, 50000, 75000, 13000, 30000, 99000, 75000, 90000, 55000, 15000],
+      data: [
+        15000, 45000, 12000, 50000, 75000, 13000, 30000, 99000, 75000, 90000,
+        55000, 15000,
+      ],
     },
     {
       name: "Expense",
-      data: [1500, 48000, 19000, 59000, 25000, 9000, 36000, 9000, 79000, 70000, 57000, 5000],
+      data: [
+        1500, 48000, 19000, 59000, 25000, 9000, 36000, 9000, 79000, 70000,
+        57000, 5000,
+      ],
     },
   ];
 
@@ -56,7 +71,9 @@ const Analytics = () => {
         <StyledSelect
           value={selectType}
           IconComponent={() => <KeyboardArrowDown />}
-          onChange={(e: SelectChangeEvent<string>) => setSelectType(e.target.value)}
+          onChange={(e: SelectChangeEvent<string>) =>
+            setSelectType(e.target.value)
+          }
         >
           <MenuItem value="yearly">Yearly</MenuItem>
           <MenuItem value="monthly">Monthly</MenuItem>

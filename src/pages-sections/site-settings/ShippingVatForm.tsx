@@ -1,15 +1,10 @@
+import { FC } from "react";
+import { Formik } from "formik";
 import { Button, Grid, TextField } from "@mui/material";
 import { H4 } from "components/Typography";
-import { Formik } from "formik";
-import React, { FC, useState } from "react";
 
 const ShippingVatForm: FC = () => {
-  const [loadingButton, setLoadingButton] = useState(false);
-
-  const initialValues = {
-    vat: 2,
-    shipping: 10,
-  };
+  const initialValues = { vat: 2, shipping: 10 };
 
   const handleFormSubmit = async (values) => {
     console.log(values);
@@ -43,7 +38,7 @@ const ShippingVatForm: FC = () => {
                 onChange={handleChange}
                 value={values.shipping}
                 error={!!touched.shipping && !!errors.shipping}
-                helperText={touched.shipping && errors.shipping}
+                helperText={(touched.shipping && errors.shipping) as string}
               />
             </Grid>
 
@@ -59,7 +54,7 @@ const ShippingVatForm: FC = () => {
                 onBlur={handleBlur}
                 onChange={handleChange}
                 error={!!touched.vat && !!errors.vat}
-                helperText={touched.vat && errors.vat}
+                helperText={(touched.vat && errors.vat) as string}
               />
             </Grid>
           </Grid>

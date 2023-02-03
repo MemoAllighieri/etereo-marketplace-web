@@ -1,13 +1,14 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+import Link from "next/link";
+import { CSSProperties, FC, Fragment } from "react";
+import { Box, Button, Chip, styled, useTheme, SxProps } from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
-import { Box, Button, Chip, styled, useTheme } from "@mui/material";
-import BazarRating from "components/BazarRating";
+import BazaarRating from "components/BazaarRating";
 import { FlexBox } from "components/flex-box";
 import LazyImage from "components/LazyImage";
 import { H3, Span } from "components/Typography";
 import { CartItem, useAppContext } from "contexts/AppContext";
-import Link from "next/link";
-import { CSSProperties, FC, Fragment, useCallback } from "react";
+import { useSnackbar } from "notistack";
+import { calculateDiscount, currency } from "lib";
 
 // styled components
 const StyledCard = styled(Box)(({ theme }) => ({
@@ -32,14 +33,14 @@ const ImgBox = styled(Box)(({ theme }) => ({
   background: theme.palette.primary[50],
 }));
 
-const ContentWrapper = styled(Box)(() => ({
+const ContentWrapper = styled(Box)({
   padding: "1rem",
   "& .title, & .categories": {
     overflow: "hidden",
     whiteSpace: "nowrap",
     textOverflow: "ellipsis",
   },
-}));
+});
 
 const StyledChip = styled(Chip)(({ theme }) => ({
   zIndex: 11,
@@ -80,13 +81,13 @@ const StatusChipBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-const StatusChip = styled(Span)(() => ({
+const StatusChip = styled(Span)({
   color: "#fff",
   height: "100%",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-}));
+});
 
 const ColorBox = styled(FlexBox)(({ theme }) => ({
   gap: 8,
@@ -114,22 +115,23 @@ const StyledButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-interface Props {
-  sx?: { [key: string]: any };
-  className?: string;
-  style?: CSSProperties;
-  rating?: number;
-  imgUrl: string;
-  title: string;
-  status: string;
-  price: number;
+// =======================================================
+interface ProductCardProps {
   off: number;
+  sx?: SxProps;
+  slug: string;
+  price: number;
+  title: string;
+  imgUrl: string;
+  status: string;
+  rating?: number;
   id: string | number;
-  productColors: string[];
   hideRating?: boolean;
-  showProductSize?: boolean;
+  productColors: string[];
 }
-const ProductCard17: FC<Props> = (props) => {
+// =======================================================
+
+const ProductCard17: FC<ProductCardProps> = (props) => {
   const {
     sx,
     off,
@@ -141,28 +143,34 @@ const ProductCard17: FC<Props> = (props) => {
     rating,
     hideRating,
     productColors,
+    slug,
   } = props;
 
   const { palette } = useTheme();
+  const { enqueueSnackbar } = useSnackbar();
   const { state, dispatch } = useAppContext();
 
   const cartItem: CartItem | undefined = state.cart.find(
-    (item) => item.id === id
+    (item) => item.slug === slug
   );
 
-  const handleCartAmountChange = useCallback(
-    (amount) => () => {
+  const handleCartAmountChange =
+    (amount: number, type?: "add" | "remove") => () => {
       dispatch({
         type: "CHANGE_CART_AMOUNT",
-        payload: { price, imgUrl, id, name: title, qty: amount },
+        payload: { price, imgUrl, id, name: title, qty: amount, slug },
       });
-    },
-    []
-  );
+
+      if (type === "remove") {
+        enqueueSnackbar("Remove from Cart", { variant: "error" });
+      } else {
+        enqueueSnackbar("Added to Cart", { variant: "success" });
+      }
+    };
 
   return (
     <StyledCard sx={sx}>
-      <Link href={`/product/${id}`}>
+      <Link href={`/product/${slug}`}>
         <a>
           <ImgBox id="imgBox">
             {status && (
@@ -178,6 +186,7 @@ const ProductCard17: FC<Props> = (props) => {
             {off !== 0 && <StyledChip size="small" label={`${off}% off`} />}
 
             <LazyImage
+              alt={title}
               width={100}
               height={100}
               src={imgUrl}
@@ -192,7 +201,7 @@ const ProductCard17: FC<Props> = (props) => {
       <ContentWrapper>
         <FlexBox>
           <Box flex="1 1 0" minWidth="0px" mr={1}>
-            <Link href={`/product/${id}`}>
+            <Link href={`/product/${slug}`}>
               <a>
                 <H3
                   mb={1}
@@ -210,7 +219,7 @@ const ProductCard17: FC<Props> = (props) => {
 
             {!hideRating && (
               <Box display="flex" alignItems="center">
-                <BazarRating
+                <BazaarRating
                   fontSize={18}
                   value={rating || 0}
                   color="warn"
@@ -228,12 +237,12 @@ const ProductCard17: FC<Props> = (props) => {
 
             <FlexBox gap={1} alignItems="center" mt={0.5}>
               <Box fontWeight="600" color="primary.main">
-                ${(price - (price * off) / 100).toFixed(2)}
+                {calculateDiscount(price, off)}
               </Box>
 
               {off !== 0 && (
                 <Box color="grey.600" fontWeight="600">
-                  <del>{price?.toFixed(2)}</del>
+                  <del>{currency(price)}</del>
                 </Box>
               )}
             </FlexBox>
@@ -261,7 +270,7 @@ const ProductCard17: FC<Props> = (props) => {
 
                 <StyledButton
                   variant="outlined"
-                  onClick={handleCartAmountChange(cartItem?.qty - 1)}
+                  onClick={handleCartAmountChange(cartItem?.qty - 1, "remove")}
                 >
                   <Remove fontSize="small" />
                 </StyledButton>

@@ -1,16 +1,16 @@
+import { ReactElement } from "react";
+import { GetStaticProps } from "next";
 import { Box, Card, Stack, Table, TableContainer } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import SearchArea from "components/dashboard/SearchArea";
 import TableHeader from "components/data-table/TableHeader";
 import TablePagination from "components/data-table/TablePagination";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
-import Scrollbar from "components/Scrollbar";
 import { H3 } from "components/Typography";
+import Scrollbar from "components/Scrollbar";
 import useMuiTable from "hooks/useMuiTable";
-import { GetStaticProps } from "next";
 import { SellerRow } from "pages-sections/admin";
-import React, { ReactElement } from "react";
-import api from "utils/api/dashboard";
+import api from "utils/__api__/dashboard";
 
 // table column list
 const tableHeading = [

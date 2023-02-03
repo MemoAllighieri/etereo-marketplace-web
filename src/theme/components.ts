@@ -1,16 +1,28 @@
-import { Components } from "@mui/material";
-import { blue, grey } from "./themeColors";
+import { Components, Theme } from "@mui/material";
+import { dark, grey } from "./themeColors";
 import { fontFamily, fontSize } from "./typography";
+
+// ========================================================
+declare module "@mui/material/Button" {
+  interface ButtonPropsColorOverrides {
+    dark: true;
+    paste: true;
+    marron: true;
+  }
+
+  interface ButtonPropsSizeOverrides {
+    normal: true;
+  }
+}
+// =========================================================
 
 export const components: Components = {
   MuiCssBaseline: {
-    styleOverrides: {
+    styleOverrides: (theme: Theme) => ({
       html: { scrollBehavior: "smooth" },
       p: { lineHeight: 1.75 },
       button: { fontFamily, fontSize },
-      ".MuiRating-sizeSmall": {
-        fontSize: "20px",
-      },
+      ".MuiRating-sizeSmall": { fontSize: "20px" },
       a: {
         textDecoration: "none",
         color: "inherit",
@@ -21,16 +33,12 @@ export const components: Components = {
         listStyle: "none",
       },
       "#nprogress .bar": {
-        top: 0,
-        left: 0,
-        position: "fixed",
         overflow: "hidden",
         height: "3px !important",
-        backgroundColor: blue.main,
         zIndex: "99999999 !important",
-        borderRadius: "0px 300px 300px 0px !important",
+        background: `${theme.palette.primary.main} !important`,
       },
-    },
+    }),
   },
   MuiInputLabel: {
     styleOverrides: {
@@ -85,10 +93,21 @@ export const components: Components = {
         fontWeight: 600,
         textTransform: "capitalize",
         ...(ownerState.color === "info" && { borderRadius: "8px" }),
+        ...(ownerState.color === "dark" && {
+          color: "#fff",
+          borderRadius: 0,
+          transition: "all 0.3s",
+          ":hover": { backgroundColor: "#343434" },
+        }),
+        ...(ownerState.color === "dark" &&
+          ownerState.variant === "outlined" && {
+            color: dark.main,
+            borderRadius: "3px",
+            transition: "all 0.3s",
+            ":hover": { backgroundColor: dark.main, color: "white" },
+          }),
       }),
-      sizeLarge: { padding: "1.25rem 2.5rem" },
-      // sizeMedium: { padding: "1.07rem 2.15rem" },
-      sizeSmall: { padding: ".92rem 1.61rem" },
+      sizeLarge: { padding: ".6rem 2.5rem" },
     },
     defaultProps: { color: "inherit" },
   },

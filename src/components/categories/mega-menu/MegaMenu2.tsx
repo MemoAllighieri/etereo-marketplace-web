@@ -1,37 +1,32 @@
-import BazarCard from "components/BazarCard";
-import React, { FC } from "react";
-import CategoryMenuItem from "../CategoryMenuItem";
+import { FC } from "react";
 import MegaMenu3 from "./MegaMenu3";
 import StyledMegaMenu from "./StyledMegaMenu";
+import BazaarCard from "components/BazaarCard";
+import CategoryMenuItem from "../CategoryMenuItem";
 
-// component interface
-export interface MegaMenu2Props {
-  data: {
-    icon: string;
-    href: string;
-    title: string;
-    menuData?: any;
-  }[];
-}
+// =======================================================================
+type Data = { icon: string; href: string; title: string; menuData?: any };
+export type MegaMenu2Props = { data: Data[] };
+// =======================================================================
 
 const MegaMenu2: FC<MegaMenu2Props> = ({ data }) => {
   return (
     <StyledMegaMenu>
-      <BazarCard elevation={2} sx={{ ml: "1rem", py: "0.5rem" }}>
+      <BazaarCard elevation={2} sx={{ ml: "1rem", py: "0.5rem" }}>
         {data?.map((item) => (
           <CategoryMenuItem
-            title={item.title}
             href={item.href}
             icon={item.icon}
-            caret={!!item.menuData}
             key={item.title}
+            title={item.title}
+            caret={!!item.menuData}
           >
             {item.menuData && (
               <MegaMenu3 minWidth="560px" data={item.menuData} />
             )}
           </CategoryMenuItem>
         ))}
-      </BazarCard>
+      </BazaarCard>
     </StyledMegaMenu>
   );
 };

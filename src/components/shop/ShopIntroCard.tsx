@@ -1,3 +1,4 @@
+import { FC } from "react";
 import { Call, Place } from "@mui/icons-material";
 import { Avatar, Box, Button, Card, Rating } from "@mui/material";
 import { FlexBetween, FlexBox } from "components/flex-box";
@@ -6,25 +7,30 @@ import InstagramFilled from "components/icons/InstagramFilled";
 import TwitterFilled from "components/icons/TwitterFilled";
 import YoutubeFilled from "components/icons/YoutubeFilled";
 import { H3, Small, Span } from "components/Typography";
-import React from "react";
 
 // =======================================================
-type ShopIntroCardProps = {};
+type ShopIntroCardProps = {
+  name: string;
+  phone: string;
+  address: string;
+  coverPicture: string;
+  profilePicture: string;
+};
 // =======================================================
 
-const ShopIntroCard: React.FC<ShopIntroCardProps> = () => {
+const ShopIntroCard: FC<ShopIntroCardProps> = (props) => {
+  const { name, phone, address, coverPicture, profilePicture } = props;
+
   return (
     <Card sx={{ mb: 4, pb: 2.5 }}>
       <Box
         height="202px"
-        sx={{
-          background: "url(/assets/images/banners/shop-cover.png) center/cover",
-        }}
+        sx={{ background: `url(${coverPicture}) center/cover` }}
       />
 
       <FlexBox mt={-8} px={3.75} flexWrap="wrap">
         <Avatar
-          src="/assets/images/faces/propic.png"
+          src={profilePicture}
           sx={{
             mr: "37px",
             width: "120px",
@@ -50,7 +56,7 @@ const ShopIntroCard: React.FC<ShopIntroCardProps> = () => {
               bgcolor="secondary.main"
             >
               <H3 fontWeight="600" color="grey.100">
-                Scarlett Beauty
+                {name}
               </H3>
             </Box>
 
@@ -79,14 +85,12 @@ const ShopIntroCard: React.FC<ShopIntroCardProps> = () => {
 
               <FlexBox color="grey.600" gap={1} mb={1} maxWidth={270}>
                 <Place fontSize="small" sx={{ fontSize: 18, mt: "3px" }} />
-                <Span color="grey.600">
-                  845 N. Stonybrook Ave. Tonawanda, NY 14210, Denmark
-                </Span>
+                <Span color="grey.600">{address}</Span>
               </FlexBox>
 
               <FlexBox color="grey.600" gap={1} mb={1}>
                 <Call fontSize="small" sx={{ fontSize: 18, mt: "2px" }} />
-                <Span color="grey.600">(613) 343-9004</Span>
+                <Span color="grey.600">{phone}</Span>
               </FlexBox>
             </Box>
 

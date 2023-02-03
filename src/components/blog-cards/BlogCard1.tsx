@@ -1,23 +1,15 @@
-import { AccessTime, CommentOutlined } from "@mui/icons-material";
-import { Box } from "@mui/material";
-import { FlexBox } from "components/flex-box";
-import LazyImage from "components/LazyImage";
-import NavLink2 from "components/nav-link/NavLink2";
-import { H3, Paragraph } from "components/Typography";
-import format from "date-fns/format";
 import { FC } from "react";
+import { Box } from "@mui/material";
+import format from "date-fns/format";
+import { AccessTime, CommentOutlined } from "@mui/icons-material";
+import LazyImage from "components/LazyImage";
+import { FlexBox } from "components/flex-box";
+import { NavLink2 } from "components/nav-link";
+import { H3, Paragraph } from "components/Typography";
+import Blog from "models/Blog.model";
 
 // ===========================================================
-type BlogCard1Props = {
-  blog: {
-    url: string;
-    title: string;
-    imgUrl: string;
-    comments: number;
-    createdAt: string;
-    description: string;
-  };
-};
+type BlogCard1Props = { blog: Blog };
 // ===========================================================
 
 const BlogCard1: FC<BlogCard1Props> = ({ blog }) => {
@@ -29,7 +21,8 @@ const BlogCard1: FC<BlogCard1Props> = ({ blog }) => {
       <LazyImage
         width={588}
         height={272}
-        src={blog.imgUrl}
+        alt="blog-image"
+        src={blog.thumbnail}
         layout="responsive"
         sx={{
           transition: "transform 0.3s",
@@ -44,7 +37,9 @@ const BlogCard1: FC<BlogCard1Props> = ({ blog }) => {
         <FlexBox alignItems="center" mt="5px">
           <FlexBox alignItems="center" mr="1.5rem">
             <AccessTime sx={iconStyle} />
-            <Paragraph>{format(new Date(blog.createdAt), "dd MMMM, yyyy")}</Paragraph>
+            <Paragraph>
+              {format(new Date(blog.createdAt), "dd MMMM, yyyy")}
+            </Paragraph>
           </FlexBox>
 
           <FlexBox alignItems="center">
@@ -57,7 +52,7 @@ const BlogCard1: FC<BlogCard1Props> = ({ blog }) => {
           {blog.description}
         </Paragraph>
 
-        <NavLink2 title="CONTINUE READING" url={blog.url} />
+        <NavLink2 title="CONTINUE READING" url="#" />
       </Box>
     </Box>
   );

@@ -1,5 +1,4 @@
-import { Card } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Card, styled } from "@mui/material";
 
 const TableRow = styled(Card)({
   display: "flex",
@@ -7,12 +6,8 @@ const TableRow = styled(Card)({
   alignItems: "center",
   borderRadius: "10px",
   cursor: "pointer",
-  "& > *": {
-    flex: "1 1 0",
-  },
-  "& .pre": {
-    whiteSpace: "pre",
-  },
+  "& > *": { flex: "1 1 0" },
+  "& .pre": { whiteSpace: "pre" },
 });
 
 export default TableRow;

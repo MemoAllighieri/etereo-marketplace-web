@@ -1,17 +1,25 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { Add, Remove, RemoveRedEye } from "@mui/icons-material";
-import ShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import FavoriteIcon from "@mui/icons-material/FavoriteBorder";
+import Link from "next/link";
+import { FC, useCallback, useState } from "react";
 import { Box, Button, Chip, Divider, styled } from "@mui/material";
-import BazarRating from "components/BazarRating";
-import { FlexBetween, FlexBox } from "components/flex-box";
+import {
+  Add,
+  Favorite,
+  FavoriteBorder,
+  Remove,
+  RemoveRedEye,
+} from "@mui/icons-material";
+import { useSnackbar } from "notistack";
+import ShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import LazyImage from "components/LazyImage";
 import { H3, Span } from "components/Typography";
+import BazaarRating from "components/BazaarRating";
+import { FlexBetween, FlexBox } from "components/flex-box";
+import ProductViewDialog from "components/products/ProductViewDialog";
 import { CartItem, useAppContext } from "contexts/AppContext";
-import Link from "next/link";
-import React, { CSSProperties, Fragment, useCallback } from "react";
+import { calculateDiscount, currency } from "lib";
 
-const StyledBazarCard = styled(Box)(() => ({
+// styled components
+const StyledBazaarCard = styled(Box)({
   height: "100%",
   margin: "auto",
   display: "flex",
@@ -19,7 +27,7 @@ const StyledBazarCard = styled(Box)(() => ({
   position: "relative",
   flexDirection: "column",
   justifyContent: "space-between",
-}));
+});
 
 const ImageWrapper = styled(Box)(({ theme }) => ({
   borderRadius: 8,
@@ -29,12 +37,12 @@ const ImageWrapper = styled(Box)(({ theme }) => ({
   display: "inline-block",
   [theme.breakpoints.down("sm")]: { display: "block" },
   "&:hover": {
-    "& .hoverImgBox": { filter: "blur(5px)" },
     "& .hoverButtonBox": { opacity: 1 },
+    "& .hoverImgBox": { filter: "blur(5px)" },
   },
 }));
 
-const HoverButtonBox = styled(Box)(() => ({
+const HoverButtonBox = styled(Box)({
   opacity: 0,
   top: "50%",
   left: "50%",
@@ -59,14 +67,14 @@ const HoverButtonBox = styled(Box)(() => ({
       "& svg": { fontSize: 16 },
     },
   },
-}));
+});
 
-const ImageBox = styled(Box)(() => ({
+const ImageBox = styled(Box)({
   opacity: 1,
   padding: "44px 40px",
   background: "#F5F5F5",
   transition: "all .3s ease",
-}));
+});
 
 const ItemController = styled(FlexBetween)(({ theme }) => ({
   background: "#fff",
@@ -84,7 +92,7 @@ const ItemController = styled(FlexBetween)(({ theme }) => ({
   "& svg": { fontSize: 22, color: theme.palette.grey[600] },
 }));
 
-const StyledChip = styled(Chip)(() => ({
+const StyledChip = styled(Chip)({
   zIndex: 11,
   top: "10px",
   left: "10px",
@@ -93,58 +101,66 @@ const StyledChip = styled(Chip)(() => ({
   fontWeight: 600,
   fontSize: "10px",
   position: "absolute",
-}));
+});
 
-const ContentWrapper = styled(Box)(() => ({
+const ContentWrapper = styled(Box)({
   padding: "1rem",
   "& .title, & .categories": {
     overflow: "hidden",
     whiteSpace: "nowrap",
     textOverflow: "ellipsis",
   },
-}));
+});
 
 // ====================================================================
-type ProductCard1Props = {
+type ProductCardProps = {
   off: number;
+  slug: string;
   price: number;
   title: string;
   imgUrl: string;
   rating?: number;
-  className?: string;
   id: string | number;
   hideRating?: boolean;
-  style?: CSSProperties;
-  showProductSize?: boolean;
 };
 // ====================================================================
 
-const ProductCard13: React.FC<ProductCard1Props> = (props) => {
-  const { off, id, title, price, imgUrl, rating, hideRating } = props;
+const ProductCard10: FC<ProductCardProps> = (props) => {
+  const { off, id, title, price, imgUrl, rating, hideRating, slug } = props;
 
+  const { enqueueSnackbar } = useSnackbar();
   const { state, dispatch } = useAppContext();
-  const cartItem: CartItem | undefined = state.cart.find(
-    (item) => item.id === id
-  );
+  const [openModal, setOpenModal] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
-  const handleCartAmountChange = useCallback(
-    (amount) => () => {
-      dispatch({
-        type: "CHANGE_CART_AMOUNT",
-        payload: { price, imgUrl, id, name: title, qty: amount },
-      });
-    },
-    []
-  );
+  const toggleIsFavorite = () => setIsFavorite((fav) => !fav);
+  const toggleDialog = useCallback(() => setOpenModal((open) => !open), []);
+
+  const cartItem: CartItem = state.cart.find((item) => item.slug === slug);
+
+  const handleCartAmountChange = (amount: number, type?: "remove") => () => {
+    dispatch({
+      type: "CHANGE_CART_AMOUNT",
+      payload: { price, imgUrl, id, name: title, qty: amount, slug },
+    });
+
+    // SHOW ALERT PRODUCT ADDED OR REMOVE
+    if (type === "remove") {
+      enqueueSnackbar("Remove from Cart", { variant: "error" });
+    } else {
+      enqueueSnackbar("Added to Cart", { variant: "success" });
+    }
+  };
 
   return (
-    <StyledBazarCard>
+    <StyledBazaarCard>
       <ImageWrapper>
         {off !== 0 && (
           <StyledChip color="primary" size="small" label={`${off}% off`} />
         )}
+
         <ImageBox className="hoverImgBox">
-          <Link href={`/product/${id}`}>
+          <Link href={`/product/${slug}`}>
             <a>
               <LazyImage
                 alt={title}
@@ -158,21 +174,27 @@ const ProductCard13: React.FC<ProductCard1Props> = (props) => {
           </Link>
         </ImageBox>
 
+        <ProductViewDialog
+          openDialog={openModal}
+          handleCloseDialog={toggleDialog}
+          product={{ title, price, id, slug, imgGroup: [imgUrl, imgUrl] }}
+        />
+
         <HoverButtonBox className="hoverButtonBox">
           <Box className="buttonBox">
             <ItemController>
-              <Link href={`/product/${id}`}>
-                <a>
-                  <Span>
-                    <RemoveRedEye />
-                  </Span>
-                </a>
-              </Link>
+              <Span onClick={toggleDialog}>
+                <RemoveRedEye />
+              </Span>
 
               <Divider orientation="vertical" flexItem />
 
-              <Span>
-                <FavoriteIcon />
+              <Span onClick={toggleIsFavorite}>
+                {isFavorite ? (
+                  <Favorite color="primary" fontSize="small" />
+                ) : (
+                  <FavoriteBorder fontSize="small" color="primary" />
+                )}
               </Span>
 
               <Divider orientation="vertical" flexItem />
@@ -182,36 +204,36 @@ const ProductCard13: React.FC<ProductCard1Props> = (props) => {
               </Span>
             </ItemController>
 
-            <Button
-              color="primary"
-              variant="outlined"
-              className="addCartButton"
-              onClick={handleCartAmountChange(
-                cartItem?.qty ? cartItem.qty - 1 : 1
-              )}
-            >
-              {cartItem?.qty ? (
-                <Fragment>
-                  <Remove /> Remove from Cart
-                </Fragment>
-              ) : (
-                <Fragment>
-                  <Add /> Add to Cart
-                </Fragment>
-              )}
-            </Button>
+            {cartItem?.qty ? (
+              <Button
+                color="primary"
+                variant="outlined"
+                className="addCartButton"
+                onClick={handleCartAmountChange(cartItem.qty - 1, "remove")}
+              >
+                <Remove /> Remove from Cart
+              </Button>
+            ) : (
+              <Button
+                color="primary"
+                variant="outlined"
+                className="addCartButton"
+                onClick={handleCartAmountChange(1)}
+              >
+                <Add /> Add to Cart
+              </Button>
+            )}
           </Box>
         </HoverButtonBox>
       </ImageWrapper>
 
       <ContentWrapper>
-        <Link href={`/product/${id}`}>
+        <Link href={`/product/${slug}`}>
           <a>
             <H3
               mb={1}
               title={title}
               fontSize="14px"
-              // textAlign="left"
               fontWeight="600"
               className="title"
               color="text.secondary"
@@ -223,25 +245,25 @@ const ProductCard13: React.FC<ProductCard1Props> = (props) => {
 
         {!hideRating && (
           <Box display="flex" alignItems="center">
-            <BazarRating value={rating || 0} color="warn" readOnly />{" "}
+            <BazaarRating value={rating || 0} color="warn" readOnly />{" "}
             <Span sx={{ color: "grey.600" }}>{`(${rating}.0)`}</Span>
           </Box>
         )}
 
         <FlexBox gap={1} alignItems="center" mt={0.5}>
           <Box fontWeight="600" color="primary.main">
-            ${(price - (price * off) / 100).toFixed(2)}
+            {calculateDiscount(price, off)}
           </Box>
 
           {off !== 0 && (
             <Box color="grey.600" fontWeight="600">
-              <del>{price?.toFixed(2)}</del>
+              <del>{currency(price)}</del>
             </Box>
           )}
         </FlexBox>
       </ContentWrapper>
-    </StyledBazarCard>
+    </StyledBazaarCard>
   );
 };
 
-export default ProductCard13;
+export default ProductCard10;

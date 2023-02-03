@@ -1,3 +1,5 @@
+import { ReactElement } from "react";
+import { GetStaticProps } from "next";
 import { Delete, Edit } from "@mui/icons-material";
 import { Box, Card, Stack, Table, TableContainer } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
@@ -9,17 +11,18 @@ import SearchInput from "components/SearchInput";
 import useMuiTable from "hooks/useMuiTable";
 import {
   StatusWrapper,
-  StyledIconButton,
-  StyledTableCell,
   StyledTableRow,
+  StyledTableCell,
+  StyledIconButton,
 } from "pages-sections/admin";
-import React, { ReactElement } from "react";
+import Ticket from "models/Ticket.model";
+import api from "utils/__api__/ticket";
 
 const tableHeading = [
-  { id: "information", label: "Information", align: "left" },
+  { id: "title", label: "Information", align: "left" },
   { id: "type", label: "Type", align: "left" },
   { id: "date", label: "Ticket Date", align: "left" },
-  { id: "problem", label: "Problem Title", align: "left" },
+  { id: "category", label: "Problem Title", align: "left" },
   { id: "action", label: "Action", align: "center" },
 ];
 
@@ -28,8 +31,10 @@ SupportTickets.getLayout = function getLayout(page: ReactElement) {
   return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
 };
 // =============================================================================
+type SupportTicketsProps = { ticketList: Ticket[] };
+// =============================================================================
 
-export default function SupportTickets() {
+export default function SupportTickets({ ticketList }: SupportTicketsProps) {
   const {
     order,
     orderBy,
@@ -38,7 +43,7 @@ export default function SupportTickets() {
     filteredList,
     handleChangePage,
     handleRequestSort,
-  } = useMuiTable({ listData, defaultSort: "date" });
+  } = useMuiTable({ listData: ticketList, defaultSort: "date" });
 
   return (
     <Box py={4}>
@@ -53,7 +58,7 @@ export default function SupportTickets() {
                 hideSelectBtn
                 orderBy={orderBy}
                 heading={tableHeading}
-                rowCount={listData.length}
+                rowCount={ticketList.length}
                 numSelected={selected.length}
                 onRequestSort={handleRequestSort}
               />
@@ -62,7 +67,7 @@ export default function SupportTickets() {
                 {filteredList.map((ticket, index) => (
                   <StyledTableRow role="checkbox" key={index}>
                     <StyledTableCell align="left">
-                      {ticket.information}
+                      {ticket.title}
                     </StyledTableCell>
 
                     <StyledTableCell align="left">
@@ -75,7 +80,7 @@ export default function SupportTickets() {
                       {ticket.date}
                     </StyledTableCell>
                     <StyledTableCell align="left">
-                      {ticket.problem}
+                      {ticket.category}
                     </StyledTableCell>
 
                     <StyledTableCell align="center">
@@ -96,7 +101,7 @@ export default function SupportTickets() {
         <Stack alignItems="center" my={4}>
           <TablePagination
             onChange={handleChangePage}
-            count={Math.ceil(listData.length / rowsPerPage)}
+            count={Math.ceil(ticketList.length / rowsPerPage)}
           />
         </Stack>
       </Card>
@@ -104,60 +109,7 @@ export default function SupportTickets() {
   );
 }
 
-// list data
-const listData = [
-  {
-    information: "Product Broken. I need refund",
-    type: "Urgent",
-    date: "13 April, 2022",
-    problem: "Website Problem",
-  },
-  {
-    information: "When will my product arrive?",
-    type: "Normal",
-    date: "15 April, 2022",
-    problem: "UX Problem",
-  },
-  {
-    information: "Payment method is not working",
-    type: "Urgent",
-    date: "17 April, 2022",
-    problem: "Payment Problem",
-  },
-  {
-    information: "Do you accept prepaid card?",
-    type: "Normal",
-    date: "13 April, 2022",
-    problem: "Website Problem",
-  },
-  {
-    information: "How much do I have to pay for...",
-    type: "Normal",
-    date: "10 April, 2022",
-    problem: "UX Problem",
-  },
-  {
-    information: "Do you ship to Bangladesh?",
-    type: "Urgent",
-    date: "16 April, 2022",
-    problem: "Payment Problem",
-  },
-  {
-    information: "Where's My Stuff?",
-    type: "Urgent",
-    date: "13 April, 2022",
-    problem: "Website Problem",
-  },
-  {
-    information: "When will my product arrive?",
-    type: "Normal",
-    date: "19 April, 2022",
-    problem: "UX Problem",
-  },
-  {
-    information: "Payment method is not working",
-    type: "Urgent",
-    date: "23 April, 2022",
-    problem: "Payment Problem",
-  },
-];
+export const getStaticProps: GetStaticProps = async () => {
+  const ticketList = await api.getTicketList();
+  return { props: { ticketList } };
+};

@@ -1,20 +1,20 @@
-import { ThemeOptions } from '@mui/material/styles';
-import { components } from './components';
-import { blue, marron, paste, primary, themeColors } from './themeColors';
-import { typography } from './typography';
+import { ThemeOptions } from "@mui/material/styles";
+import { components } from "./components";
+import { typography } from "./typography";
+import { primary, themeColors } from "./themeColors";
 
 /********************************************
-* You can delete themeOptions.ts file and
-* rename this file to `themeOptions.ts`
-* Follow the documentation for more details
-*********************************************/
+ * You can delete themeOptions.ts file and
+ * rename this file to `themeOptions.ts`
+ * Follow the documentation for more details
+ *********************************************/
 
 const THEMES = {
-  GIFT: 'GIFT',
-  HEALTH: 'HEALTH',
-  DEFAULT: 'DEFAULT',
-  GROCERY: 'GROCERY',
-  FURNITURE: 'FURNITURE',
+  GIFT: "GIFT",
+  HEALTH: "HEALTH",
+  DEFAULT: "DEFAULT",
+  GROCERY: "GROCERY",
+  FURNITURE: "FURNITURE",
 };
 
 const breakpoints = {

@@ -1,4 +1,4 @@
-import { Avatar, Box, Container, Grid } from "@mui/material";
+import { Avatar, Box, Container, Button, Grid } from "@mui/material";
 import { FlexBox } from "components/flex-box";
 import { H2, Paragraph } from "components/Typography";
 import Router from "next/router";
@@ -17,14 +17,15 @@ const list = [
     title: "Shop Pages",
     thumbnail: "/assets/images/landing/inner-pages.png",
     subTitle:
-      "Clean Shop inner pages. Vendor shop, Sale/discount product page, checkout, cart and etc.",
+      "Clean Shop inner pages. Vendor shop, Sale/discount pages, checkout, cart and etc.",
     category: "shop",
     buttonText: "Browse Pages",
   },
   {
     title: "User Dashboard",
     thumbnail: "/assets/images/landing/user-dashboard.png",
-    subTitle: "Structured User dashboard for managing user account, orders, address and etc.",
+    subTitle:
+      "Structured user dashboard for managing user account, orders, address and etc.",
     category: "user",
     buttonText: "Browse User Dashboard",
   },
@@ -48,9 +49,16 @@ const Section6: FC<Props> = ({ setFilterDemo }) => {
   };
 
   return (
-    <Box id="get">
-      <Container sx={{ my: 8 }}>
-        <H2 fontSize={40} textAlign="center" fontWeight="900" color="secondary.main" mb={7.5}>
+    <Box id="get" sx={{ backgroundColor: "grey.100" }}>
+      <Container sx={{ py: 18 }}>
+        <H2
+          fontSize={28}
+          textAlign="center"
+          fontWeight="700"
+          color="secondary.main"
+          mb={8}
+          textTransform="uppercase"
+        >
           What You Get?
         </H2>
 
@@ -58,11 +66,8 @@ const Section6: FC<Props> = ({ setFilterDemo }) => {
           {list.map((item, index) => (
             <Grid item md={6} xs={12} key={index}>
               <FlexBox
-                data-aos="fade-up"
-                data-aos-duration={index + 1 * 500}
                 gap={3}
                 sx={{
-                  alignItems: { sm: "center", xs: "flex-start" },
                   flexDirection: { sm: "row", xs: "column" },
                 }}
               >
@@ -71,29 +76,25 @@ const Section6: FC<Props> = ({ setFilterDemo }) => {
                   sx={{
                     boxShadow: 1,
                     borderRadius: "10px",
-                    height: { sm: 150, xs: 300 },
-                    width: { sm: 200, xs: "100%" },
+                    height: "auto",
+                    width: { sm: 250, xs: "100%" },
                   }}
                 />
 
-                <Box>
+                <FlexBox flexDirection="column" alignItems="flex-start">
                   <H2 fontSize={22} mb={1}>
                     {item.title}
                   </H2>
-                  <Paragraph mb={4}>{item.subTitle}</Paragraph>
-
-                  <Box
+                  <Paragraph mb={2}>{item.subTitle}</Paragraph>
+                  <Box m="auto"></Box>
+                  <Button
                     onClick={handleNavigate(item.category)}
-                    sx={{
-                      cursor: "pointer",
-                      color: "primary.main",
-                      textDecoration: "underline",
-                      ":hover": { color: "primary.main" },
-                    }}
+                    variant="outlined"
+                    color="primary"
                   >
                     {item.buttonText}
-                  </Box>
-                </Box>
+                  </Button>
+                </FlexBox>
               </FlexBox>
             </Grid>
           ))}

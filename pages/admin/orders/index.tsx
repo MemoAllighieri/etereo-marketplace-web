@@ -1,18 +1,19 @@
+import { ReactElement } from "react";
+import { GetStaticProps } from "next";
 import { Box, Card, Stack, Table, TableContainer } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
+import { H3 } from "components/Typography";
+import Scrollbar from "components/Scrollbar";
 import SearchArea from "components/dashboard/SearchArea";
 import TableHeader from "components/data-table/TableHeader";
 import TablePagination from "components/data-table/TablePagination";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
-import Scrollbar from "components/Scrollbar";
-import { H3 } from "components/Typography";
 import useMuiTable from "hooks/useMuiTable";
-import { GetStaticProps } from "next";
 import { OrderRow } from "pages-sections/admin";
-import React, { ReactElement } from "react";
-import api from "utils/api/dashboard";
+import api from "utils/__api__/dashboard";
+import Order from "models/Order.model";
 
-// table column list
+// TABLE HEADING DATA LIST
 const tableHeading = [
   { id: "id", label: "Order ID", align: "left" },
   { id: "qty", label: "Qty", align: "left" },
@@ -28,12 +29,20 @@ OrderList.getLayout = function getLayout(page: ReactElement) {
   return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
 };
 // =============================================================================
-
-type OrderListProps = { orders: any[] };
-
+type OrderListProps = { orders: Order[] };
 // =============================================================================
 
 export default function OrderList({ orders }: OrderListProps) {
+  // RESHAPE THE ORDER LIST BASED TABLE HEAD CELL ID
+  const filteredOrders = orders.map((item) => ({
+    id: item.id,
+    qty: item.items.length,
+    purchaseDate: item.createdAt,
+    billingAddress: item.shippingAddress,
+    amount: item.totalPrice,
+    status: item.status,
+  }));
+
   const {
     order,
     orderBy,
@@ -43,7 +52,7 @@ export default function OrderList({ orders }: OrderListProps) {
     handleChangePage,
     handleRequestSort,
   } = useMuiTable({
-    listData: orders,
+    listData: filteredOrders,
     defaultSort: "purchaseDate",
     defaultOrder: "desc",
   });
@@ -68,14 +77,14 @@ export default function OrderList({ orders }: OrderListProps) {
                 hideSelectBtn
                 orderBy={orderBy}
                 heading={tableHeading}
-                rowCount={orders.length}
                 numSelected={selected.length}
+                rowCount={filteredList.length}
                 onRequestSort={handleRequestSort}
               />
 
               <TableBody>
-                {filteredList.map((order, index) => (
-                  <OrderRow order={order} key={index} />
+                {filteredList.map((order) => (
+                  <OrderRow order={order} key={order.id} />
                 ))}
               </TableBody>
             </Table>
@@ -85,7 +94,7 @@ export default function OrderList({ orders }: OrderListProps) {
         <Stack alignItems="center" my={4}>
           <TablePagination
             onChange={handleChangePage}
-            count={Math.ceil(orders.length / rowsPerPage)}
+            count={Math.ceil(filteredList.length / rowsPerPage)}
           />
         </Stack>
       </Card>
@@ -95,6 +104,5 @@ export default function OrderList({ orders }: OrderListProps) {
 
 export const getStaticProps: GetStaticProps = async () => {
   const orders = await api.orders();
-
   return { props: { orders } };
 };

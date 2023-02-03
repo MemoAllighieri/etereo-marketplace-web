@@ -1,13 +1,14 @@
-import { ArrowDropUp } from "@mui/icons-material";
+import { FC, ReactNode } from "react";
 import { Box, Card } from "@mui/material";
+import { ArrowDropUp } from "@mui/icons-material";
 import { FlexBox } from "components/flex-box";
 import { H3, H6, Paragraph } from "components/Typography";
-import React, { FC } from "react";
 
 // =========================================================
 type Card2Props = {
   title: string;
   percentage: string;
+  children: ReactNode;
   amount: string | number;
 };
 // =========================================================

@@ -1,9 +1,10 @@
+import { FC } from "react";
+import NextImage from "next/image";
 import { Box, Card } from "@mui/material";
 import { H3, H5, Paragraph } from "components/Typography";
-import NextImage from "next/image";
-import React from "react";
+import { currency } from "lib";
 
-const WishCard = () => {
+const WishCard: FC = () => {
   return (
     <Card
       sx={{
@@ -25,7 +26,7 @@ const WishCard = () => {
       <H3 mt={3}>15,350.25</H3>
       <Paragraph color="grey.600">Today’s Visit</Paragraph>
 
-      <H3 mt={1.5}>$10,360.66</H3>
+      <H3 mt={1.5}>{currency(10360.66)}</H3>
       <Paragraph color="grey.600">Today’s total sales</Paragraph>
 
       <Box

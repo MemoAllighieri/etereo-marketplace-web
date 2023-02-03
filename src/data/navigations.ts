@@ -231,6 +231,7 @@ const navigations = [
           ],
         },
       ],
+
       rightImage: {
         imgUrl: "/assets/images/promotion/offer-1.png",
         href: "/sale-page-1",
@@ -453,6 +454,7 @@ const navigations = [
           ],
         },
       ],
+
       bottomImage: {
         imgUrl: "/assets/images/promotion/offer-5.png",
         href: "/",
@@ -823,11 +825,7 @@ const navigations = [
     href: "/product/search/gifts",
     menuComponent: "MegaMenu2",
     menuData: [
-      {
-        icon: Dress,
-        title: "Fashion",
-        href: "/product/search/fashion",
-      },
+      { icon: Dress, title: "Fashion", href: "/product/search/fashion" },
       {
         icon: Laptop,
         title: "Electronics",
@@ -838,46 +836,22 @@ const navigations = [
         title: "Home & Garden",
         href: "/product/search/home&garden",
       },
-      {
-        icon: MotorBike,
-        title: "Bikes",
-        href: "/product/search/bikes",
-      },
-      {
-        icon: Gift,
-        title: "Gifts",
-        href: "/product/search/gifts",
-      },
-      {
-        icon: Microphone,
-        title: "Music",
-        href: "/product/search/music",
-      },
+      { icon: MotorBike, title: "Bikes", href: "/product/search/bikes" },
+      { icon: Gift, title: "Gifts", href: "/product/search/gifts" },
+      { icon: Microphone, title: "Music", href: "/product/search/music" },
       {
         icon: MakeUp,
         title: "Health & Beauty",
         href: "/product/search/health&beauty",
       },
-      {
-        icon: Pets,
-        title: "Pets",
-        href: "/product/search/pets",
-      },
+      { icon: Pets, title: "Pets", href: "/product/search/pets" },
       {
         icon: TeddyBear,
         title: "Baby Toys",
         href: "/product/search/baby-toys",
       },
-      {
-        icon: Food,
-        title: "Groceries",
-        href: "/product/search/groceries",
-      },
-      {
-        icon: Car,
-        title: "Automotive",
-        href: "/product/search/automotive",
-      },
+      { icon: Food, title: "Groceries", href: "/product/search/groceries" },
+      { icon: Car, title: "Automotive", href: "/product/search/automotive" },
     ],
   },
   {
